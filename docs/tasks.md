@@ -45,11 +45,17 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
 - **Integration impact:** prerequisite for I2.
 - **Stop condition:** CO-safety reviewed; emitted events validate.
 - **Status:** implemented 2026-07-10 — `go test -race` clean incl. CO-safety + seed-determinism
-  tests; live run vs the pinned gateway+mock pair (infergate @ `a5a2c02`) green; emitted events
-  + manifests kit-validated against contracts @ `8c58863`; deterministic replay verified (same
-  seed → identical schedule + identical mock bodies). Deferred behaviors + deviations recorded
-  in `implementation-notes.md` (live streaming vs a *pinned* target waits on IG-T003).
-  CO-safety review pending.
+  tests; live run vs the pinned gateway+mock pair (infergate @ `a5a2c02`) green; deterministic
+  replay verified (same seed → identical schedule + identical mock bodies). Deferred behaviors +
+  deviations recorded in `implementation-notes.md` (live streaming vs a *pinned* target waits on
+  IG-T003).
+  **CO-safety review (fresh-context, 2026-07-10): send-schedule half PASSED; measurement half
+  FAILED** — latency clock started at wire-write, leaving dispatch/connect/write delay
+  unmonitored and excluded (coordinated omission under a slow-to-accept target). **Fixed same
+  day**: latency basis moved to `scheduled_send_ts` (contracts @ `8d81492`, raw-event v0.2.0),
+  `send_slip_seconds` emitted, wire-stage watchdog added (typed `schedule_slip` abort), slow-dial
+  CO tests added, evidence regenerated + kit-validated against the new pin. See
+  `implementation-notes.md` "IB-T002 CO-review fix".
 
 ## IB-T003 — Workload suite v1
 

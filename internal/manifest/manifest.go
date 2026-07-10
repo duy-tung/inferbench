@@ -19,9 +19,12 @@ import (
 )
 
 // ContractsBundleVersion is the serving-contracts pin this build emits.
-// Re-pinned at IB-T003 (2026-07-10) from pre-release commit 8c58863 to the
-// released v0.1.0 tag (commit 2df9f81); see docs/implementation-notes.md.
-const ContractsBundleVersion = "v0.1.0"
+// Re-pinned at the IB-T002 CO-review fix (2026-07-10) from the released
+// v0.1.0 tag to commit 8d81492 (rides the untagged v0.2.0: raw-event gains
+// required scheduled_send_ts + optional send_slip_seconds). Reversible
+// assumption: re-pin to the v0.2.0 tag when it is cut; see
+// docs/implementation-notes.md.
+const ContractsBundleVersion = "8d81492 (v0.2.0 tag pending)"
 
 var versionRe = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
 

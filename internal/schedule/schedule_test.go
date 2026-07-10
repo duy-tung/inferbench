@@ -209,3 +209,32 @@ func TestDeferredFeaturesRefuse(t *testing.T) {
 func constDist(v float64) *workload.Dist {
 	return &workload.Dist{Type: "constant", Value: &v}
 }
+
+// A repeating phase schedule with no positive-rate phase must refuse
+// (previously an infinite loop in Build).
+func TestAllZeroRateRepeatingPhasesRefused(t *testing.T) {
+	w := baseWorkload(t, 3)
+	w.Arrival.RateRPS = nil
+	w.Arrival.Phases = []workload.Phase{
+		{DurationSeconds: 1, RateRPS: 0},
+		{DurationSeconds: 2, RateRPS: 0},
+	}
+	rep := true
+	w.Arrival.RepeatPhases = &rep
+	w.Stop.RequestCount = nil
+	d := 10.0
+	w.Stop.DurationSeconds = &d
+	done := make(chan error, 1)
+	go func() {
+		_, err := Build(w)
+		done <- err
+	}()
+	select {
+	case err := <-done:
+		if err == nil {
+			t.Fatal("all-zero-rate repeating phases must be refused")
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("Build hung on all-zero-rate repeating phases")
+	}
+}

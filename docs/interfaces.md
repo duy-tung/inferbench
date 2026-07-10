@@ -9,10 +9,14 @@ protocols. No shared application library with any repo. The dependency graph is 
 golden fixtures and its own emitted artifacts against it in CI (`make contracts-verify` pattern;
 this repo's arm of integration milestone I1).
 
-> **Pin status:** pinned to the released **`v0.1.0`** tag (commit `2df9f81`), re-pinned at
-> IB-T003 (2026-07-10) from the pre-release commit `8c58863` recorded at IB-T002
-> (schema-identical apart from the `$id` namespace; see `implementation-notes.md`). Emitted
-> manifests carry `contracts_bundle_version: "v0.1.0"`.
+> **Pin status:** pinned to `serving-contracts` commit **`8d81492`** (rides the untagged
+> **v0.2.0**; re-pin to the tag when cut — reversible assumption in `implementation-notes.md`).
+> Re-pinned at the IB-T002 CO-review fix (2026-07-10) from the released v0.1.0 tag because
+> raw-event v0.2.0 REQUIRES `scheduled_send_ts` (+ optional `send_slip_seconds`) with the
+> normative rule that client-side TTFT/E2E are measured from the scheduled send time
+> (coordinated-omission safety). Emitted manifests carry
+> `contracts_bundle_version: "8d81492 (v0.2.0 tag pending)"`. Pin history: `8c58863` (IB-T002)
+> → `v0.1.0` (IB-T003) → `8d81492` (this fix).
 
 ### Contract 1 — Inference API (OpenAI-compatible subset) — inferbench DRIVES it
 

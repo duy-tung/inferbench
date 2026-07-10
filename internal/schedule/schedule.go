@@ -86,6 +86,21 @@ func Build(w *workload.Workload) (*Plan, error) {
 func arrivalOffsets(w *workload.Workload, seed int64) ([]time.Duration, error) {
 	rng := rand.New(rand.NewPCG(uint64(seed), streamArrivals))
 
+	// A repeating phase schedule with no positive-rate phase would cycle
+	// forever without ever producing an arrival: refuse it up front.
+	if len(w.Arrival.Phases) > 0 && w.Arrival.RepeatPhases != nil && *w.Arrival.RepeatPhases {
+		positive := false
+		for _, p := range w.Arrival.Phases {
+			if p.RateRPS > 0 {
+				positive = true
+				break
+			}
+		}
+		if !positive {
+			return nil, errors.New("schedule: repeat_phases requires at least one phase with rate_rps > 0")
+		}
+	}
+
 	var wantCount int
 	var horizon float64 // seconds; 0 = unbounded
 	if w.Stop.RequestCount != nil {

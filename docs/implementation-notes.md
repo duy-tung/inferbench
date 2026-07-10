@@ -199,6 +199,65 @@ Apache-2.0 for all portfolio repos).
 **Evidence:** `docs/evidence/ib-t003/` — per-workload run dirs (manifest, raw events, run log),
 `derived/` dry-run variants, `*.refusal.log` typed-refusal transcripts, `kit-validate.log`.
 
+### 2026-07-10 — IB-T002 CO-review fix: latency basis = scheduled send, wire-stage watchdog
+
+**The mandatory fresh-context CO-safety review FAILED on the measurement half** (the
+send-schedule half passed). Defect, demonstrated empirically by the reviewer: the latency clock
+started at actual wire-write (`httptrace.WroteRequest`) and the slip watchdog measured before
+the request goroutine started — so goroutine start, JSON marshal, DNS/TCP/TLS connect, and
+blocked body writes were unmonitored, unbounded, excluded from TTFT/E2E, and unrecorded. A probe
+with 2 s dial delays (a full accept queue at saturation) hid 2.002 s per request while the run
+self-reported VALID — classic coordinated omission, contradicting ADR-0001 §3/§5 and
+`testing.md` layer 3 as written.
+
+**Contract amendment consumed:** `serving-contracts` @ `8d81492` (rides the untagged v0.2.0):
+raw-event now REQUIRES `scheduled_send_ts` and optionally takes `send_slip_seconds`
+(= `send_ts − scheduled_send_ts` ≥ 0), with the normative rule that client-side TTFT/E2E are
+measured from `scheduled_send_ts`. **Pin moved v0.1.0 → `8d81492 (v0.2.0 tag pending)`**
+(reversible: re-pin to the v0.2.0 tag when cut).
+
+**Fix (all in this repo):**
+- `internal/client`: `Request.ScheduledAt` threaded in; TTFT (stream + non-stream) now measured
+  from the scheduled send time, never wire-write; `Outcome` carries `ScheduledAt` +
+  `SendSlipSeconds` (clamped ≥ 0).
+- `internal/events`: `scheduled_send_ts` (required) + `send_slip_seconds` emitted per event;
+  `send_ts` stays as the wire-write diagnostic.
+- `internal/run`: two-stage watchdog — dispatch stage (as before) plus **wire stage**: after each
+  request completes its send, `send_ts − scheduled_send_ts > MaxSlip` ⇒ typed `ErrScheduleSlip`
+  run-invalidating abort that also stops the scheduler mid-run. Run **epoch** persisted in the
+  run log (`epoch=<RFC3339>`; `scheduled_send_ts(item) = epoch + SendOffset`) so events join
+  exactly to the plan. `Result.MaxSlip` renamed to `MaxDispatchSlip` (it shadowed
+  `Options.MaxSlip`), `MaxSendSlip` added; canceled events' `elapsed_seconds` uses the same
+  scheduled-send basis.
+- `internal/schedule`: `Build` now refuses a repeating phase schedule with no positive-rate phase
+  (previously an infinite loop).
+- ADR-0001 §3 + consequences rewritten to the implemented two-stage semantics and the
+  scheduled-send measurement basis (including the at-saturation caveat: sub-threshold target
+  connect delay is measured, not absorbed).
+
+**New tests (in `internal/run`):** `TestSlowDialDelayCountsAgainstLatency` — transport with 2 s
+dial delay + keep-alives off (accept-queue-full model): every recorded TTFT ≥ 2 s and
+`send_slip_seconds` ≈ 2 s (the delay is *included*, run completes under a generous threshold);
+`TestSlowDialTripsWireWatchdog` — same transport under a 500 ms threshold: typed
+`ErrScheduleSlip (stage=wire)`, scheduler stopped mid-run (sent < planned), ABORT in the run
+log; `TestEpochJoinsEventsToPlan` — `scheduled_send_ts == epoch + SendOffset` within 1 ms;
+plus `TestLatencyBasisIsScheduledSend` (client), `TestEventMarshalScheduledSend` (events),
+`TestAllZeroRateRepeatingPhasesRefused` (schedule). Full suite:
+`go test -race -count=1 ./...` → 6 packages ok (run 10.7 s incl. the slow-dial cases).
+
+**Evidence regenerated** (`docs/evidence/ib-t002/` delete-and-replace; the pre-fix artifacts
+correctly FAIL the amended schema — verified — and were pre-publication smoke evidence):
+- Pinned pair (infergate @ `a5a2c02`), 200 req @ 20 rps: runs A/B/C → 200/200 ok, max dispatch
+  slip 4.6/63.2/70.9 ms, max send slip 4.8/63.6/71.1 ms (all ≪ 100 ms threshold).
+- Kit FROM `serving-contracts@8d81492` (git archive, read-only; kit selftest GREEN 52/52 + 29/29):
+  raw-event + benchmark-run PASS for all five regenerated runs; workload file PASS.
+- Determinism unchanged: schedule dumps A==B byte-identical, A≠C (seed 99); response-body
+  SHA-256 sets identical A==B and SA==SB (200 each).
+- Streaming smoke (informational, unpinned worktree as before): SA/SB 200/200 ok, TTFT p50
+  22.6 ms (basis now scheduled-send; mock ttft 20 ms), send-slip p50 0.88 ms.
+- `send_slip_seconds` on healthy local runs: p50 ≈ 0.9 ms — the newly measured segment is small
+  when the client keeps up, which is exactly what makes it safe to assert on and abort over.
+
 ## Deviations
 
 > Program deviation policy: when repository evidence forces a deviation from the approved plan,
@@ -219,3 +278,17 @@ Apache-2.0 for all portfolio repos).
   releases the image; no published claim depends on streaming yet.
 - **Follow-up:** rerun the live streaming verification against the pinned/released mock when
   IG-T003 lands, before IB-T004 calibration starts.
+
+### 2026-07-10 — IB-T003 dry-run evidence predates the raw-event v0.2.0 amendment
+
+- **Evidence:** `docs/evidence/ib-t003/*/events.jsonl` were emitted by the pre-CO-fix binary and
+  FAIL the amended raw-event schema at pin `8d81492` (missing `scheduled_send_ts`; verified with
+  the kit). They passed the pin in force when they were produced (v0.1.0) and carry manifests
+  saying so.
+- **Decision (conservative, reversible):** left in place for now, scoped only per the directive
+  to regenerate the *IB-T002* artifacts; they are dry-run completion evidence (did the workload
+  run end-to-end), not latency evidence, and no published claim reads their latency fields.
+- **Consequences:** a repo-wide `contracts-verify` sweep at pin `8d81492` would flag them.
+- **Follow-up:** regenerate `docs/evidence/ib-t003/` with the fixed binary via
+  `scripts/dryrun-workloads.sh` at the next IB-T003-touching change (or IB-T004 start,
+  whichever comes first).

@@ -242,3 +242,37 @@ func TestStreamTruncatedWithoutDone(t *testing.T) {
 		t.Fatalf("stream without terminal event must classify upstream_error, got %s/%v", out.Status, out.ErrorClass)
 	}
 }
+
+// TTFT and slip are measured from the scheduled send time, not wire-write:
+// a request scheduled 500ms before it could actually run reports >= 500ms
+// of TTFT and send slip (coordinated-omission safety).
+func TestLatencyBasisIsScheduledSend(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, `{"id":"x","object":"chat.completion","created":1,"model":"mock-8b",
+			"choices":[{"index":0,"message":{"role":"assistant","content":"hi"},"finish_reason":"stop"}],
+			"usage":{"prompt_tokens":3,"completion_tokens":1,"total_tokens":4}}`)
+	}))
+	defer srv.Close()
+
+	c := newClient(srv.URL, false, time.Second)
+	scheduled := time.Now().Add(-500 * time.Millisecond)
+	out := c.Do(context.Background(), Request{
+		RequestID: "r", Prompt: "hi", MaxTokens: 4, ScheduledAt: scheduled,
+	})
+	if out.Status != events.StatusOK {
+		t.Fatalf("want ok, got %s", out.Status)
+	}
+	if !out.ScheduledAt.Equal(scheduled) {
+		t.Fatal("outcome must echo the scheduled send time")
+	}
+	if out.TTFTSeconds == nil || *out.TTFTSeconds < 0.5 {
+		t.Fatalf("ttft %v must include the 500ms pre-send delay (basis = scheduled_send_ts)", out.TTFTSeconds)
+	}
+	if out.SendSlipSeconds < 0.5 {
+		t.Fatalf("send slip %v must report the 500ms delay", out.SendSlipSeconds)
+	}
+	if !out.SendTS.After(scheduled) {
+		t.Fatal("send_ts (wire write) must remain the actual send time")
+	}
+}

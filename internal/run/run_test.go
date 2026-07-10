@@ -8,8 +8,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -280,4 +282,155 @@ func testWorkload(t *testing.T, seed int64, count int) *workload.Workload {
 		t.Fatal(err)
 	}
 	return w
+}
+
+// slowDialClient returns a client whose transport delays every new
+// connection by dialDelay — simulating a saturated target whose accept
+// queue is full. This is the scenario the 2026-07-10 CO-safety review
+// demonstrated: connect delay used to be unmonitored, unbounded, and
+// excluded from TTFT.
+func slowDialClient(url string, dialDelay, timeout time.Duration) *client.Client {
+	transport := &http.Transport{
+		// Every request must dial (and therefore queue) for itself — the
+		// accept-queue-full model. Without this, a connection freed by an
+		// earlier request can be raced to a later one and soften its slip.
+		DisableKeepAlives: true,
+		DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			select {
+			case <-ctx.Done():
+				return nil, ctx.Err()
+			case <-time.After(dialDelay):
+			}
+			var d net.Dialer
+			return d.DialContext(ctx, network, addr)
+		},
+	}
+	return client.New(client.Config{
+		BaseURL:        url,
+		Model:          "mock-8b",
+		RequestTimeout: timeout,
+		HTTPClient:     &http.Client{Transport: transport},
+	})
+}
+
+// Slow-dial CO safety, part (a): connect delay MUST be included in the
+// recorded latency. TTFT is measured from scheduled_send_ts, so a 2s dial
+// shows up as >= 2s of TTFT — never hidden.
+func TestSlowDialDelayCountsAgainstLatency(t *testing.T) {
+	const dialDelay = 2 * time.Second
+	srv := httptest.NewServer(okHandler(0))
+	defer srv.Close()
+
+	plan := fixedPlan(5, 50*time.Millisecond)
+	var sink bytes.Buffer
+	// Generous threshold: this case observes the measurement, not the abort.
+	res, err := Execute(context.Background(), Options{
+		Plan:       plan,
+		Client:     slowDialClient(srv.URL, dialDelay, 15*time.Second),
+		RunID:      "co-dial-measure",
+		Repetition: 1,
+		MaxSlip:    30 * time.Second,
+		EventSink:  &sink,
+	})
+	if err != nil {
+		t.Fatalf("run aborted under generous threshold: %v", err)
+	}
+	if res.OK != 5 {
+		t.Fatalf("want 5 ok, got %+v", res)
+	}
+	if res.MaxSendSlip < dialDelay {
+		t.Fatalf("MaxSendSlip %s must include the %s dial delay", res.MaxSendSlip, dialDelay)
+	}
+
+	n := 0
+	sc := bufio.NewScanner(bytes.NewReader(sink.Bytes()))
+	for sc.Scan() {
+		var ev events.Event
+		if err := json.Unmarshal(sc.Bytes(), &ev); err != nil {
+			t.Fatal(err)
+		}
+		n++
+		if ev.TTFTSeconds == nil || *ev.TTFTSeconds < dialDelay.Seconds() {
+			t.Errorf("item %d: ttft %v hides the %s dial delay (coordinated omission)",
+				ev.WorkloadItem, ev.TTFTSeconds, dialDelay)
+		}
+		if ev.SendSlipSeconds == nil || *ev.SendSlipSeconds < dialDelay.Seconds()-0.1 {
+			t.Errorf("item %d: send_slip_seconds %v does not report the dial delay",
+				ev.WorkloadItem, ev.SendSlipSeconds)
+		}
+		if time.Time(ev.SendTS).Sub(time.Time(ev.ScheduledSendTS)) < dialDelay-100*time.Millisecond {
+			t.Errorf("item %d: send_ts - scheduled_send_ts must expose the dial delay", ev.WorkloadItem)
+		}
+	}
+	if n != 5 {
+		t.Fatalf("want 5 events, got %d", n)
+	}
+}
+
+// Slow-dial CO safety, part (b): when send slip exceeds the threshold, the
+// wire-stage watchdog aborts the run with the typed schedule_slip reason —
+// the run self-reports INVALID instead of publishing coordinated omission.
+func TestSlowDialTripsWireWatchdog(t *testing.T) {
+	const dialDelay = 2 * time.Second
+	srv := httptest.NewServer(okHandler(0))
+	defer srv.Close()
+
+	// 60 items x 50ms = 3s of schedule: the first wire trip (~2s in) must
+	// also stop the scheduler before the schedule is exhausted.
+	plan := fixedPlan(60, 50*time.Millisecond)
+	var log bytes.Buffer
+	res, err := Execute(context.Background(), Options{
+		Plan:       plan,
+		Client:     slowDialClient(srv.URL, dialDelay, 15*time.Second),
+		RunID:      "co-dial-abort",
+		Repetition: 1,
+		MaxSlip:    500 * time.Millisecond,
+		EventSink:  io.Discard,
+		Log:        &log,
+	})
+	if !errors.Is(err, ErrScheduleSlip) {
+		t.Fatalf("want ErrScheduleSlip from wire-stage watchdog, got %v", err)
+	}
+	if !strings.Contains(err.Error(), "stage=wire") {
+		t.Fatalf("abort must name the wire stage: %v", err)
+	}
+	if res.Sent >= len(plan.Items) {
+		t.Errorf("wire trip must stop the scheduler mid-run; sent %d/%d", res.Sent, len(plan.Items))
+	}
+	if !bytes.Contains(log.Bytes(), []byte("ABORT")) {
+		t.Error("abort not recorded in run log")
+	}
+}
+
+// The run epoch joins events to the plan exactly:
+// scheduled_send_ts(item) == epoch + SendOffset, and it is in the run log.
+func TestEpochJoinsEventsToPlan(t *testing.T) {
+	srv := httptest.NewServer(okHandler(0))
+	defer srv.Close()
+
+	plan := fixedPlan(5, 20*time.Millisecond)
+	var sink, log bytes.Buffer
+	cl := client.New(client.Config{BaseURL: srv.URL, Model: "mock-8b", RequestTimeout: time.Second})
+	res, err := Execute(context.Background(), Options{
+		Plan: plan, Client: cl, RunID: "epoch", Repetition: 1,
+		EventSink: &sink, Log: &log,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(log.Bytes(), []byte("epoch=")) {
+		t.Fatal("run log must persist the epoch")
+	}
+	sc := bufio.NewScanner(bytes.NewReader(sink.Bytes()))
+	for sc.Scan() {
+		var ev events.Event
+		if err := json.Unmarshal(sc.Bytes(), &ev); err != nil {
+			t.Fatal(err)
+		}
+		want := res.Epoch.Add(plan.Items[ev.WorkloadItem].SendOffset)
+		got := time.Time(ev.ScheduledSendTS)
+		if d := got.Sub(want); d < -time.Millisecond || d > time.Millisecond {
+			t.Errorf("item %d: scheduled_send_ts off epoch+offset by %s", ev.WorkloadItem, d)
+		}
+	}
 }

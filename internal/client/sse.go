@@ -18,10 +18,11 @@ import (
 // stream_options.include_usage=true, mid-stream failures as one
 // standardized error-envelope event followed by stream close).
 //
-// IB-T002 measurement scope: TTFT = first body byte; ITL series = gaps
-// between content-bearing chunks; max stall = largest gap. Finer-grained
-// capture and calibration are IB-T004.
-func (c *Client) readStream(ctx context.Context, sendTS time.Time, resp *http.Response) Outcome {
+// Measurement scope: TTFT = scheduledAt (the CO-safe basis, never sendTS)
+// to first body byte; ITL series = gaps between content-bearing chunks;
+// max stall = largest gap. Finer-grained capture and calibration are
+// IB-T004.
+func (c *Client) readStream(ctx context.Context, scheduledAt, sendTS time.Time, resp *http.Response) Outcome {
 	fr := &firstByteReader{r: resp.Body}
 	scanner := bufio.NewScanner(fr)
 	scanner.Buffer(make([]byte, 0, 64*1024), 4<<20)
@@ -95,7 +96,7 @@ scan:
 		BodySHA256: hex.EncodeToString(hash.Sum(nil)),
 	}
 	if !fr.first.IsZero() {
-		out.TTFTSeconds = f64ptr(fr.first.Sub(sendTS).Seconds())
+		out.TTFTSeconds = f64ptr(fr.first.Sub(scheduledAt).Seconds())
 	}
 	if len(contentTimes) >= 2 {
 		itl := &events.ITL{SeriesSeconds: make([]float64, 0, len(contentTimes)-1)}

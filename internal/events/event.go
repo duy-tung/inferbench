@@ -23,12 +23,22 @@ const (
 
 // Event is one JSONL record per request. Pointer fields marshal to explicit
 // null (they are required-but-nullable in the schema, so no omitempty).
+//
+// Latency measurement basis (contracts v0.2.0, coordinated-omission
+// safety): client-side TTFT and end-to-end latency are measured from
+// ScheduledSendTS — the schedule-plan send time — never from SendTS, so
+// dispatch/connect/write delay (client-side queueing under saturation) is
+// never excluded from the latency a request experienced. SendTS remains
+// the actual wire-write time for diagnostics; SendSlipSeconds = send_ts −
+// scheduled_send_ts (>= 0).
 type Event struct {
 	RunID             string             `json:"run_id"`
 	Repetition        int                `json:"repetition"`
 	RequestID         string             `json:"request_id"`
 	WorkloadItem      int                `json:"workload_item"`
+	ScheduledSendTS   Timestamp          `json:"scheduled_send_ts"`
 	SendTS            Timestamp          `json:"send_ts"`
+	SendSlipSeconds   *float64           `json:"send_slip_seconds,omitempty"`
 	EndTS             Timestamp          `json:"end_ts"`
 	Status            string             `json:"status"`
 	ErrorClass        *string            `json:"error_class"`

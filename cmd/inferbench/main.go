@@ -140,9 +140,10 @@ func cmdRun(args []string) error {
 		Log:        logFile,
 	})
 	if res != nil {
-		fmt.Printf("run %s: sent=%d ok=%d errors=%d shed=%d canceled=%d max_dispatch_slip=%s wall=%s\n",
+		fmt.Printf("run %s: sent=%d ok=%d errors=%d shed=%d canceled=%d max_dispatch_slip=%s max_send_slip=%s wall=%s\n",
 			*runID, res.Sent, res.OK, res.Errors, res.Shed, res.Canceled,
-			res.MaxSlip, res.Finished.Sub(res.Started).Round(time.Millisecond))
+			res.MaxDispatchSlip, res.MaxSendSlip,
+			res.Finished.Sub(res.Started).Round(time.Millisecond))
 		if res.UsageMissing > 0 {
 			fmt.Printf("warning: %d responses carried no usage payload; their token counts are client-side chunk counts (or 0)\n", res.UsageMissing)
 		}

@@ -21,10 +21,20 @@ failure mode built in. The program treats benchmark invalidity as its central me
    times using a monotonic clock. Nothing downstream — response latency, disk stalls, recorder
    backpressure, target saturation — can delay or reorder the schedule. Per-request goroutines own
    stream lifecycles; the recorder is a single writer behind a bounded channel.
-3. **The client must prove it kept the schedule.** A schedule-slip watchdog compares intended vs
-   actual send timestamps continuously; slip beyond the declared threshold aborts the run with
-   typed reason `schedule_slip` and marks it INVALID. Client host resources (CPU, FDs, network)
-   are sampled into the run log and cited in threats-to-validity.
+3. **The client must prove it kept the schedule — all the way to the wire.** A two-stage
+   schedule-slip watchdog enforces this (semantics fixed after the 2026-07-10 CO-safety review
+   found the wire segment unmonitored): *dispatch stage* — intended vs actual dispatch time,
+   checked in the scheduler loop; *wire stage* — scheduled send time vs actual wire-write time
+   (`send_ts − scheduled_send_ts`), checked when each request completes its send, covering
+   goroutine start, marshal, DNS/TCP/TLS connect, and blocked body writes. Slip beyond the
+   declared threshold at either stage aborts the run with typed reason `schedule_slip` and marks
+   it INVALID. Client host resources (CPU, FDs, network) are sampled into the run log and cited
+   in threats-to-validity.
+   **Measurement basis:** recorded client-side TTFT and end-to-end latency are measured from the
+   *scheduled* send time (`scheduled_send_ts`, required by raw-event v0.2.0), never from the
+   actual wire-write time, so sub-threshold slip still counts against latency instead of
+   vanishing; `send_ts` is kept as a diagnostic and `send_slip_seconds` makes the slip visible
+   per event.
 4. **No client-side retries, ever.** A retry inserts an arrival the process didn't declare and
    hides an error; failed requests are recorded as classified events instead.
 5. Connection setup is not allowed to serialize sends (e.g. a starved connection pool would be a
@@ -48,7 +58,15 @@ failure mode built in. The program treats benchmark invalidity as its central me
   not avoided — that is the honest picture.
 - The client host becomes a validity dependency; hence the watchdog + resource sampling + typed
   aborts (see `observability.md`, `risks.md`).
-- A CO-safety test is mandatory: a deliberately stalled mock target must not shift subsequent
-  send times (see `testing.md` layer 3). This test guards the invariant against regression.
+- CO-safety tests are mandatory and two-sided (see `testing.md` layer 3): a deliberately stalled
+  mock target must not shift subsequent send times (send-schedule independence), and a
+  deliberately slow-to-connect target (accept-queue-full model) must have its connect delay
+  included in recorded latency and must trip the wire-stage watchdog beyond threshold
+  (measurement completeness). Both guard the invariant against regression.
+- At-saturation caveat: connect delay caused by the *target* is client-visible queueing and is
+  measured (it counts against TTFT via the scheduled-send basis); the wire-stage watchdog
+  threshold bounds how much of it a *valid* run may absorb before the run must instead be
+  declared saturated-beyond-measurement and INVALID. Raising `--max-slip` for overload studies is
+  legitimate only because the slip is recorded per event either way.
 - Same seed → identical schedule becomes a first-class contract used by replay (IB-T008) and by
   determinism tests.

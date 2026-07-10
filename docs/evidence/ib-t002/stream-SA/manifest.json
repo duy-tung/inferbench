@@ -36,14 +36,14 @@
   },
   "client": {
     "location": "same-host (loopback)",
-    "rtt_ms": 0.934042
+    "rtt_ms": 1.047251
   },
   "warm_up": {
     "policy": "none"
   },
   "repetitions": 1,
   "hypothesis": "IB-T002 smoke: the open-loop generator keeps its precomputed seeded send schedule (no dispatch slip \u003e 100ms) at 20 rps against the local infergate gateway + deterministic mock pair, and every emitted artifact validates against the pinned contracts bundle.",
-  "started_at": "2026-07-10T04:16:03Z",
-  "contracts_bundle_version": "8c58863 (v0.1.0 tag pending)",
+  "started_at": "2026-07-10T09:21:43Z",
+  "contracts_bundle_version": "8d81492 (v0.2.0 tag pending)",
   "notes": "IB-T002 verification run. rtt_ms is measured by the tool at preflight (healthz round trip) when left null here. Mock runs CPU-only: hardware nulls assert not-applicable."
 }

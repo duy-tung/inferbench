@@ -1,11 +1,19 @@
 // Package client drives Contract 1 (POST /v1/chat/completions, stream and
 // non-stream) and classifies every outcome onto the contract error taxonomy.
 //
-// Measurement points (client-side mirror series, Contract 2):
-//   - send_ts   = request body write completed (httptrace.WroteRequest)
-//   - client_ttft = send_ts -> first response *body* byte at the client,
-//     recorded only for 2xx responses (a shed or error body byte is not a
-//     token). Durations use Go's monotonic clock (time.Time carries it).
+// Measurement points (client-side mirror series, Contract 2; latency basis
+// per raw-event.schema.json v0.2.0 — coordinated-omission safety):
+//   - scheduled_send_ts = the schedule-plan send time (Request.ScheduledAt).
+//     NORMATIVE basis for client-side TTFT and end-to-end latency:
+//     goroutine start, JSON marshal, DNS/TCP/TLS connect, and blocked body
+//     writes all count against the latency a request experienced, so a
+//     saturated target that slows connection acceptance can never hide
+//     that delay from the measurement.
+//   - send_ts   = request body write completed (httptrace.WroteRequest);
+//     diagnostic only. send_ts - scheduled_send_ts is the send slip.
+//   - client_ttft = scheduled_send_ts -> first response *body* byte at the
+//     client, recorded only for 2xx responses (a shed or error body byte is
+//     not a token). Durations use Go's monotonic clock.
 //   - client_itl  = gaps between content-bearing SSE chunks; max stall is
 //     the largest gap. Refined per-chunk capture is IB-T004.
 //
@@ -59,19 +67,27 @@ type Request struct {
 	RequestID string
 	Prompt    string
 	MaxTokens int
+	// ScheduledAt is the schedule-plan send time — the latency measurement
+	// basis (raw-event scheduled_send_ts). Zero means "now" (ad-hoc use).
+	ScheduledAt time.Time
 }
 
 // Outcome is the classified result of one request, in raw-event terms.
 type Outcome struct {
-	SendTS       time.Time
-	EndTS        time.Time
-	Status       string
-	ErrorClass   *string // nil exactly when Status == ok
-	TTFTSeconds  *float64
-	ITL          *events.ITL
-	InputTokens  int
-	OutputTokens int
-	Shed         bool
+	// ScheduledAt echoes Request.ScheduledAt (raw-event scheduled_send_ts).
+	ScheduledAt time.Time
+	// SendSlipSeconds = SendTS - ScheduledAt clamped at 0 (raw-event
+	// send_slip_seconds): the wire-level schedule-keeping evidence.
+	SendSlipSeconds float64
+	SendTS          time.Time
+	EndTS           time.Time
+	Status          string
+	ErrorClass      *string // nil exactly when Status == ok
+	TTFTSeconds     *float64
+	ITL             *events.ITL
+	InputTokens     int
+	OutputTokens    int
+	Shed            bool
 	// UsageMissing reports that a 2xx response carried no usage payload,
 	// so token counts are 0 ("not measured"); surfaced in the run log.
 	UsageMissing bool
@@ -140,6 +156,23 @@ type errorEnvelope struct {
 // Do issues one request and always returns a classified Outcome; failures
 // are recorded, never retried and never fatal to the run.
 func (c *Client) Do(ctx context.Context, req Request) Outcome {
+	if req.ScheduledAt.IsZero() {
+		req.ScheduledAt = time.Now()
+	}
+	return finish(c.do(ctx, req), req.ScheduledAt)
+}
+
+// finish stamps the latency measurement basis onto an outcome: the
+// scheduled send time and the wire-level send slip.
+func finish(out Outcome, scheduledAt time.Time) Outcome {
+	out.ScheduledAt = scheduledAt
+	if slip := out.SendTS.Sub(scheduledAt).Seconds(); slip > 0 {
+		out.SendSlipSeconds = slip
+	}
+	return out
+}
+
+func (c *Client) do(ctx context.Context, req Request) Outcome {
 	body := chatRequest{
 		Model:     c.cfg.Model,
 		Messages:  []chatMessage{{Role: "user", Content: req.Prompt}},
@@ -185,13 +218,14 @@ func (c *Client) Do(ctx context.Context, req Request) Outcome {
 		return c.classifyHTTPError(sendTS, resp)
 	}
 	if c.cfg.Stream {
-		return c.readStream(ctx, sendTS, resp)
+		return c.readStream(ctx, req.ScheduledAt, sendTS, resp)
 	}
-	return c.readNonStream(ctx, sendTS, resp)
+	return c.readNonStream(ctx, req.ScheduledAt, sendTS, resp)
 }
 
-// readNonStream consumes a non-streaming 2xx response.
-func (c *Client) readNonStream(ctx context.Context, sendTS time.Time, resp *http.Response) Outcome {
+// readNonStream consumes a non-streaming 2xx response. TTFT is measured
+// from scheduledAt (the CO-safe basis), never from sendTS.
+func (c *Client) readNonStream(ctx context.Context, scheduledAt, sendTS time.Time, resp *http.Response) Outcome {
 	fr := &firstByteReader{r: resp.Body}
 	raw, err := io.ReadAll(io.LimitReader(fr, 8<<20))
 	end := time.Now()
@@ -205,7 +239,7 @@ func (c *Client) readNonStream(ctx context.Context, sendTS time.Time, resp *http
 		BodySHA256: sha256Hex(raw),
 	}
 	if !fr.first.IsZero() {
-		out.TTFTSeconds = f64ptr(fr.first.Sub(sendTS).Seconds())
+		out.TTFTSeconds = f64ptr(fr.first.Sub(scheduledAt).Seconds())
 	}
 	var parsed struct {
 		Usage *usage `json:"usage"`

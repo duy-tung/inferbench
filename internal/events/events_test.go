@@ -111,3 +111,32 @@ func TestRecorderConcurrent(t *testing.T) {
 }
 
 func strPtr(s string) *string { return &s }
+
+// scheduled_send_ts is required (contracts v0.2.0 CO fix) and
+// send_slip_seconds is emitted when set.
+func TestEventMarshalScheduledSend(t *testing.T) {
+	slip := 0.012
+	ttft := 0.2
+	ev := Event{
+		RunID: "run-1", Repetition: 1, RequestID: "r", WorkloadItem: 0,
+		ScheduledSendTS: ts("2026-07-10T09:00:59.988000Z"),
+		SendTS:          ts("2026-07-10T09:01:00Z"),
+		SendSlipSeconds: &slip,
+		EndTS:           ts("2026-07-10T09:01:01Z"),
+		Status:          StatusOK, TTFTSeconds: &ttft,
+	}
+	raw, err := json.Marshal(&ev)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(raw)
+	for _, want := range []string{
+		`"scheduled_send_ts":"2026-07-10T09:00:59.988000Z"`,
+		`"send_ts":"2026-07-10T09:01:00.000000Z"`,
+		`"send_slip_seconds":0.012`,
+	} {
+		if !strings.Contains(s, want) {
+			t.Errorf("missing %s in %s", want, s)
+		}
+	}
+}
