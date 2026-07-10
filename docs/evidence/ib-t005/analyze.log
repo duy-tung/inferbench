@@ -1,0 +1,227 @@
+# IB-T005 end-to-end analysis of ib-t002/ib-t004 evidence runs
+# bundle: /home/user/serving-contracts (8d81492)
+# date: 2026-07-10T19:44:34Z
+
+## analyze docs/evidence/ib-t002/smoke-A -> ib-t005-smoke-A (expected exit 0)
+result_id: ib-t005-smoke-A
+measured window: 9.445s, 200 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 21.1750 ok-req/s, 478.77 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=200 p50=0.107420 p90=0.254118 p95=0.308781 p99=0.483625 max=0.634441 mean=0.131573  p99 95% CI [0.329784, 0.634441]
+  e2e_duration_seconds: n=200 p50=0.107420 p90=0.254149 p95=0.308801 p99=0.483639 max=0.634495 mean=0.131581  p99 95% CI [0.329817, 0.634495]
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=1.0000 (200/200), 21.1750 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/0 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - non-streaming run: client TTFT equals full-response arrival (first body byte of a non-streamed JSON response), not a streaming first-token time
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+  - no ITL-bearing requests in the measured window: itl_seconds/max_stall_seconds tables absent; stall_rate is 0.0 computed over 0 streaming requests (vacuous, not evidence of stall-freedom)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t005/results/ib-t005-smoke-A.benchmark-result.json
+ok: ib-t005-smoke-A exit 0
+
+## analyze docs/evidence/ib-t002/stream-SA -> ib-t005-stream-SA (expected exit 0)
+result_id: ib-t005-stream-SA
+measured window: 9.407s, 200 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 21.2616 ok-req/s, 455.00 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=200 p50=0.022594 p90=0.023434 p95=0.023948 p99=0.049101 max=0.083534 mean=0.023446  p99 95% CI [0.024708, 0.083534]
+  e2e_duration_seconds: n=200 p50=0.112889 p90=0.279047 p95=0.339858 p99=0.426923 max=0.607537 mean=0.138849  p99 95% CI [0.377763, 0.607537]
+  itl_seconds: n=4080 p50=0.005610 p90=0.005914 p95=0.006013 p99=0.006296 p999=0.057618 max=0.067332 mean=0.005652  p99 95% CI [0.006209, 0.006590]
+  max_stall_seconds: n=196 p50=0.006028 p90=0.007593 p95=0.027142 p99=0.063930 max=0.067332 mean=0.008555  p99 95% CI [0.029217, 0.067332]
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=1.0000 (200/200), 21.2616 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/196 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t005/results/ib-t005-stream-SA.benchmark-result.json
+ok: ib-t005-stream-SA exit 0
+
+## analyze docs/evidence/ib-t004/calib-A -> ib-t005-calib-A (expected exit 0)
+result_id: ib-t005-calib-A
+measured window: 38.492s, 120 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 3.1175 ok-req/s, 198.74 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=120 p50=0.102833 p90=0.103709 p95=0.104329 p99=0.105027 max=0.118783 mean=0.103000  p99 95% CI [0.104472, 0.118783]
+  e2e_duration_seconds: n=120 p50=1.414857 p90=2.487111 p95=2.557468 p99=2.717662 max=2.750780 mean=1.411110  p99 95% CI [2.574802, 2.750780]
+  itl_seconds: n=7530 p50=0.020806 p90=0.021153 p95=0.021231 p99=0.022534 p999=0.048802 max=0.059435 mean=0.020843  p99 95% CI [0.021708, 0.023604]
+  max_stall_seconds: n=117 p50=0.021469 p90=0.040597 p95=0.048781 p99=0.058310 max=0.059435 mean=0.025512  p99 95% CI [0.048784, 0.059435]
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=1.0000 (120/120), 3.1175 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/117 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t005/results/ib-t005-calib-A.benchmark-result.json
+ok: ib-t005-calib-A exit 0
+
+## analyze docs/evidence/ib-t004/calib-B -> ib-t005-calib-B (expected exit 0)
+result_id: ib-t005-calib-B
+measured window: 37.538s, 120 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 3.1968 ok-req/s, 203.79 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=120 p50=0.302966 p90=0.303763 p95=0.305041 p99=0.337862 max=0.439569 mean=0.304681  p99 95% CI [0.307029, 0.439569]
+  e2e_duration_seconds: n=120 p50=0.649014 p90=0.946411 p95=0.976272 p99=1.138095 max=1.213585 mean=0.659653  p99 95% CI [0.979726, 1.213585]
+  itl_seconds: n=7530 p50=0.005472 p90=0.005798 p95=0.005905 p99=0.006149 p999=0.045818 max=0.227278 mean=0.005655  p99 95% CI [0.006125, 0.006185]
+  max_stall_seconds: n=117 p50=0.006076 p90=0.008159 p95=0.014000 p99=0.227162 max=0.227278 mean=0.014381  p99 95% CI [0.014015, 0.227278]
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=1.0000 (120/120), 3.1968 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/117 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t005/results/ib-t005-calib-B.benchmark-result.json
+ok: ib-t005-calib-B exit 0
+
+## analyze docs/evidence/ib-t004/slow-control -> ib-t005-slow-control (expected exit 0)
+result_id: ib-t005-slow-control
+measured window: 13.249s, 30 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 2.2644 ok-req/s, 82.20 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=30 p50=0.022643 p90=0.023309 p95=0.023777 p99=0.065769 max=0.082837 mean=0.024681  p99 95% CI [0.023285, 0.082837]
+  e2e_duration_seconds: n=30 p50=0.237841 p90=0.328267 p95=0.345516 p99=0.353441 max=0.353449 mean=0.215386  p99 95% CI [0.326929, 0.353449]
+  itl_seconds: n=1059 p50=0.005364 p90=0.005651 p95=0.005735 p99=0.005912 p999=0.006166 max=0.006505 mean=0.005399  p99 95% CI [0.005855, 0.005963]
+  max_stall_seconds: n=28 p50=0.005735 p90=0.006123 p95=0.006162 p99=0.006414 max=0.006505 mean=0.005775  p99 95% CI [0.006071, 0.006505]
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=1.0000 (30/30), 2.2644 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/28 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t005/results/ib-t005-slow-control.benchmark-result.json
+ok: ib-t005-slow-control exit 0
+
+## analyze docs/evidence/ib-t004/slow-on -> ib-t005-slow-on (expected exit 0)
+result_id: ib-t005-slow-on
+measured window: 15.690s, 30 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 1.9120 ok-req/s, 69.41 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=30 p50=0.223168 p90=0.223957 p95=0.224014 p99=0.224178 max=0.224231 mean=0.223197  p99 95% CI [0.223895, 0.224231]
+  e2e_duration_seconds: n=30 p50=2.168569 p90=2.921614 p95=3.012169 p99=3.083042 max=3.111931 mean=1.943756  p99 95% CI [2.911572, 3.111931]
+  itl_seconds: n=1059 p50=0.000059 p90=0.100099 p95=0.100433 p99=0.100727 p999=0.105733 max=0.114201 mean=0.045807  p99 95% CI [0.100639, 0.100880]
+  max_stall_seconds: n=28 p50=0.100555 p90=0.103310 p95=0.105648 p99=0.111919 max=0.114201 mean=0.101450  p99 95% CI [0.102389, 0.114201]
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=1.0000 (30/30), 1.9120 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/28 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - slow-client run: the client deliberately throttles its own reads (4096 B/s + 0.2 s initial delay); latency figures measure that self-imposed backpressure by design
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t005/results/ib-t005-slow-on.benchmark-result.json
+ok: ib-t005-slow-on exit 0
+
+## analyze docs/evidence/ib-t004/cancel-mid-stream -> ib-t005-cancel-mid-stream (expected exit 0)
+result_id: ib-t005-cancel-mid-stream
+measured window: 10.243s, 30 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 0.0976 ok-req/s, 23.33 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=30 p50=0.303181 p90=0.303623 p95=0.303768 p99=0.303998 max=0.304057 mean=0.303148  p99 95% CI [0.303614, 0.304057]
+  e2e_duration_seconds: n=1 p50=0.486683 p90=0.486683 p95=0.486683 p99=0.486683 max=0.486683 mean=0.486683  p99 95% CI [0.486683, 0.486683]
+  itl_seconds: n=209 p50=0.030557 p90=0.030994 p95=0.031075 p99=0.031312 max=0.050047 mean=0.030691  p99 95% CI [0.031151, 0.048871]
+  max_stall_seconds: n=30 p50=0.030934 p90=0.031225 p95=0.033531 p99=0.045783 max=0.050047 mean=0.031661  p99 95% CI [0.031208, 0.050047]
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=0.0333 (1/30), 0.0976 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/30 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+  - 29 deliberately canceled request(s) (workload cancellation profile) count in the offered denominator and never meet the SLO; goodput ratio reflects that by design
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t005/results/ib-t005-cancel-mid-stream.benchmark-result.json
+ok: ib-t005-cancel-mid-stream exit 0
+
+## analyze docs/evidence/ib-t004/cancel-queued -> ib-t005-cancel-queued (expected exit 3)
+result_id: ib-t005-cancel-queued
+measured window: 9.709s, 30 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 0.0000 ok-req/s, 0.00 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+latency percentiles: WITHHELD (no-samples)
+  signal 'ttft_seconds' has zero pooled samples in the measured window (e.g. no request ever produced a first byte / no request completed ok) — the contract-required latency table cannot be computed; latency is withheld, the run remains valid
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=0.0000 (0/30), 0.0000 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/0 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - latency percentiles withheld: signal 'ttft_seconds' has zero pooled samples in the measured window (e.g. no request ever produced a first byte / no request completed ok) — the contract-required latency table cannot be computed; latency is withheld, the run remains valid
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+  - no ITL-bearing requests in the measured window: itl_seconds/max_stall_seconds tables absent; stall_rate is 0.0 computed over 0 streaming requests (vacuous, not evidence of stall-freedom)
+  - 30 deliberately canceled request(s) (workload cancellation profile) count in the offered denominator and never meet the SLO; goodput ratio reflects that by design
+unexplained_anomalies: [] (we looked and found none)
+
+RESULT NOT EXPRESSIBLE (run remains valid): latency percentiles are withheld (no-samples): signal 'ttft_seconds' has zero pooled samples in the measured window (e.g. no request ever produced a first byte / no request completed ok) — the contract-required latency table cannot be computed; latency is withheld, the run remains valid — the run set is a VALID run, but a schema-valid benchmark-result cannot be emitted at the pinned contracts version (percentile tables are required and have no null form); publish the run's validity data via the report path instead of a result file
+ok: ib-t005-cancel-queued exit 3
+
+## analyze docs/evidence/ib-t004/cancel-pre-first-token -> ib-t005-cancel-pre-first-token (expected exit 3)
+result_id: ib-t005-cancel-pre-first-token
+measured window: 9.858s, 30 events (1 repetition(s)); warm-up: 0 excluded
+throughput: 0.0000 ok-req/s, 0.00 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+latency percentiles: WITHHELD (no-samples)
+  signal 'ttft_seconds' has zero pooled samples in the measured window (e.g. no request ever produced a first byte / no request completed ok) — the contract-required latency table cannot be computed; latency is withheld, the run remains valid
+goodput@SLO[mock-loopback-baseline@1.0.0]: ratio=0.0000 (0/30), 0.0000 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.25s, 0/0 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - latency percentiles withheld: signal 'ttft_seconds' has zero pooled samples in the measured window (e.g. no request ever produced a first byte / no request completed ok) — the contract-required latency table cannot be computed; latency is withheld, the run remains valid
+  - run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+  - warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)
+  - no ITL-bearing requests in the measured window: itl_seconds/max_stall_seconds tables absent; stall_rate is 0.0 computed over 0 streaming requests (vacuous, not evidence of stall-freedom)
+  - 30 deliberately canceled request(s) (workload cancellation profile) count in the offered denominator and never meet the SLO; goodput ratio reflects that by design
+unexplained_anomalies: [] (we looked and found none)
+
+RESULT NOT EXPRESSIBLE (run remains valid): latency percentiles are withheld (no-samples): signal 'ttft_seconds' has zero pooled samples in the measured window (e.g. no request ever produced a first byte / no request completed ok) — the contract-required latency table cannot be computed; latency is withheld, the run remains valid — the run set is a VALID run, but a schema-valid benchmark-result cannot be emitted at the pinned contracts version (percentile tables are required and have no null form); publish the run's validity data via the report path instead of a result file
+ok: ib-t005-cancel-pre-first-token exit 3
+
+## kit validation of everything under docs/evidence/ib-t005
+PASS  docs/evidence/ib-t005/mock-loopback.slo.json  [slo]
+
+validate: 1/1 file(s) valid against 'slo'
+PASS  ib-t005-calib-A.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-calib-B.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-cancel-mid-stream.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-slow-control.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-slow-on.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-smoke-A.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-stream-SA.benchmark-result.json  [benchmark-result]
+
+check: 7/7 artifact(s) valid
+RESULT: GREEN — 7 results emitted + kit-valid, 2 typed latency-withheld refusals as expected

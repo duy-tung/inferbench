@@ -1,0 +1,86 @@
+{
+  "result_id": "ib-t005-slow-on",
+  "created_at": "2026-07-10T19:44:40Z",
+  "links": {
+    "run_manifests": [
+      "docs/evidence/ib-t004/slow-on/manifest.json"
+    ],
+    "raw_events": [
+      "docs/evidence/ib-t004/slow-on/events.jsonl"
+    ]
+  },
+  "throughput": {
+    "requests_per_second": 1.9120055551420758,
+    "output_tokens_per_second": 69.40580165165736,
+    "total_requests": 30,
+    "total_output_tokens": 1089
+  },
+  "pooled_percentiles": {
+    "method": "pooled-raw-events",
+    "pooled_event_count": 30,
+    "tables": {
+      "ttft_seconds": {
+        "n": 30,
+        "p50": 0.223168451,
+        "p90": 0.2239566083,
+        "p95": 0.2240136623,
+        "p99": 0.22417774691,
+        "max": 0.224230562,
+        "mean": 0.22319654586666668
+      },
+      "e2e_duration_seconds": {
+        "n": 30,
+        "p50": 2.168568968772888,
+        "p90": 2.9216140985488894,
+        "p95": 3.0121692299842833,
+        "p99": 3.0830422616004944,
+        "max": 3.1119308471679688,
+        "mean": 1.9437561670939127
+      },
+      "itl_seconds": {
+        "n": 1059,
+        "p50": 5.9165e-05,
+        "p90": 0.1000988696,
+        "p95": 0.1004330108,
+        "p99": 0.10072741784,
+        "max": 0.114201019,
+        "mean": 0.045806856224740324,
+        "p999": 0.10573254304
+      },
+      "max_stall_seconds": {
+        "n": 28,
+        "p50": 0.1005552595,
+        "p90": 0.1033103585,
+        "p95": 0.105647828,
+        "p99": 0.11191907377,
+        "max": 0.114201019,
+        "mean": 0.10145010153571428
+      }
+    }
+  },
+  "goodput": {
+    "slo_ref": {
+      "id": "mock-loopback-baseline",
+      "version": "1.0.0"
+    },
+    "requests_per_second_meeting_slo": 1.9120055551420758,
+    "ratio": 1.0,
+    "shed_rate": 0.0,
+    "stall_rate": 0.0,
+    "stall_threshold_seconds": 0.25
+  },
+  "knee_estimate": null,
+  "cost": null,
+  "validity": {
+    "warm_up_handling": "manifest warm-up policy 'none': no warm-up exclusion applied; 0 of 30 events excluded",
+    "run_count": 1,
+    "threats_to_validity": [
+      "slow-client run: the client deliberately throttles its own reads (4096 B/s + 0.2 s initial delay); latency figures measure that self-imposed backpressure by design",
+      "run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable",
+      "no rate sweep in this run set \u2014 knee_estimate is null; no claim is made about saturation behavior",
+      "no cost profile applies to this run set \u2014 cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)",
+      "warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)"
+    ],
+    "unexplained_anomalies": []
+  }
+}

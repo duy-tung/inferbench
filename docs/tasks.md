@@ -133,6 +133,24 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
   green.
 - **Evidence:** test suite output. **Integration impact:** results feed fleetlab.
 - **Stop condition:** synthetic-data tests green.
+- **Status:** implemented 2026-07-10 — `analysis/` Python package (numpy + jsonschema only;
+  pandas/scipy justified out). **70 pytest tests green**, all known-answer: exact percentiles on
+  constructed data (Hyndman–Fan 7), pooled-vs-averaged guard (data constructed so averaging
+  gives the wrong answer + `PercentileTable` construction is structurally locked to raw pooled
+  samples), bootstrap CI coverage on Exp(1) (measured 0.913/0.958 for p50/p90 at nominal 95%),
+  warm-up exclusion counts per policy, synthetic-knee detection (placed knee found, spike ≠
+  knee, edge knee flagged unbracketed), error/shed gating (10% errors → latency withheld;
+  100%-timeout run stays valid with goodput/error accounting; deliberate cancels don't trip),
+  goodput single-pass with shed+stall structurally adjacent (SLO without a stall objective is
+  refused), provenance-aware cost (null + validity note without a profile). ADR-0002 numeric
+  parameters finalized (B=1000/95%/seed 20260710; knee 1.5× plateau sustained-departure +
+  kneedle cross-check; gate threshold 0.05 declared). End-to-end: 9 real evidence runs from
+  `docs/evidence/ib-t002` + `ib-t004` analyzed against a measured-basis SLO
+  (`docs/evidence/ib-t005/mock-loopback.slo.json`) — 7 benchmark-result files emitted and
+  **kit-valid 7/7** at pin `8d81492`, 2 runs (cancel-queued/pre-first-token) correctly refused
+  as valid-but-latency-inexpressible (typed exit 3, no TTFT samples). Evidence:
+  `docs/evidence/ib-t005/`. Contract gap (no null form for gated latency tables) recorded as a
+  contracts observation in `implementation-notes.md`.
 
 ## IB-T006 — Report generator + validity block
 

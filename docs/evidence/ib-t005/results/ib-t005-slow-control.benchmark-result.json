@@ -1,0 +1,85 @@
+{
+  "result_id": "ib-t005-slow-control",
+  "created_at": "2026-07-10T19:44:39Z",
+  "links": {
+    "run_manifests": [
+      "docs/evidence/ib-t004/slow-control/manifest.json"
+    ],
+    "raw_events": [
+      "docs/evidence/ib-t004/slow-control/events.jsonl"
+    ]
+  },
+  "throughput": {
+    "requests_per_second": 2.2644053983096795,
+    "output_tokens_per_second": 82.19791595864137,
+    "total_requests": 30,
+    "total_output_tokens": 1089
+  },
+  "pooled_percentiles": {
+    "method": "pooled-raw-events",
+    "pooled_event_count": 30,
+    "tables": {
+      "ttft_seconds": {
+        "n": 30,
+        "p50": 0.022643028000000003,
+        "p90": 0.0233093188,
+        "p95": 0.02377666895,
+        "p99": 0.06576869796000005,
+        "max": 0.082837453,
+        "mean": 0.024680514366666666
+      },
+      "e2e_duration_seconds": {
+        "n": 30,
+        "p50": 0.23784101009368896,
+        "p90": 0.32826693058013917,
+        "p95": 0.345516288280487,
+        "p99": 0.3534409475326538,
+        "max": 0.35344910621643066,
+        "mean": 0.215385635693868
+      },
+      "itl_seconds": {
+        "n": 1059,
+        "p50": 0.005363944,
+        "p90": 0.0056508667999999995,
+        "p95": 0.005734527,
+        "p99": 0.005912071360000001,
+        "max": 0.006505181,
+        "mean": 0.005398990737488197,
+        "p999": 0.006166251938
+      },
+      "max_stall_seconds": {
+        "n": 28,
+        "p50": 0.0057345174999999995,
+        "p90": 0.006122715,
+        "p95": 0.00616168535,
+        "p99": 0.00641391506,
+        "max": 0.006505181,
+        "mean": 0.00577454682142857
+      }
+    }
+  },
+  "goodput": {
+    "slo_ref": {
+      "id": "mock-loopback-baseline",
+      "version": "1.0.0"
+    },
+    "requests_per_second_meeting_slo": 2.2644053983096795,
+    "ratio": 1.0,
+    "shed_rate": 0.0,
+    "stall_rate": 0.0,
+    "stall_threshold_seconds": 0.25
+  },
+  "knee_estimate": null,
+  "cost": null,
+  "validity": {
+    "warm_up_handling": "manifest warm-up policy 'none': no warm-up exclusion applied; 0 of 30 events excluded",
+    "run_count": 1,
+    "threats_to_validity": [
+      "run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable",
+      "no rate sweep in this run set \u2014 knee_estimate is null; no claim is made about saturation behavior",
+      "no cost profile applies to this run set \u2014 cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)",
+      "warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)"
+    ],
+    "unexplained_anomalies": []
+  }
+}

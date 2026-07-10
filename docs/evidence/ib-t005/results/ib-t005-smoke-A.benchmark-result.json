@@ -1,0 +1,68 @@
+{
+  "result_id": "ib-t005-smoke-A",
+  "created_at": "2026-07-10T19:44:35Z",
+  "links": {
+    "run_manifests": [
+      "docs/evidence/ib-t002/smoke-A/manifest.json"
+    ],
+    "raw_events": [
+      "docs/evidence/ib-t002/smoke-A/events.jsonl"
+    ]
+  },
+  "throughput": {
+    "requests_per_second": 21.174998501222685,
+    "output_tokens_per_second": 478.76671611264493,
+    "total_requests": 200,
+    "total_output_tokens": 4522
+  },
+  "pooled_percentiles": {
+    "method": "pooled-raw-events",
+    "pooled_event_count": 200,
+    "tables": {
+      "ttft_seconds": {
+        "n": 200,
+        "p50": 0.1074202415,
+        "p90": 0.25411783469999993,
+        "p95": 0.3087806218499999,
+        "p99": 0.4836247724299987,
+        "max": 0.634441416,
+        "mean": 0.13157306805500002
+      },
+      "e2e_duration_seconds": {
+        "n": 200,
+        "p50": 0.10741996765136719,
+        "p90": 0.2541491031646728,
+        "p95": 0.3088007926940917,
+        "p99": 0.4836394476890551,
+        "max": 0.6344950199127197,
+        "mean": 0.13158116221427918
+      }
+    }
+  },
+  "goodput": {
+    "slo_ref": {
+      "id": "mock-loopback-baseline",
+      "version": "1.0.0"
+    },
+    "requests_per_second_meeting_slo": 21.174998501222685,
+    "ratio": 1.0,
+    "shed_rate": 0.0,
+    "stall_rate": 0.0,
+    "stall_threshold_seconds": 0.25
+  },
+  "knee_estimate": null,
+  "cost": null,
+  "validity": {
+    "warm_up_handling": "manifest warm-up policy 'none': no warm-up exclusion applied; 0 of 200 events excluded",
+    "run_count": 1,
+    "threats_to_validity": [
+      "non-streaming run: client TTFT equals full-response arrival (first body byte of a non-streamed JSON response), not a streaming first-token time",
+      "run_count=1 is below the >=3-repetitions methodology minimum (experiments.md rule 4); cross-run dispersion is not assessable",
+      "no rate sweep in this run set \u2014 knee_estimate is null; no claim is made about saturation behavior",
+      "no cost profile applies to this run set \u2014 cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)",
+      "warm-up policy 'none' declared in the manifest: no warm-up exclusion applied; results include any cold-start effects (experiments.md rule 2 requires exclusion for published benchmark claims)",
+      "no ITL-bearing requests in the measured window: itl_seconds/max_stall_seconds tables absent; stall_rate is 0.0 computed over 0 streaming requests (vacuous, not evidence of stall-freedom)"
+    ],
+    "unexplained_anomalies": []
+  }
+}

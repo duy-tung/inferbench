@@ -1,6 +1,8 @@
 # ADR-0002 — Statistics choices: pooled percentiles, bootstrap CIs, warm-up exclusion, knee detection
 
-**Status:** Accepted (user review passed at the Wave-1 exit review, 2026-07-10) · **Date:** 2026-07-10 · **Owner task:** IB-T005 (parameters finalized there)
+**Status:** Accepted (user review passed at the Wave-1 exit review, 2026-07-10); numeric
+parameters finalized by IB-T005 — see the changelog at the bottom · **Date:** 2026-07-10 ·
+**Owner task:** IB-T005 (parameters finalized there)
 
 ## Context
 
@@ -60,3 +62,62 @@ this ADR fixes how we compute them.
   acceptance basis for IB-T005 (see `testing.md` layer 2).
 - Any future change to bootstrap parameters or knee method is a documented amendment here, since
   it affects comparability of results across report versions.
+
+## Changelog
+
+### 2026-07-10 — IB-T005 finalized parameters (implementation: `analysis/` package)
+
+Fixed by the known-answer test suite (`analysis/tests/`, 70 tests green; evidence in
+`implementation-notes.md`):
+
+1. **Percentile definition:** linear interpolation between order statistics (Hyndman–Fan
+   type 7, `numpy.quantile(..., method="linear")`), computed on the pooled raw samples.
+   `p999` is reported only when the pool has ≥1000 samples (below that it restates the max
+   with false precision). Structural pooling guard: `PercentileTable` is only constructible
+   from raw pooled samples (`pooled_table()`); direct construction — the averaging path —
+   raises `PoolingGuardError`, and the known-answer guard test (pooling ≠ averaging by
+   construction) pins the pooled answer.
+2. **Bootstrap CIs:** nonparametric percentile bootstrap, **B = 1000 resamples, 95% interval**
+   (2.5th/97.5th empirical percentiles of the replicates), seeded generator (**default seed
+   20260710**) so intervals are reproducible run-to-run. Coverage verified on Exp(1) with
+   analytically known p50 (= ln 2) and p90 (= ln 10): measured coverage **0.913** (p50,
+   150 trials, n=300) and **0.958** (p90, 120 trials, n=400) for the nominal 95% interval,
+   inside the [0.85, 1.0] acceptance band (measured 2026-07-10; percentile bootstrap is known
+   to undercover slightly at small n — the band catches regressions, not decoration). CIs are
+   report-surface data — the pinned benchmark-result percentileTable has no CI fields.
+3. **Warm-up:** as decided above; policy read ONLY from the run manifest (`discard-requests` /
+   `discard-duration` / `none`), applied per repetition in `scheduled_send_ts` order; every
+   exclusion counted into `validity.warm_up_handling`. A policy that excludes every event is a
+   typed refusal. Policy `none` always produces a threats-to-validity entry.
+4. **Knee detection (finalized method):** plateau-departure threshold — plateau = median of
+   the signal over the lowest ⌊n/3⌋ (≥2) sweep rates; knee = first rate whose signal exceeds
+   **1.5× plateau** and stays above it for every higher rate (sustained departure; a single
+   noisy spike is not a knee). Kneedle-style max-curvature cross-check on the normalized curve;
+   agreement within one sweep point → confidence 0.8, disagreement → 0.5. **Honest
+   limitations, emitted in the method string:** resolution is bounded by sweep-point spacing
+   (the true knee lies in (previous point, reported point]); assumes a plateau-then-degrade
+   shape; the 1.5× factor is a declared judgment call, not a statistical test; a knee at the
+   highest swept rate is reported as NOT bracketed with confidence capped at 0.5 and a
+   mandatory threat entry. <6 sweep points is a typed refusal (rule 3). No extrapolation past
+   the knee anywhere.
+5. **Error/shed gating (CO re-review requirement, new in IB-T005):** latency percentiles are
+   **withheld** when the measured window's combined error+shed rate exceeds the **declared**
+   gate threshold (default **0.05**; always echoed in output so a permissive declaration is
+   visible). A 100%-timeout run is a VALID run — its throughput, error/shed accounting and
+   goodput are reported — but its latency table is structurally absent (`WithheldLatency`
+   carries the reason into the validity block; there is no percentile surface to quote).
+   Deliberate cancellations are workload features and do not count toward the gate. Because the
+   pinned benchmark-result schema has no null form for the required percentile tables, emission
+   of a withheld-latency result file is a typed refusal (`ResultNotExpressibleError`) — never a
+   schema-invalid or number-fabricating artifact (contracts observation filed in
+   `implementation-notes.md`).
+6. **Goodput evaluation semantics:** DistServe-style per-request SLO attainment — a request
+   meets the SLO iff status `ok` AND every objective holds on the request's own signal values;
+   shed/errored/canceled requests count in the offered denominator and never meet. The SLO
+   MUST declare a `max_stall_seconds` upper bound (otherwise typed refusal: stall rate needs a
+   threshold to exist beside goodput). Stall rate = stalled / ITL-bearing requests; zero
+   streaming requests → 0.0 with a mandatory vacuousness threat.
+7. **Comparability guards on pooling:** repetitions pool only when their manifests agree on
+   every comparability key (rule 10 set); duplicate run_ids refuse (double-counting/
+   cherry-picking guard). Cross-run dispersion is a separate type (`RunDispersion`, median ±
+   range of per-run summaries) that cannot occupy a pooled-table slot.

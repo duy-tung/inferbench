@@ -1,0 +1,51 @@
+{
+  "slo_id": "mock-loopback-baseline",
+  "version": "1.0.0",
+  "scope": "model-serving",
+  "description": "Demonstration SLO for analyzing the IB-T002/IB-T004 mock-loopback evidence runs with the IB-T005 analysis core. Model-serving SLOs are declared ONLY from measurement (slo.schema.json normative rule); every threshold below is derived from the measured maxima of the ib-t004 calibration/scenario evidence, rounded up one honest headroom step. This SLO exists so goodput@SLO can be exercised end-to-end on real raw events; it is NOT a production target.",
+  "applies_to": {
+    "workload_ref": "ib-t002/ib-t004 smoke, calibration, cancellation and slow-client runs (gateway-mock, loopback)"
+  },
+  "objectives": [
+    {
+      "signal": "ttft_seconds",
+      "statistic": "max",
+      "comparator": "<=",
+      "threshold": 0.75,
+      "unit": "seconds",
+      "provenance": {
+        "basis": "measured",
+        "as_of": "2026-07-10",
+        "source": "inferbench docs/evidence/ib-t002 + ib-t004 raw events (largest observed client TTFT 0.634 s, smoke-A non-streaming full-response read; calibrated streaming points 0.102-0.440 s, docs/evidence/ib-t004/calibration.md)",
+        "notes": "threshold = measured suite maximum 0.634 s rounded up to 0.75 s"
+      }
+    },
+    {
+      "signal": "e2e_duration_seconds",
+      "statistic": "max",
+      "comparator": "<=",
+      "threshold": 5.0,
+      "unit": "seconds",
+      "provenance": {
+        "basis": "measured",
+        "as_of": "2026-07-10",
+        "source": "inferbench docs/evidence/ib-t002 + ib-t004 raw events (largest observed e2e 3.112 s on the throttled slow-client run slow-on; calibration maximum 2.751 s)",
+        "notes": "threshold = measured suite maximum 3.112 s rounded up to 5.0 s"
+      }
+    },
+    {
+      "signal": "max_stall_seconds",
+      "statistic": "max",
+      "comparator": "<=",
+      "threshold": 0.25,
+      "unit": "seconds",
+      "provenance": {
+        "basis": "measured",
+        "as_of": "2026-07-10",
+        "source": "inferbench docs/evidence/ib-t002 + ib-t004 raw events (largest observed inter-chunk stall 0.227 s, calib-B at configured ITL 20 ms under 300 ms TTFT; slow-on pacing-granularity stalls up to 0.114 s)",
+        "notes": "threshold = measured suite maximum 0.227 s rounded up to 0.25 s; also the stall threshold used for stall_rate"
+      }
+    }
+  ],
+  "notes": "Per-request evaluation: statistic 'max' objectives read exactly as per-request bounds, which is how the analyzer applies them (DistServe-style per-request SLO attainment). Declared thresholds are measured-derived as of 2026-07-10; re-derive when the target or topology changes."
+}

@@ -366,6 +366,121 @@ errors are now real, plus the calibration evidence that makes them trustworthy.
 events / run log / derived workload / stats / mock debug-state, infergate-pin.txt,
 kit-validate.log) and regenerated `docs/evidence/ib-t003/`.
 
+### 2026-07-10 — IB-T005: analysis core (Python)
+
+**Contracts pin:** serving-contracts @ `8d81492` (raw-event v0.2.0 basis: latency from
+`scheduled_send_ts`). **Scope:** `analysis/` Python package (src layout,
+`inferbench_analysis`) + known-answer test suite + end-to-end analysis of the real
+IB-T002/IB-T004 evidence runs into kit-valid benchmark-result files.
+
+**Dependency decision:** numpy (percentiles, vectorized bootstrap) + jsonschema (pinned-bundle
+validation of everything consumed and emitted) only. pandas rejected — the unit of work is a
+list of typed per-request events, no relational operations exist; scipy rejected — percentile
+bootstrap and the knee method are elementary numpy; PyYAML rejected — every artifact is JSON.
+
+**Honesty rules made structural (G4 will attack these; they are code, not convention):**
+
+1. **Pooling, never averaging (rule 5):** `PercentileTable` is constructible ONLY via
+   `pooled_table(samples_by_run)` which concatenates raw samples before computing anything;
+   direct construction (the path an averager would need) raises `PoolingGuardError`; no API
+   accepts two tables; the emitted `pooled_percentiles.method` is the schema const
+   `pooled-raw-events`. Guard test constructs runs where averaging per-run p99s yields 2.0 but
+   the pooled p99 is 3.0 and pins the pooled answer. Cross-run dispersion is a separate
+   `RunDispersion` type (median ± range of per-run summaries, rule 4) that cannot occupy a
+   table slot. Known residual: Python cannot stop a *deliberate* bypass (e.g.
+   `dataclasses.replace` on a real table); the guard blocks the accidental path and the
+   known-answer test catches the deliberate one.
+2. **Goodput adjacency (rule 7):** `evaluate_goodput()` is a single pass returning one frozen
+   `Goodput` object carrying ratio + `shed_rate` + `stall_rate` + `slo_ref` + stall threshold;
+   no bare-goodput API exists; an SLO without a `max_stall_seconds` upper bound is a typed
+   refusal (no stall threshold → no stall rate → no goodput at all). Mirrors the contract's
+   goodput block exactly. Per-request evaluation is DistServe-style attainment; canceled/shed/
+   errored requests count in the denominator and never meet.
+3. **Error/shed gate (CO re-review requirement):** when measured-window error+shed rate
+   exceeds the DECLARED threshold (default 0.05, echoed everywhere), the result's latency
+   field becomes `WithheldLatency` (kind + reason + rates) — the percentile tables do not
+   exist on the object, and the reason is appended to `threats_to_validity`. A 100%-timeout
+   run is analyzed as a VALID run (throughput 0 ok/s, error accounting, goodput 0 with rates
+   visible) whose latency table is absent. Deliberate cancellations do not count toward the
+   gate (workload features, not failures). A second withholding kind (`no-samples`) covers
+   contract-required signals with zero samples (e.g. every request canceled pre-first-token).
+4. **Warm-up (rule 2):** policy read ONLY from the manifest (no override parameter exists),
+   applied per repetition in scheduled-send order; exclusions counted into
+   `validity.warm_up_handling`; excluding every event is a typed refusal; policy `none` always
+   yields a threats entry.
+5. **Comparability (rule 10):** pooling refuses manifests differing on any comparability key
+   (topology/workload/engine/model/hardware/gateway/warm-up) and duplicate run_ids
+   (double-count/cherry-pick guard).
+6. **Self-validating emission:** `to_benchmark_result_dict()` validates against the pinned
+   schema before anything is written; a withheld-latency result is a typed
+   `ResultNotExpressibleError` (CLI exit 3) — no schema-invalid or number-fabricating artifact
+   can be produced.
+
+**Finalized statistics parameters** (recorded in ADR-0002 changelog): percentiles = linear
+interpolation (Hyndman–Fan 7) on the pool; p999 only at n ≥ 1000; bootstrap = percentile
+method, B=1000, 95% interval, seed 20260710 (CLI-overridable), measured coverage on Exp(1)
+0.913 (p50) / 0.958 (p90) at nominal 95%; knee = plateau-departure (median of lowest ⌊n/3⌋
+rates, 1.5× factor, sustained departure) + kneedle cross-check (agree → confidence 0.8, else
+0.5, edge knee unbracketed and capped 0.5), ≥6 points required, limitations emitted in the
+method string; gate threshold default 0.05.
+
+**Verification (all commands run 2026-07-10):**
+
+1. `cd analysis && CONTRACTS_BUNDLE=/path/to/serving-contracts python -m pytest -q` →
+   **70 passed** (exact percentiles incl. 1..100 known answers; pooled≠averaged guard;
+   bootstrap reproducibility + bracketing + coverage on Exp(1) with analytic p50/p90;
+   warm-up counts for all three policies incl. shuffled-input invariance; gating trip/pass/
+   100%-timeout/cancel-exemption/no-samples; goodput known ratios + structural refusals;
+   synthetic knees (placed knee at rate 7 found; spike-then-recover not a knee; flat sweep →
+   None; edge knee unbracketed; <6 points refused); cost known answers + provenance honesty;
+   loader refusals against the pinned schemas incl. a pre-v0.2.0 event (missing
+   `scheduled_send_ts`) being refused; emission schema-validity). Schema-dependent tests skip
+   loudly if `CONTRACTS_BUNDLE` is unset — CI must fetch the pinned bundle per the kit README
+   wiring (follow-up noted below).
+2. **End-to-end on real evidence** (`scripts/analyze-evidence.sh /path/to/serving-contracts`,
+   log: `docs/evidence/ib-t005/analyze.log`): 9 runs analyzed against the measured-basis SLO
+   `docs/evidence/ib-t005/mock-loopback.slo.json` (model-serving SLOs must be
+   measurement-derived; thresholds = measured suite maxima rounded up: TTFT ≤ 0.75 s from max
+   0.634 s, e2e ≤ 5.0 s from max 3.112 s, stall ≤ 0.25 s from max 0.227 s, sources in the
+   file). **7 results emitted** (smoke-A, stream-SA, calib-A/B, slow-control, slow-on,
+   cancel-mid-stream), each with pooled tables + bootstrap CIs on stdout, goodput with
+   shed/stall adjacent, knee null + threat (no sweep), **cost null + validity note (mock runs
+   have no cost profile — honest)**, warm-up 'none' disclosed as a threat, run_count=1
+   below-minimum threat. **2 typed refusals as designed** (cancel-queued,
+   cancel-pre-first-token: valid runs, zero TTFT samples, exit 3, no file).
+3. **Kit validation green** (`docs/evidence/ib-t005/kit-validate.log`): selftest GREEN,
+   SLO instance 1/1 PASS, `check docs/evidence/ib-t005/results` → **7/7 benchmark-result
+   PASS** at pin `8d81492`.
+
+Sample pooled numbers (calib-A, 120 events, mock configured TTFT 100 ms / ITL 20 ms): client
+TTFT p50 0.1028 s / p99 0.1050 s (95% CI [0.1045, 0.1188]); pooled ITL n=7530, p50 0.0208 s,
+p999 0.0488 s — consistent with the IB-T004 calibration deltas. The `unexplained_anomalies: []`
+claims in the emitted results rest on the IB-T004 calibration review of these same events
+(deltas explained there) plus the per-run summaries in `analyze.log`.
+
+**Contracts observations (proposals for the orchestrator — NO local schema edits):**
+
+4. **benchmark-result has no expressible form for a valid run whose latency table is
+   withheld/empty.** `pooled_percentiles.tables` requires `ttft_seconds` and
+   `e2e_duration_seconds` as numeric percentileTables (n ≥ 1), so (a) a 100%-shed/timeout or
+   all-canceled-pre-first-token run and (b) an error/shed-GATED run cannot emit a schema-valid
+   result even though they are valid runs with meaningful throughput/goodput/validity data.
+   IB-T005 handles this honestly (typed `ResultNotExpressibleError`, exit 3, reason in the
+   in-memory validity block) but the run's non-latency aggregates are then file-less. Proposal:
+   allow each table (or the tables block) to be `null` with a required sibling reason string,
+   mirroring the knee/cost null-with-validity-note pattern.
+5. **percentileTable has no CI fields** (`additionalProperties: false`), so the bootstrap CIs
+   this repo computes cannot ride in the result file and live only in reports/logs. Proposal:
+   optional `p50_ci`/`p90_ci`/`p95_ci`/`p99_ci` `[lo, hi]` pairs plus a `ci_method` string —
+   additive MINOR.
+
+**Follow-up:** wire `analysis` pytest + the kit sweep into CI with the pinned-bundle fetch
+(kit README §"Wiring") so the loud skips can never pass silently in CI; IB-T006 renders the
+dispersion objects and bootstrap CIs that the contract file cannot carry.
+
+**Evidence:** `analysis/` (package + tests), `docs/evidence/ib-t005/` (mock-loopback.slo.json,
+results/ ×7, analyze.log, kit-validate.log), `scripts/analyze-evidence.sh`.
+
 ## Deviations
 
 > Program deviation policy: when repository evidence forces a deviation from the approved plan,

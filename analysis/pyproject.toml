@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inferbench-analysis"
+version = "0.1.0"
+description = "inferbench analysis core (IB-T005): pooled-percentile statistics, bootstrap CIs, warm-up exclusion, saturation-knee detection, goodput@SLO with shed/stall adjacency, cost, benchmark-result emission"
+requires-python = ">=3.11"
+# Dependency policy (program Python conventions): numpy (percentiles + vectorized
+# bootstrap resampling) and jsonschema (validate consumed/emitted artifacts against
+# the pinned serving-contracts bundle) only. pandas is NOT needed: the unit of work
+# is a list of typed per-request events, no relational/dataframe operations exist.
+# scipy is NOT needed: percentile bootstrap and the knee method are elementary
+# numpy; a scipy dependency would buy nothing but a heavier install.
+# PyYAML is NOT needed: every consumed and emitted artifact is JSON.
+dependencies = [
+    "numpy>=1.26",
+    "jsonschema>=4.18",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

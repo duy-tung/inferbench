@@ -1,0 +1,19 @@
+# kit validation vs serving-contracts @ 8d81492 (v0.2.0 tag pending), 2026-07-10
+# covers: IB-T005 emitted benchmark-result files + the measured-basis SLO instance
+## kit selftest
+selftest: negatives 29/29 failed-as-required
+selftest: GREEN
+## validate --schema slo docs/evidence/ib-t005/mock-loopback.slo.json
+PASS  docs/evidence/ib-t005/mock-loopback.slo.json  [slo]
+
+validate: 1/1 file(s) valid against 'slo'
+## check docs/evidence/ib-t005/results
+PASS  ib-t005-calib-A.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-calib-B.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-cancel-mid-stream.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-slow-control.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-slow-on.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-smoke-A.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-stream-SA.benchmark-result.json  [benchmark-result]
+
+check: 7/7 artifact(s) valid
