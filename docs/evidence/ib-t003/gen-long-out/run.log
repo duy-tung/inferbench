@@ -1,4 +1,4 @@
-run_id=dryrun-gen-long-out repetition=1 requests=45 max_slip=100ms
+run_id=dryrun-gen-long-out repetition=1 requests=45 max_slip=100ms cancel_planned=0 slow_planned=0 prefix_sharing=0
 schedule item=0 offset=27.826553ms input_tokens=70 max_tokens=1069
 schedule item=1 offset=294.737912ms input_tokens=30 max_tokens=1404
 schedule item=2 offset=1.523257188s input_tokens=276 max_tokens=1564
@@ -44,49 +44,50 @@ schedule item=41 offset=23.420693442s input_tokens=158 max_tokens=1190
 schedule item=42 offset=24.507025977s input_tokens=138 max_tokens=1013
 schedule item=43 offset=24.626820623s input_tokens=189 max_tokens=1005
 schedule item=44 offset=25.196821092s input_tokens=187 max_tokens=1172
-request item=0 id=dryrun-gen-long-out-r1-000000 status=ok body_sha256=1eecdee20f0def5900e235b2af9a6852840b101f52062ce81c7913204ec4513b
-request item=1 id=dryrun-gen-long-out-r1-000001 status=ok body_sha256=4fab0fda7088341a91c3e1528eea1feb58c7818038c03ed912fa45002cbc24fd
-request item=2 id=dryrun-gen-long-out-r1-000002 status=ok body_sha256=ffa49bffd6d287a984f4eb6d47bc96e709a5a538bc9d360d5577eddab502622e
-request item=3 id=dryrun-gen-long-out-r1-000003 status=ok body_sha256=19d7ca7d51b9cf7a6e238d335cd040ce2d335403e13277971f38457923e308b9
-request item=4 id=dryrun-gen-long-out-r1-000004 status=ok body_sha256=f8e3698c77a6fb8a0c56c58ccd413818974b41c82ea704cdd73467ed846630b8
-request item=5 id=dryrun-gen-long-out-r1-000005 status=ok body_sha256=289f1f33b5267d03aa2cdebba3da79d1a4283b0e6f8a4c088e9514cfd6ad4494
-request item=7 id=dryrun-gen-long-out-r1-000007 status=ok body_sha256=fd8af10fd28002eb5409a78f018adf253718fe540f259da2fc9fcdbe57455471
-request item=10 id=dryrun-gen-long-out-r1-000010 status=ok body_sha256=3379402f3b9e62ff43ba5dccdf003f4621d322a3d108150122c1e1f31f08c0e8
-request item=9 id=dryrun-gen-long-out-r1-000009 status=ok body_sha256=e685de9dd8b85c07e5b4616f0a3f04006a8ff559f1d0e094eff46f6fc238df7e
-request item=6 id=dryrun-gen-long-out-r1-000006 status=ok body_sha256=98f0e7fdd39338d4a2493d1611d1bc2fc1d34525d46ceec87cc32c95f422d1ed
-request item=8 id=dryrun-gen-long-out-r1-000008 status=ok body_sha256=10b98cc0627bff7abc7c8e05df8c235ac97e768c275f0be9d3a99a59cb4b9164
-request item=11 id=dryrun-gen-long-out-r1-000011 status=ok body_sha256=eb98483ea82dc83d393b768cb46222a49185c067e18f82e5e3efe9e9066f0976
-request item=12 id=dryrun-gen-long-out-r1-000012 status=ok body_sha256=25723e23cf53199d966d45824dccf89e05033cc9749a1413a3a00419f4c8ba40
-request item=14 id=dryrun-gen-long-out-r1-000014 status=ok body_sha256=9f9a99cd8fe49dcc09ca724d9c4c48f443220791518dd55623a6472bbb80b026
-request item=13 id=dryrun-gen-long-out-r1-000013 status=ok body_sha256=2da0112a8d73987f7fb36345f32b58de83286f48e4080f53303091dc8a491507
-request item=16 id=dryrun-gen-long-out-r1-000016 status=ok body_sha256=a28bb6c2cd6797df0d7b3416f04985230481897d3e751ca4c6f39b0ca9c0c6b1
-request item=15 id=dryrun-gen-long-out-r1-000015 status=ok body_sha256=58e8fb0ec86b82a4f84f10f4ac7c3ac0411c043ba6251be94f40b6538b96da5d
-request item=17 id=dryrun-gen-long-out-r1-000017 status=ok body_sha256=0491255fd6c17ea2c2b811fde897317581b61dd075ddfeb458f8cd30e8ec31b9
-request item=18 id=dryrun-gen-long-out-r1-000018 status=ok body_sha256=6c597730f33ed5c481585715982a5d08358806ff326df39452cb9ca3fe6941fa
-request item=20 id=dryrun-gen-long-out-r1-000020 status=ok body_sha256=195f4f15719e520f32cf6903b6148f28e93c6bb89d44d87972c80c55353d0d49
-request item=19 id=dryrun-gen-long-out-r1-000019 status=ok body_sha256=2baa2258837a073f47d324a3ea5f3767d865016d9c149a158b797d1fb2afd5cd
-request item=22 id=dryrun-gen-long-out-r1-000022 status=ok body_sha256=b1373af0259a97e579e95820f462e2b34fca28dba1161248a51b929a56d871a9
-request item=21 id=dryrun-gen-long-out-r1-000021 status=ok body_sha256=9d8cf5b5c02964fc5be1ee139d766f10febfdb4754b3a6aec6742e7de63c74ca
-request item=23 id=dryrun-gen-long-out-r1-000023 status=ok body_sha256=06dbb9850d05fc5f3c9a9448eb5ea9ce664662494a1ee7d001dc08976f1fb6be
-request item=25 id=dryrun-gen-long-out-r1-000025 status=ok body_sha256=af8412ef417ef2a448c4e14647cea98e0dc576d9f22d875dde50f199578273ba
-request item=24 id=dryrun-gen-long-out-r1-000024 status=ok body_sha256=ca371a2b42cdfd472853930d79077e73ddc307dadef7e468b842a34000de8f30
-request item=26 id=dryrun-gen-long-out-r1-000026 status=ok body_sha256=3cd0b4de83704c8cb83ab49e2d3c525b160ce2d4733b235c1abe66fd99ea4e9f
-request item=27 id=dryrun-gen-long-out-r1-000027 status=ok body_sha256=a65df2ec6f919ca303e2dfd75fccd66a007b5e31addaaf55e68e7f8706f7b493
-request item=29 id=dryrun-gen-long-out-r1-000029 status=ok body_sha256=f071cb36e377a8ce61ac4b49da0446a4071bd3dc2704ba9e4c42f1f32440cae5
-request item=28 id=dryrun-gen-long-out-r1-000028 status=ok body_sha256=f732f8bb83dc05387cd5035ac58265f7289505fa0d1c91be327c30cc55283e75
-request item=30 id=dryrun-gen-long-out-r1-000030 status=ok body_sha256=511a1795cba07342b46dee23a164b1677cab3d90f7d5eef286b7b8a4a62525c3
-request item=32 id=dryrun-gen-long-out-r1-000032 status=ok body_sha256=6762647fe837db146f4843c37f9d6cf82ae0a3336a39f1be14187caf8f233568
-request item=31 id=dryrun-gen-long-out-r1-000031 status=ok body_sha256=2cd18752bac8d61b9b9c3c61ea72d4b8b1cf60c9ce694c79b2fa3a8fd6c894a9
-request item=33 id=dryrun-gen-long-out-r1-000033 status=ok body_sha256=f9bad27c1326afebc9a34941457c2a24fe5ff1f7f7285a2a070be3333f162b86
-request item=35 id=dryrun-gen-long-out-r1-000035 status=ok body_sha256=cce73293e85e1428b6d922d1bd42bcd8a906de7ff8a07b5ef8fbd2ac49db512a
-request item=34 id=dryrun-gen-long-out-r1-000034 status=ok body_sha256=cf20e07da91675a88701e6c17e4f1f0e0f56f7b0ae63071d20e015eb4dc095d9
-request item=36 id=dryrun-gen-long-out-r1-000036 status=ok body_sha256=325727f1afbd947e220ea870dde931d5dc5685b269a08532f4979bcbca40a2fd
-request item=37 id=dryrun-gen-long-out-r1-000037 status=ok body_sha256=dd0aa78ed3e4185793de57a2df31abf88d6cfa2f3b083d0ade9f56067722288b
-request item=38 id=dryrun-gen-long-out-r1-000038 status=ok body_sha256=0b051a2d28e8e5c9d2e0e5869cdfd540064d9d3bf883c2d666edfe04d3ce2d83
-request item=39 id=dryrun-gen-long-out-r1-000039 status=ok body_sha256=b7dd6bc6f7087bc080fae350931acaec54074de12fb1ebc879f31f2ebd8f7273
-request item=41 id=dryrun-gen-long-out-r1-000041 status=ok body_sha256=c30826f2a1e41f0a9e1e279edaa97712c203c589ac92aeba2e56f1de49218655
-request item=40 id=dryrun-gen-long-out-r1-000040 status=ok body_sha256=e066829f5bb94b9ed3863f3067a57c391ed2d7843d077af6fcaf0fcab1d83ca9
-request item=42 id=dryrun-gen-long-out-r1-000042 status=ok body_sha256=9a58d49f1b1af6e36f8f9692a3a6638d20c5b7eea08a1ffb2cbcbebcc594655d
-request item=43 id=dryrun-gen-long-out-r1-000043 status=ok body_sha256=48d0f06c2e532020cdadb5fd6dc02e9448c9bdda7af75285eec4cb22c8ec1758
-request item=44 id=dryrun-gen-long-out-r1-000044 status=ok body_sha256=f68f4fad9b432170c1e6a5c4db9983496db458f8bfa1fdeea512fffa42e18a26
-summary sent=45 ok=45 errors=0 shed=0 canceled=0 max_dispatch_slip=1.116334ms usage_missing=0 wall=25.78s
+epoch=2026-07-10T14:47:54.707773Z
+request item=0 id=dryrun-gen-long-out-r1-000000 status=ok send_slip=1.10621ms body_sha256=aac40f9f7ee60764f41100496a75b1e36d23215d0c285def7609e6acde970384
+request item=1 id=dryrun-gen-long-out-r1-000001 status=ok send_slip=425.981µs body_sha256=b40d18f5ce081e7c1aef244acb6b8452fc8b06d2850deafe92dd0fd87aa7269a
+request item=2 id=dryrun-gen-long-out-r1-000002 status=ok send_slip=769.346µs body_sha256=949fafebed0449dc65f4e70490e8bd939ef9e31d78e8ce1256cb48a2c4f38ce6
+request item=4 id=dryrun-gen-long-out-r1-000004 status=ok send_slip=1.083668ms body_sha256=a0f0902de2ee01291e7ada46840c4d859e13da0476fd492743acb13b4c926b18
+request item=3 id=dryrun-gen-long-out-r1-000003 status=ok send_slip=1.565499ms body_sha256=c6df75931ff11388d4e87675598fd00d1e9a97b4b6127ca6f4fe62c60bfc147e
+request item=5 id=dryrun-gen-long-out-r1-000005 status=ok send_slip=528.221µs body_sha256=bda909084c216703143ef582ce823366a58742ca48c3a747301790e3a7d66909
+request item=6 id=dryrun-gen-long-out-r1-000006 status=ok send_slip=563.258µs body_sha256=dfe5669a1a5b51e500f200c7ab91bfb0e80239ec629fd2fdbc61c9c4903909b9
+request item=11 id=dryrun-gen-long-out-r1-000011 status=ok send_slip=1.150847ms body_sha256=75f06d02dac59981ca7fb34160bc08cfb379aca715367d680f6149d65e061089
+request item=7 id=dryrun-gen-long-out-r1-000007 status=ok send_slip=918.349µs body_sha256=e69fb96f9f1fede2d99ac531fe279f9314f2a225deafa8d3863364c9e7c250a8
+request item=8 id=dryrun-gen-long-out-r1-000008 status=ok send_slip=839.813µs body_sha256=e2150b12c28193da6f4953f841f29ee1bbf2f1ddcff105a83d59ebf8f16b3457
+request item=9 id=dryrun-gen-long-out-r1-000009 status=ok send_slip=584.281µs body_sha256=f7bd7d5c0faeda22cb178e4e157f7c63d92c228a2bf952c3115dd91d6989ef26
+request item=10 id=dryrun-gen-long-out-r1-000010 status=ok send_slip=1.300118ms body_sha256=dd333d27d121633abf1079ac89be9ee9d8abff7a587ae43d62248eb975591534
+request item=12 id=dryrun-gen-long-out-r1-000012 status=ok send_slip=1.27442ms body_sha256=898d4db623bd678414b90503fef9ba9f5156a768162f48d652b06b021f01ae87
+request item=13 id=dryrun-gen-long-out-r1-000013 status=ok send_slip=1.163775ms body_sha256=b113b3a74426e98e302e3eca79277a653aae362638bc1fff80975f87eba3ee6d
+request item=14 id=dryrun-gen-long-out-r1-000014 status=ok send_slip=551.219µs body_sha256=08d8443d5cc8c6c93ce76ddee667b0dc622448d7c88d62f24a55dcbeeeaa2ecd
+request item=15 id=dryrun-gen-long-out-r1-000015 status=ok send_slip=1.277276ms body_sha256=2b6e75ff4856c21c8b81defd03cd1fda5013e7a4f1a5f34bf5d722f6b6812607
+request item=16 id=dryrun-gen-long-out-r1-000016 status=ok send_slip=645.491µs body_sha256=c80c700f13010b9743196c34779e0dba96db6bbdb9bcf0dcf05e901580c7d67b
+request item=17 id=dryrun-gen-long-out-r1-000017 status=ok send_slip=1.275146ms body_sha256=01572c35756d5155369385273d871f8440094c1555e0903be66ed8f1c50cefe9
+request item=20 id=dryrun-gen-long-out-r1-000020 status=ok send_slip=977.74µs body_sha256=802e91efaa98e72b69747797a2b15a2a466f2d78d5b975109ca45d5889885a18
+request item=19 id=dryrun-gen-long-out-r1-000019 status=ok send_slip=797.115µs body_sha256=c5bb9d5ead303b07ac9e8245e3924883d0468e6d341848a65e38a4830f5bd7cd
+request item=22 id=dryrun-gen-long-out-r1-000022 status=ok send_slip=1.102887ms body_sha256=e1ec8131a9420b8b6aae33594a4085d663602612d203d1c0c98ce4ed58f54e19
+request item=18 id=dryrun-gen-long-out-r1-000018 status=ok send_slip=1.339848ms body_sha256=6a7e4d1b3d987b2e623fd0fbb6fd9d07be16db53868be079c63de3574b90a0de
+request item=21 id=dryrun-gen-long-out-r1-000021 status=ok send_slip=1.201749ms body_sha256=3cc7d1e47857d9246f69d3810a670e8679f280e9f56d0a4a62558a6bef9522b0
+request item=23 id=dryrun-gen-long-out-r1-000023 status=ok send_slip=220.446µs body_sha256=fca542cda9305949eddf87218d1d37afae091c3a0aa5099524adbd70dfad3702
+request item=24 id=dryrun-gen-long-out-r1-000024 status=ok send_slip=815.483µs body_sha256=70312fddbc3bc15104146744168f5ce11d13be6e34c8e04bf7246be8065dc1ab
+request item=26 id=dryrun-gen-long-out-r1-000026 status=ok send_slip=1.445158ms body_sha256=b809e1d6917f1590077016818521a1e96d6f6a8c64817e3acc1eb48693140ab8
+request item=25 id=dryrun-gen-long-out-r1-000025 status=ok send_slip=1.005466ms body_sha256=b83ff4cd428f725f4718ce0d02ee630b814b86b21ec030ccd4483f47bea41913
+request item=27 id=dryrun-gen-long-out-r1-000027 status=ok send_slip=665.083µs body_sha256=a7d8b9a337dc01c576de23bfc562b87d0eac6d4aabe9d0330e2e4b9807c16723
+request item=29 id=dryrun-gen-long-out-r1-000029 status=ok send_slip=1.149135ms body_sha256=2f2de3a047e0a265681bcb1f1e532210d956a84b1f2f12dc8bcd3070d512ee7c
+request item=30 id=dryrun-gen-long-out-r1-000030 status=ok send_slip=1.617633ms body_sha256=711c7df883caadead906046fcbad9cbcc2086cd8e36993753ed1525226b2c545
+request item=32 id=dryrun-gen-long-out-r1-000032 status=ok send_slip=958.496µs body_sha256=929ff9cc05688ee36e66a654d3b70f69d61a209ba3b0c54996d5fab576128a53
+request item=28 id=dryrun-gen-long-out-r1-000028 status=ok send_slip=719.904µs body_sha256=bdb351f71c80f63dedb5aa9f7b9f328164d49d586e68ed680b22b34211ffe512
+request item=31 id=dryrun-gen-long-out-r1-000031 status=ok send_slip=1.193895ms body_sha256=3c56f59ee9ab095073504cd16feca86f5f71c6b955a7c2925999d9e71ea48e10
+request item=33 id=dryrun-gen-long-out-r1-000033 status=ok send_slip=1.073685ms body_sha256=3cb7da22d5d8009c64cbbba41dd3aa0ffa4e09c217adcb1991bdf63a0903471e
+request item=34 id=dryrun-gen-long-out-r1-000034 status=ok send_slip=1.260073ms body_sha256=7245a0b5c94a272433578cac2f0aac71e12413b5e9fd9c39decb03867b1aad3b
+request item=35 id=dryrun-gen-long-out-r1-000035 status=ok send_slip=982.667µs body_sha256=77d1f4fd3cf285fc50b80259a71d958e9ddeec39d654699df6559aeb2ff7f9b2
+request item=36 id=dryrun-gen-long-out-r1-000036 status=ok send_slip=693.811µs body_sha256=7106c2fbff667e6754994279c4ba3b7cb9ff109450ca99b021f8242da80c0eb8
+request item=37 id=dryrun-gen-long-out-r1-000037 status=ok send_slip=644.976µs body_sha256=d9b55b852076d7b90b1914465bbe698ee16bcd9b51e267a7fafde9f892071263
+request item=38 id=dryrun-gen-long-out-r1-000038 status=ok send_slip=1.116065ms body_sha256=d2f72d12e12cc3b1e86c421bf2ba14cec41bdb7750a79316701c808d9e2028dd
+request item=39 id=dryrun-gen-long-out-r1-000039 status=ok send_slip=490.706µs body_sha256=a7dcd94d669a06895c50f04ea3a592f59734fd285c69383e5fb0a539f6113669
+request item=41 id=dryrun-gen-long-out-r1-000041 status=ok send_slip=984.824µs body_sha256=f04a0788dffb42ecc3b1534fb6b3d7d5a55fe00ebfad4bcde188471bb7a943cc
+request item=40 id=dryrun-gen-long-out-r1-000040 status=ok send_slip=649.695µs body_sha256=b5a9451c5338531751e0967ae00d0591e53c8e4218ffb317170cf6e931d8b67e
+request item=42 id=dryrun-gen-long-out-r1-000042 status=ok send_slip=1.066348ms body_sha256=5cdef49686adcad839bb268e682234cae9b9db5f2b1ee7976fafd447f5882a4f
+request item=43 id=dryrun-gen-long-out-r1-000043 status=ok send_slip=1.401016ms body_sha256=35f3c7e25bae77c725bc036d9a6135d96db7506efd4f2b39835615300963e074
+request item=44 id=dryrun-gen-long-out-r1-000044 status=ok send_slip=1.205782ms body_sha256=df84d10080997a5ba4f6d1e29b73f7797784e99c69fe69723ea63aa3731d2c36
+summary sent=45 ok=45 errors=0 shed=0 canceled=0 cancel_planned=0 slow_planned=0 max_dispatch_slip=1.135216ms max_send_slip=1.617633ms usage_missing=0 wall=25.766s

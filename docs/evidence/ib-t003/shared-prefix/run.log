@@ -1,0 +1,123 @@
+run_id=dryrun-shared-prefix repetition=1 requests=60 max_slip=100ms cancel_planned=0 slow_planned=0 prefix_sharing=48
+schedule item=0 offset=43.586451ms input_tokens=1152 max_tokens=30 prefix_group=1
+schedule item=1 offset=314.534653ms input_tokens=1226 max_tokens=187 prefix_group=1
+schedule item=2 offset=651.065848ms input_tokens=1392 max_tokens=54 prefix_group=1
+schedule item=3 offset=698.330053ms input_tokens=1600 max_tokens=187
+schedule item=4 offset=814.40467ms input_tokens=1424 max_tokens=236 prefix_group=1
+schedule item=5 offset=1.031981891s input_tokens=1635 max_tokens=205 prefix_group=1
+schedule item=6 offset=1.083519182s input_tokens=1708 max_tokens=100 prefix_group=1
+schedule item=7 offset=1.126231555s input_tokens=1261 max_tokens=146 prefix_group=1
+schedule item=8 offset=1.149593904s input_tokens=1582 max_tokens=98
+schedule item=9 offset=1.161378165s input_tokens=1240 max_tokens=165
+schedule item=10 offset=1.351439887s input_tokens=1244 max_tokens=151 prefix_group=1
+schedule item=11 offset=1.551535965s input_tokens=1460 max_tokens=244 prefix_group=1
+schedule item=12 offset=2.047074635s input_tokens=1435 max_tokens=91
+schedule item=13 offset=2.263391967s input_tokens=1671 max_tokens=134 prefix_group=1
+schedule item=14 offset=2.265734034s input_tokens=1239 max_tokens=144 prefix_group=1
+schedule item=15 offset=2.27924576s input_tokens=1408 max_tokens=246 prefix_group=1
+schedule item=16 offset=2.54513563s input_tokens=1504 max_tokens=214 prefix_group=1
+schedule item=17 offset=2.740415089s input_tokens=1582 max_tokens=187 prefix_group=1
+schedule item=18 offset=3.235273038s input_tokens=1395 max_tokens=161 prefix_group=1
+schedule item=19 offset=3.372020951s input_tokens=1491 max_tokens=55 prefix_group=1
+schedule item=20 offset=3.50343616s input_tokens=1587 max_tokens=118
+schedule item=21 offset=3.753426388s input_tokens=1519 max_tokens=115 prefix_group=2
+schedule item=22 offset=3.877918338s input_tokens=1423 max_tokens=73 prefix_group=2
+schedule item=23 offset=3.887454511s input_tokens=1296 max_tokens=171
+schedule item=24 offset=3.972741079s input_tokens=1220 max_tokens=190
+schedule item=25 offset=4.108177107s input_tokens=1184 max_tokens=144 prefix_group=2
+schedule item=26 offset=4.201819192s input_tokens=1687 max_tokens=178 prefix_group=2
+schedule item=27 offset=4.205243524s input_tokens=1353 max_tokens=246 prefix_group=2
+schedule item=28 offset=4.590748542s input_tokens=1586 max_tokens=121
+schedule item=29 offset=4.649265156s input_tokens=1637 max_tokens=38 prefix_group=2
+schedule item=30 offset=4.755269881s input_tokens=1528 max_tokens=139
+schedule item=31 offset=5.04098108s input_tokens=1497 max_tokens=178 prefix_group=2
+schedule item=32 offset=5.163034901s input_tokens=1410 max_tokens=259 prefix_group=2
+schedule item=33 offset=5.272168653s input_tokens=1306 max_tokens=143 prefix_group=2
+schedule item=34 offset=5.477903824s input_tokens=1578 max_tokens=175 prefix_group=2
+schedule item=35 offset=5.731220496s input_tokens=1152 max_tokens=150 prefix_group=2
+schedule item=36 offset=5.777330828s input_tokens=1517 max_tokens=179 prefix_group=2
+schedule item=37 offset=5.986842737s input_tokens=1462 max_tokens=266 prefix_group=2
+schedule item=38 offset=6.108166462s input_tokens=1684 max_tokens=91
+schedule item=39 offset=6.109242268s input_tokens=1523 max_tokens=130 prefix_group=2
+schedule item=40 offset=6.201406014s input_tokens=1392 max_tokens=72
+schedule item=41 offset=6.244772891s input_tokens=1948 max_tokens=280 prefix_group=2
+schedule item=42 offset=6.302837642s input_tokens=1311 max_tokens=37 prefix_group=2
+schedule item=43 offset=6.528525545s input_tokens=1152 max_tokens=178 prefix_group=3
+schedule item=44 offset=6.551381047s input_tokens=1475 max_tokens=180 prefix_group=3
+schedule item=45 offset=6.561395159s input_tokens=1600 max_tokens=149 prefix_group=3
+schedule item=46 offset=6.756715369s input_tokens=1471 max_tokens=114 prefix_group=3
+schedule item=47 offset=6.90295081s input_tokens=1853 max_tokens=106 prefix_group=3
+schedule item=48 offset=6.943357225s input_tokens=1501 max_tokens=162 prefix_group=3
+schedule item=49 offset=6.988593077s input_tokens=1206 max_tokens=139 prefix_group=3
+schedule item=50 offset=6.997332067s input_tokens=1577 max_tokens=16 prefix_group=3
+schedule item=51 offset=7.032017136s input_tokens=1538 max_tokens=212 prefix_group=3
+schedule item=52 offset=7.055415328s input_tokens=1433 max_tokens=179
+schedule item=53 offset=7.380435179s input_tokens=1429 max_tokens=137 prefix_group=3
+schedule item=54 offset=7.716018987s input_tokens=1463 max_tokens=138 prefix_group=3
+schedule item=55 offset=7.771375892s input_tokens=1152 max_tokens=82 prefix_group=3
+schedule item=56 offset=7.830738679s input_tokens=1579 max_tokens=159 prefix_group=3
+schedule item=57 offset=7.835297834s input_tokens=1425 max_tokens=237 prefix_group=3
+schedule item=58 offset=7.873647444s input_tokens=1625 max_tokens=103 prefix_group=3
+schedule item=59 offset=8.120162933s input_tokens=1385 max_tokens=79 prefix_group=3
+epoch=2026-07-10T14:48:20.482208Z
+request item=0 id=dryrun-shared-prefix-r1-000000 status=ok send_slip=1.674056ms body_sha256=4eba81880c005c3f9392b3c9d3d5e1018a35ab61fab094987af7e05975b8952b
+request item=1 id=dryrun-shared-prefix-r1-000001 status=ok send_slip=1.476268ms body_sha256=f6da5cde5d39075412d54178c13ae8a956c853f4d82a4ba0519d5db6011e18e4
+request item=2 id=dryrun-shared-prefix-r1-000002 status=ok send_slip=1.037382ms body_sha256=28200574b754dbdf5de250983ec6bf51f8b4555062b92fc8b2687dee0a3ab46f
+request item=3 id=dryrun-shared-prefix-r1-000003 status=ok send_slip=890.81µs body_sha256=c8dd98fa274cb8bfd617f872e5f2da1518d53879f2a1b1be7d1700ec69f6a482
+request item=8 id=dryrun-shared-prefix-r1-000008 status=ok send_slip=1.230522ms body_sha256=ebc9bffaaed337c5450fa04b24885c6d9f48c9fa06cad58a397151ba9c277711
+request item=5 id=dryrun-shared-prefix-r1-000005 status=ok send_slip=831.114µs body_sha256=536dbc15e0e61c633d369b8c86e2cd3e51462e29965a473fa6bbb17f545fcbb4
+request item=9 id=dryrun-shared-prefix-r1-000009 status=ok send_slip=1.237406ms body_sha256=e7585030978bda6ba91cd931437f8f464fcd20652337adf802c716ce36d38c3d
+request item=7 id=dryrun-shared-prefix-r1-000007 status=ok send_slip=1.400249ms body_sha256=e340eb6854816dc6234b0ce65e9581ace02ce0d391acc59b406f2129301258bc
+request item=6 id=dryrun-shared-prefix-r1-000006 status=ok send_slip=1.435824ms body_sha256=8d10db83ff8c2ca7d2455051d5c7529625dd5d7130e59d01c3c3da1856e3c193
+request item=10 id=dryrun-shared-prefix-r1-000010 status=ok send_slip=2.074372ms body_sha256=e4d7ad3b1336782790deaec46326570480d279c11edfdf47dd0b434ce819c2ca
+request item=4 id=dryrun-shared-prefix-r1-000004 status=ok send_slip=1.549618ms body_sha256=b99f3bc27cb2eddf2df0d42f1fcb7ccdcd7e12f7045cf0e20a5c91d1c3a28053
+request item=11 id=dryrun-shared-prefix-r1-000011 status=ok send_slip=1.055762ms body_sha256=06fb92ee2ae4b86b55ffe20ae334d2a6a01a1ff6140341a2268adc33ed48bc3b
+request item=12 id=dryrun-shared-prefix-r1-000012 status=ok send_slip=644.589µs body_sha256=2521926d4208bd6c3b2157091cd473110a72f06368beff350e5f9edd4a913807
+request item=14 id=dryrun-shared-prefix-r1-000014 status=ok send_slip=840.387µs body_sha256=1d91a64d71c2b8d20dd76cc59ee7fb2a0ec418ed99af0dfbeaf742ee35ceead6
+request item=13 id=dryrun-shared-prefix-r1-000013 status=ok send_slip=810.605µs body_sha256=09737117de868d3a46a6d4f0de9397fb6d7ac7be488e4f161e279588708c1f48
+request item=17 id=dryrun-shared-prefix-r1-000017 status=ok send_slip=1.397758ms body_sha256=652cb793ccf357c150bebc9018a8d45162a0ef7a5064614f3aecbf3ab35d31b9
+request item=15 id=dryrun-shared-prefix-r1-000015 status=ok send_slip=1.341576ms body_sha256=88515f7e62b3858fb0c25f657b370c7ee55fb7816596db4323bca7e1097ed787
+request item=16 id=dryrun-shared-prefix-r1-000016 status=ok send_slip=877.058µs body_sha256=843bf74d110e86f3bc34e78d111844c37b50c5b360f5a6a3630bef6060e4afd3
+request item=19 id=dryrun-shared-prefix-r1-000019 status=ok send_slip=743.97µs body_sha256=3ebf2965e924e7e102488da9eddd701051879d724141b926bb5d5c52270cd497
+request item=18 id=dryrun-shared-prefix-r1-000018 status=ok send_slip=810.766µs body_sha256=2ddb1e3cbd2d4a5cfab3128a3684deb52ddc77bc60d360146890ed551c9bae1f
+request item=20 id=dryrun-shared-prefix-r1-000020 status=ok send_slip=1.092298ms body_sha256=1885b4d6a1e8ab6e97eaa6b65ec28bc9844319457a866270cc55ed3d499c1196
+request item=24 id=dryrun-shared-prefix-r1-000024 status=ok send_slip=864.503µs body_sha256=2fa7d94fec5dc35f4c6634dfbdb9b885588cdbd622efb7e60aceb1899a7e2d2b
+request item=22 id=dryrun-shared-prefix-r1-000022 status=ok send_slip=1.436244ms body_sha256=d6c1ea20a6b7b69bae480a3e8b9bfa4fef1a5a3697a07f65189fb389a9f99884
+request item=21 id=dryrun-shared-prefix-r1-000021 status=ok send_slip=517.21µs body_sha256=9c8cc26bc356ca686b98a472174aa97012e3309ea3b6ad5bb048d4284d161dd0
+request item=27 id=dryrun-shared-prefix-r1-000027 status=ok send_slip=912.329µs body_sha256=5a4aa02f16ba1add3cb58bfa9f7eca0b95380aa047d019ddbe74ac3b80d2e532
+request item=25 id=dryrun-shared-prefix-r1-000025 status=ok send_slip=710.71µs body_sha256=e809f9f9061f5b0a3e20536bb1beb2429e6dfec9bd78381aee5cbbe07214eae1
+request item=28 id=dryrun-shared-prefix-r1-000028 status=ok send_slip=737.005µs body_sha256=30a0ac32d476d71a5e39df7aa1c7cee8d1814ed87e0332a5fad431a37277fd76
+request item=26 id=dryrun-shared-prefix-r1-000026 status=ok send_slip=749.809µs body_sha256=43f2ed77821a50bf81d8fc8523ba550e7dce200f4527c237214762325d7a7afe
+request item=29 id=dryrun-shared-prefix-r1-000029 status=ok send_slip=1.507581ms body_sha256=acbf78a5c42b7affe5e438d7bf100a7cfc79ca0806eb91397ea1ef77803a8b65
+request item=23 id=dryrun-shared-prefix-r1-000023 status=ok send_slip=697.574µs body_sha256=56c205c574bb86e5d5023c57e918a23cc5ee6c9ee142e3801f0dd56890b7d84b
+request item=30 id=dryrun-shared-prefix-r1-000030 status=ok send_slip=1.2885ms body_sha256=d1db8523e4924d625a622bd0fba113dc67705d31b6c389279e018502401f433b
+request item=34 id=dryrun-shared-prefix-r1-000034 status=ok send_slip=1.269031ms body_sha256=7732dfe33481230e9c781a257beaace59abaf2855a1c155d37ca44efcbbecd92
+request item=33 id=dryrun-shared-prefix-r1-000033 status=ok send_slip=1.130261ms body_sha256=044a7014f29586390f2e41ebc1d407bdb66416fdee0959d7ea413a7220c31cd6
+request item=31 id=dryrun-shared-prefix-r1-000031 status=ok send_slip=1.284081ms body_sha256=87ddd89a25c7f589e59b1ba835427890a9e8478b13bdd9a15f597433ccfb2efd
+request item=38 id=dryrun-shared-prefix-r1-000038 status=ok send_slip=858.847µs body_sha256=63bde648a13de15e75cbecac70985c2c7683a9aa0855ead33b8838e1a5ba391b
+request item=42 id=dryrun-shared-prefix-r1-000042 status=ok send_slip=963.674µs body_sha256=6031986e6456f1b5e0326d66c91e34d34929671cc9352b3d250ddbb0826a7998
+request item=36 id=dryrun-shared-prefix-r1-000036 status=ok send_slip=1.299104ms body_sha256=f74f6088de7f92c480c5a847157b4dece04ca126443b7af4db66aa0f9f7ef2a3
+request item=35 id=dryrun-shared-prefix-r1-000035 status=ok send_slip=875.945µs body_sha256=be8cf884e59e48ba7de83029ec986aad3b6b89066ab202d81ef8b82958e38775
+request item=40 id=dryrun-shared-prefix-r1-000040 status=ok send_slip=1.083978ms body_sha256=93deee7fb05f2824d91511ed1e74227af3f49ef903b38c74ccda6934ca81b2f2
+request item=32 id=dryrun-shared-prefix-r1-000032 status=ok send_slip=697.643µs body_sha256=42b1e5d632b6f47f1b7e0bd38dfd86be176b390dbb1852fc8fd831980b5949f5
+request item=39 id=dryrun-shared-prefix-r1-000039 status=ok send_slip=1.324039ms body_sha256=cea1bf5d5b4aa6d5b89b50d5cde5c84cef822cf8e373851c8e2019d57d8374c2
+request item=46 id=dryrun-shared-prefix-r1-000046 status=ok send_slip=1.401671ms body_sha256=fcee2a38fbe490e6e68b08fd369f030a6ec7413304fd46f8ad3cb41087eb15ce
+request item=43 id=dryrun-shared-prefix-r1-000043 status=ok send_slip=1.180112ms body_sha256=40fce69f10ba6e4580e5b690e46419473aab2d61974f19a49eaec617ffc8b44d
+request item=50 id=dryrun-shared-prefix-r1-000050 status=ok send_slip=1.103245ms body_sha256=6d46c8873068c99de460dfcd019538b6849cce1629b637b8cdad5576dd4960fe
+request item=48 id=dryrun-shared-prefix-r1-000048 status=ok send_slip=540.038µs body_sha256=ae1119a86a65a969552491ccdd60138f9a591e364d7ae70705eb3953e7a713dd
+request item=51 id=dryrun-shared-prefix-r1-000051 status=ok send_slip=448.298µs body_sha256=2bbb04290de5f67ec805fc7da13b6b6beac1e97ea819ea3e8e1211d77b43dd10
+request item=45 id=dryrun-shared-prefix-r1-000045 status=ok send_slip=1.024823ms body_sha256=ac2b787055327dcf271a6f7f378a3c9b4bb125c92051c8c647fb339fdb0513a7
+request item=44 id=dryrun-shared-prefix-r1-000044 status=ok send_slip=1.059051ms body_sha256=cb050a6e6b36701fa963426c09611ad2167da0468e43a5b8eecab3ce9ab29b56
+request item=37 id=dryrun-shared-prefix-r1-000037 status=ok send_slip=538.557µs body_sha256=2098b80edd78c253231f74bcf4edcddbdaaabde9e30c899fca32f253b80dd7eb
+request item=49 id=dryrun-shared-prefix-r1-000049 status=ok send_slip=1.287185ms body_sha256=65b0d3adc3757162b629fe710ef94d3530bc3e7662c9529c62942aa70ea1cf72
+request item=53 id=dryrun-shared-prefix-r1-000053 status=ok send_slip=830.813µs body_sha256=870ac2d1ffb44a9c0c746194296f2208481bb3ca4d6d5f831cab673934e7e158
+request item=41 id=dryrun-shared-prefix-r1-000041 status=ok send_slip=1.348829ms body_sha256=2a12b6f4899342657a39c4e05fc3a4cebc9338ddfbda68f1df0c412f63c5f631
+request item=47 id=dryrun-shared-prefix-r1-000047 status=ok send_slip=1.349064ms body_sha256=3362d20fc4458fe0049ac6cfb48fab46a9b4c33e4f1148965be6a4658f91730d
+request item=54 id=dryrun-shared-prefix-r1-000054 status=ok send_slip=1.073155ms body_sha256=c07449e25e1b8a8c1bdb65addbfe0d7a7cb3b680ac75d0c69deb85d57e375121
+request item=55 id=dryrun-shared-prefix-r1-000055 status=ok send_slip=611.114µs body_sha256=2302595464f15eee7ce4690103654ab0a83d580c1d822c3b8b09e517a3d49680
+request item=52 id=dryrun-shared-prefix-r1-000052 status=ok send_slip=677.883µs body_sha256=5db371f46629474cec45ef514626ff206fd8e1095de44683a200cce4083d9bf6
+request item=58 id=dryrun-shared-prefix-r1-000058 status=ok send_slip=1.608171ms body_sha256=06fd4afb8b291280e779d58b0ac9633a6b1e4df0d844eb4dda081c75b095a7c5
+request item=56 id=dryrun-shared-prefix-r1-000056 status=ok send_slip=1.262749ms body_sha256=79cf4127a6c9626260ef94aa3f3a59749a797ddaa0b110de62352ed3e41b2f31
+request item=59 id=dryrun-shared-prefix-r1-000059 status=ok send_slip=633.307µs body_sha256=7cc99b39226240e0a4cbea510025bf4aa6990c4538e65db79f35f3aa907c2adf
+request item=57 id=dryrun-shared-prefix-r1-000057 status=ok send_slip=910.195µs body_sha256=ad43d5484385981930fe59c3c5fe7dc8dabb1bb4b186ed09bab50b4a7cf85dc6
+summary sent=60 ok=60 errors=0 shed=0 canceled=0 cancel_planned=0 slow_planned=0 max_dispatch_slip=1.663855ms max_send_slip=2.074372ms usage_missing=0 wall=8.679s

@@ -1,7 +1,6 @@
 package workload
 
 import (
-	"errors"
 	"fmt"
 	"path/filepath"
 	"testing"
@@ -26,17 +25,6 @@ var suiteSeeds = map[string]int64{
 	"bursty":        1003006,
 	"cancel-storm":  1003007,
 	"slow-client":   1003008,
-}
-
-// runnableNow lists the workloads whose features are fully executable at
-// IB-T003; the other three must refuse with the typed ErrNotImplemented
-// until IB-T004 lands (never a silent downgrade).
-var runnableNow = map[string]bool{
-	"chat-short":   true,
-	"rag-long-in":  true,
-	"gen-long-out": true,
-	"mixed":        true,
-	"bursty":       true,
 }
 
 func loadSuite(t *testing.T) map[string]*Workload {
@@ -152,17 +140,15 @@ func TestSuitePrefixSharingControlled(t *testing.T) {
 	}
 }
 
-// TestSuiteRunnableSplit pins today's honest execution boundary: five
-// workloads run end-to-end, three refuse with the typed ErrNotImplemented
-// until IB-T004.
-func TestSuiteRunnableSplit(t *testing.T) {
+// TestSuiteFullyRunnable pins today's honest execution boundary: since
+// IB-T004 (prefix-sharing prompts, cancellation issuance, slow-client
+// throttling) every canonical workload runs end-to-end. Only closed-loop
+// arrival still refuses (ErrNotImplemented, IB-T008) — covered by
+// TestClosedLoopDisclosedParsesButDeferred.
+func TestSuiteFullyRunnable(t *testing.T) {
 	for name, w := range loadSuite(t) {
-		err := w.CheckRunnable()
-		if runnableNow[name] && err != nil {
-			t.Errorf("%s: must be runnable at IB-T003, got %v", name, err)
-		}
-		if !runnableNow[name] && !errors.Is(err, ErrNotImplemented) {
-			t.Errorf("%s: must refuse with typed ErrNotImplemented until IB-T004, got %v", name, err)
+		if err := w.CheckRunnable(); err != nil {
+			t.Errorf("%s: canonical suite must be fully runnable since IB-T004, got %v", name, err)
 		}
 	}
 }

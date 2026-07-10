@@ -101,6 +101,22 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
 - **Evidence:** calibration report vs mock. **Integration impact:** I2/I3 measurements depend on
   it.
 - **Stop condition:** mock calibration within tolerance.
+- **Status:** implemented 2026-07-10 — monotonic-clock audit clean (all latencies are
+  `time.Now()`-pair subtractions; per-chunk stamps taken at arrival before parsing);
+  cancellation issuance implemented for both schema triggers (elapsed-seconds from the
+  scheduled-send plan basis, output-tokens from client-observed content deltas) with honest
+  per-event `cancellation_point` + planned-vs-realized accounting; slow-client emulation
+  implemented (paced body reads at `read_bytes_per_second` + initial read delay);
+  prefix-sharing prompt construction implemented (shared prefix per group, unique suffix) —
+  the IB-T003 typed refusals are replaced and the full 8/8 suite dry-runs green (streaming) vs
+  the pinned pair (infergate @ `5d69aeb`). CO re-review residual fixed: `send_slip_seconds` is
+  ABSENT when the send never completed; `send_ts` fallback documented. **Mock calibration
+  PASSED within declared tolerance** (TTFT Δp50 ≤ +3.0 ms, ITL Δp50 ≤ +0.9 ms at two config
+  points; 3 cancellation points verified two-sided against the mock's `/debug/state`;
+  slow-client bounded-rate effects demonstrated vs control) — see
+  `docs/evidence/ib-t004/calibration.md`; all emitted artifacts kit-validate at pin `8d81492`
+  (53/53). `go test -race -count=1 ./...` green. Details + contracts observations in
+  `implementation-notes.md`.
 
 ## IB-T005 — Analysis core (Python)
 

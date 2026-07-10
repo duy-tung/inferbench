@@ -1,0 +1,49 @@
+{
+  "run_id": "ib-t004-calib-A",
+  "target_topology": "gateway-mock",
+  "workload_ref": {
+    "name": "calib-a",
+    "version": "1.0.0",
+    "seed": 1004001
+  },
+  "engine": {
+    "name": "mock",
+    "version": "dev",
+    "commit": "5d69aeb11228b5dcfbaca10c2e57f0a24603b8f9",
+    "flags": {
+      "error_rate": 0,
+      "itl": "20ms",
+      "seed": 42,
+      "ttft": "100ms"
+    }
+  },
+  "model": {
+    "checkpoint": "mock-8b",
+    "revision": "mockengine@5d69aeb",
+    "tokenizer": "mockengine-estimator (~4 bytes/token, deterministic)"
+  },
+  "hardware": {
+    "gpu_model": null,
+    "gpu_count": 0,
+    "vram_gb": null,
+    "driver_version": null,
+    "cuda_version": null,
+    "instance_type": "local-dev-container (linux/amd64, CPU-only)"
+  },
+  "gateway": {
+    "version": "dev@5d69aeb",
+    "config_version": "flags-v1 (static flag config; snapshots land at IG-T004): -upstream-timeout 180s -stream-write-timeout 30s"
+  },
+  "client": {
+    "location": "same-host (loopback)",
+    "rtt_ms": 1.351346
+  },
+  "warm_up": {
+    "policy": "none"
+  },
+  "repetitions": 1,
+  "hypothesis": "Measured client TTFT p50 lands within [configured-2ms, configured+15ms] and pooled client ITL p50 within [configured-2ms, configured+5ms] of the mock-configured 100ms/20ms, with p95 within +50ms/+15ms (tolerance statement in calibration.md).",
+  "started_at": "2026-07-10T14:43:52Z",
+  "contracts_bundle_version": "8d81492 (v0.2.0 tag pending)",
+  "notes": "IB-T004 calibration/verification template. scripts/calibrate-mock.sh derives per-scenario facts (engine ttft/itl flags, hypothesis, notes) from this file. Smoke/calibration evidence, not a benchmark: no warm-up handling, single repetition. rtt_ms measured at preflight when left null."
+}

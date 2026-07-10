@@ -34,6 +34,7 @@ import (
 	"github.com/duy-tung/inferbench/internal/client"
 	"github.com/duy-tung/inferbench/internal/events"
 	"github.com/duy-tung/inferbench/internal/schedule"
+	"github.com/duy-tung/inferbench/internal/workload"
 )
 
 // Typed abort reasons (run-invalidating).
@@ -67,6 +68,12 @@ type Result struct {
 	Errors   int
 	Shed     int
 	Canceled int
+	// CancelPlanned / SlowPlanned are the plan-side profile counts, logged
+	// so realized cancellation (Canceled) is comparable against intent —
+	// a planned cancel that loses the race against stream completion is
+	// honestly recorded as the completed outcome.
+	CancelPlanned int
+	SlowPlanned   int
 	// DispatchSlips[i] is actual-minus-scheduled dispatch time of item i
 	// (schedule-keeping evidence; the CO-safety test asserts on it).
 	DispatchSlips []time.Duration
@@ -98,15 +105,45 @@ func Execute(ctx context.Context, opts Options) (*Result, error) {
 
 	// Dump the precomputed schedule before the first send: the timeline is
 	// already fixed, and the dump is the replay-determinism evidence.
-	logger.Printf("run_id=%s repetition=%d requests=%d max_slip=%s",
-		opts.RunID, opts.Repetition, len(opts.Plan.Items), opts.MaxSlip)
+	cancelPlanned, slowPlanned, sharingPlanned := 0, 0, 0
 	for _, it := range opts.Plan.Items {
-		logger.Printf("schedule item=%d offset=%s input_tokens=%d max_tokens=%d",
-			it.Index, it.SendOffset, it.InputTokens, it.MaxTokens)
+		if it.CancelTrigger != "" {
+			cancelPlanned++
+		}
+		if it.SlowReadBytesPerSec > 0 {
+			slowPlanned++
+		}
+		if it.PrefixGroup > 0 {
+			sharingPlanned++
+		}
+	}
+	logger.Printf("run_id=%s repetition=%d requests=%d max_slip=%s cancel_planned=%d slow_planned=%d prefix_sharing=%d",
+		opts.RunID, opts.Repetition, len(opts.Plan.Items), opts.MaxSlip,
+		cancelPlanned, slowPlanned, sharingPlanned)
+	for _, it := range opts.Plan.Items {
+		extra := ""
+		switch it.CancelTrigger {
+		case workload.CancelTriggerElapsed:
+			extra += fmt.Sprintf(" cancel_after=%.3fs", it.CancelAfterSeconds)
+		case workload.CancelTriggerTokens:
+			extra += fmt.Sprintf(" cancel_after_tokens=%d", it.CancelAfterTokens)
+		}
+		if it.SlowReadBytesPerSec > 0 {
+			extra += fmt.Sprintf(" slow_read_bps=%d slow_delay=%s", it.SlowReadBytesPerSec, it.SlowInitialDelay)
+		}
+		if it.PrefixGroup > 0 {
+			extra += fmt.Sprintf(" prefix_group=%d", it.PrefixGroup)
+		}
+		logger.Printf("schedule item=%d offset=%s input_tokens=%d max_tokens=%d%s",
+			it.Index, it.SendOffset, it.InputTokens, it.MaxTokens, extra)
 	}
 
 	recorder := events.NewRecorder(opts.EventSink, 4096)
-	res := &Result{DispatchSlips: make([]time.Duration, len(opts.Plan.Items))}
+	res := &Result{
+		DispatchSlips: make([]time.Duration, len(opts.Plan.Items)),
+		CancelPlanned: cancelPlanned,
+		SlowPlanned:   slowPlanned,
+	}
 
 	var (
 		wg sync.WaitGroup
@@ -168,20 +205,41 @@ func Execute(ctx context.Context, opts Options) (*Result, error) {
 			defer wg.Done()
 			reqID := fmt.Sprintf("%s-r%d-%06d", opts.RunID, opts.Repetition, it.Index)
 			prompt := opts.Plan.Prompt(it)
-			out := opts.Client.Do(ctx, client.Request{
+			req := client.Request{
 				RequestID:   reqID,
 				Prompt:      prompt,
 				MaxTokens:   it.MaxTokens,
 				ScheduledAt: scheduledAt,
-			})
+			}
+			// Workload traffic profiles (IB-T004): deliberate cancellation
+			// and slow-client read throttling, planned per item by the
+			// seeded schedule.
+			switch it.CancelTrigger {
+			case workload.CancelTriggerElapsed:
+				d := time.Duration(it.CancelAfterSeconds * float64(time.Second))
+				req.CancelAfter = &d
+			case workload.CancelTriggerTokens:
+				n := it.CancelAfterTokens
+				req.CancelAfterTokens = &n
+			}
+			if it.SlowReadBytesPerSec > 0 {
+				req.SlowRead = &client.SlowRead{
+					BytesPerSecond: it.SlowReadBytesPerSec,
+					InitialDelay:   it.SlowInitialDelay,
+				}
+			}
+			out := opts.Client.Do(ctx, req)
 			recorder.Record(outcomeEvent(opts, it, reqID, out))
 
 			// Wire-stage watchdog (ADR-0001 §3/§5): the request has
 			// completed its send; if the actual wire-write time slipped
 			// beyond the threshold, the client did not keep the schedule
-			// on the wire and the run is INVALID.
+			// on the wire and the run is INVALID. A request whose send
+			// never completed (SendCompleted=false: connect failure or a
+			// pre-send cancel) has no wire time to judge — its failure is
+			// already a classified event with full scheduled-send latency.
 			sendSlip := time.Duration(out.SendSlipSeconds * float64(time.Second))
-			if sendSlip > opts.MaxSlip {
+			if out.SendCompleted && sendSlip > opts.MaxSlip {
 				select {
 				case wireAbort <- fmt.Errorf("%w (stage=wire item=%d send_slip=%s threshold=%s)",
 					ErrScheduleSlip, it.Index, sendSlip, opts.MaxSlip):
@@ -234,8 +292,9 @@ func Execute(ctx context.Context, opts Options) (*Result, error) {
 		logger.Printf("ABORT reason=%v sent=%d", abort, res.Sent)
 		return res, abort
 	}
-	logger.Printf("summary sent=%d ok=%d errors=%d shed=%d canceled=%d max_dispatch_slip=%s max_send_slip=%s usage_missing=%d wall=%s",
-		res.Sent, res.OK, res.Errors, res.Shed, res.Canceled, res.MaxDispatchSlip,
+	logger.Printf("summary sent=%d ok=%d errors=%d shed=%d canceled=%d cancel_planned=%d slow_planned=%d max_dispatch_slip=%s max_send_slip=%s usage_missing=%d wall=%s",
+		res.Sent, res.OK, res.Errors, res.Shed, res.Canceled, res.CancelPlanned,
+		res.SlowPlanned, res.MaxDispatchSlip,
 		res.MaxSendSlip, res.UsageMissing,
 		res.Finished.Sub(res.Started).Round(time.Millisecond))
 	return res, nil
@@ -243,31 +302,42 @@ func Execute(ctx context.Context, opts Options) (*Result, error) {
 
 // outcomeEvent maps a client outcome onto the raw-event record.
 func outcomeEvent(opts Options, it schedule.Item, reqID string, out client.Outcome) events.Event {
-	slip := out.SendSlipSeconds
 	ev := events.Event{
-		RunID:           opts.RunID,
-		Repetition:      opts.Repetition,
-		RequestID:       reqID,
-		WorkloadItem:    it.Index,
-		ScheduledSendTS: events.Timestamp(out.ScheduledAt),
-		SendTS:          events.Timestamp(out.SendTS),
-		SendSlipSeconds: &slip,
-		EndTS:           events.Timestamp(out.EndTS),
-		Status:          out.Status,
-		ErrorClass:      out.ErrorClass,
-		TTFTSeconds:     out.TTFTSeconds,
-		ITL:             out.ITL,
-		InputTokens:     out.InputTokens,
-		OutputTokens:    out.OutputTokens,
-		Shed:            out.Shed,
-		Retries:         0, // the generator NEVER retries (ADR-0001)
+		RunID:             opts.RunID,
+		Repetition:        opts.Repetition,
+		RequestID:         reqID,
+		WorkloadItem:      it.Index,
+		ScheduledSendTS:   events.Timestamp(out.ScheduledAt),
+		SendTS:            events.Timestamp(out.SendTS),
+		EndTS:             events.Timestamp(out.EndTS),
+		Status:            out.Status,
+		ErrorClass:        out.ErrorClass,
+		TTFTSeconds:       out.TTFTSeconds,
+		ITL:               out.ITL,
+		CancellationPoint: out.Cancellation,
+		InputTokens:       out.InputTokens,
+		OutputTokens:      out.OutputTokens,
+		Shed:              out.Shed,
+		Retries:           0, // the generator NEVER retries (ADR-0001)
 	}
-	if out.Status == events.StatusCanceled {
-		ev.CancellationPoint = &events.CancellationPoint{
-			// Cancellation elapsed time uses the same CO-safe basis as
-			// every other latency: the scheduled send time.
-			ElapsedSeconds: out.EndTS.Sub(out.ScheduledAt).Seconds(),
+	// send_slip_seconds is emitted only when the send actually completed;
+	// a request whose body write never finished has no wire-write time, and
+	// a fabricated ~0 slip would be a false measurement (CO re-review
+	// residual, 2026-07-10). send_ts itself falls back to the
+	// request-start instant in that case (schema requires non-null).
+	if out.SendCompleted {
+		slip := out.SendSlipSeconds
+		ev.SendSlipSeconds = &slip
+	}
+	if out.Status == events.StatusCanceled && ev.CancellationPoint == nil {
+		// Safety net: the schema requires a cancellation_point object for
+		// canceled events. The client always records one; if it ever did
+		// not, the close time relative to send_ts is the honest fallback.
+		elapsed := out.EndTS.Sub(out.SendTS).Seconds()
+		if elapsed < 0 {
+			elapsed = 0
 		}
+		ev.CancellationPoint = &events.CancellationPoint{ElapsedSeconds: elapsed}
 	}
 	return ev
 }

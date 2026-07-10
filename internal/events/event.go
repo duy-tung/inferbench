@@ -31,6 +31,17 @@ const (
 // never excluded from the latency a request experienced. SendTS remains
 // the actual wire-write time for diagnostics; SendSlipSeconds = send_ts −
 // scheduled_send_ts (>= 0).
+//
+// send_ts fallback semantics (IB-T004, CO re-review residual): when a
+// request's send never completes (httptrace.WroteRequest never fires —
+// connect failure, or a cancel/timeout before the body write finished),
+// there is no wire-write instant. The schema requires a non-null send_ts,
+// so it falls back to the request-start instant (the best-known lower
+// bound), and SendSlipSeconds is left nil so send_slip_seconds is ABSENT
+// from the record — an absent optional field means "not measured", whereas
+// a fabricated ~0 slip would be a false measurement. A nullable send_ts
+// would express this more directly; that is a contracts proposal, recorded
+// in docs/implementation-notes.md, never a local schema change.
 type Event struct {
 	RunID             string             `json:"run_id"`
 	Repetition        int                `json:"repetition"`

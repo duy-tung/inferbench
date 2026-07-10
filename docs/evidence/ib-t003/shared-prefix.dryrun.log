@@ -1,0 +1,2 @@
+run dryrun-shared-prefix: sent=60 ok=60 errors=0 shed=0 canceled=0 max_dispatch_slip=1.663855ms max_send_slip=2.074372ms wall=8.679s
+artifacts: /tmp/claude-0/-home-user-ai-infra/f9d2a869-bab7-54d8-a091-357b56be5c68/scratchpad/ib-t003-final/shared-prefix

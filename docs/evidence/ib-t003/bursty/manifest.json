@@ -9,7 +9,7 @@
   "engine": {
     "name": "mock",
     "version": "dev",
-    "commit": "a5a2c021557bcb73ca8f6673c8f4503d586704e1",
+    "commit": "5d69aeb11228b5dcfbaca10c2e57f0a24603b8f9",
     "flags": {
       "error_rate": 0,
       "itl": "5ms",
@@ -19,7 +19,7 @@
   },
   "model": {
     "checkpoint": "mock-8b",
-    "revision": "mockengine@a5a2c02",
+    "revision": "mockengine@5d69aeb",
     "tokenizer": "mockengine-estimator (~4 bytes/token, deterministic)"
   },
   "hardware": {
@@ -31,19 +31,19 @@
     "instance_type": "local-dev-container (linux/amd64, CPU-only)"
   },
   "gateway": {
-    "version": "dev@a5a2c02",
-    "config_version": "flags-v1 (static flag config; snapshots land at IG-T004)"
+    "version": "dev@5d69aeb",
+    "config_version": "flags-v1 (static flag config; snapshots land at IG-T004): -upstream-timeout 180s -stream-write-timeout 30s"
   },
   "client": {
     "location": "same-host (loopback)",
-    "rtt_ms": 1.178612
+    "rtt_ms": 0.837287
   },
   "warm_up": {
     "policy": "none"
   },
   "repetitions": 1,
-  "hypothesis": "IB-T003 dry run: each canonical workload's traffic shape executes end-to-end against the pinned gateway+mock pair (short derived variant, unchanged seed/distributions), or refuses with the typed ErrNotImplemented when its defining feature is deferred to IB-T004.",
-  "started_at": "2026-07-10T09:04:12Z",
-  "contracts_bundle_version": "v0.1.0",
-  "notes": "IB-T003 suite dry run. Smoke evidence only, not a benchmark: no warm-up handling, single repetition, shortened stop conditions. rtt_ms measured at preflight when left null."
+  "hypothesis": "Workload-suite dry run (IB-T003 evidence, regenerated at IB-T004): every canonical workload's traffic shape - including prefix-sharing prompts, cancellation issuance, and slow-client read throttling - executes end-to-end as a streaming run against the pinned gateway+mock pair (short derived variant, unchanged seed/distributions), emitting schema-valid raw events.",
+  "started_at": "2026-07-10T14:48:47Z",
+  "contracts_bundle_version": "8d81492 (v0.2.0 tag pending)",
+  "notes": "Suite dry run, regenerated 2026-07-10 after the IB-T004 client features landed and after the raw-event v0.2.0 (scheduled_send_ts) amendment made the original IB-T003 artifacts stale (recorded deviation). Streaming (SSE) runs: infergate HEAD now relays streams (IG-T003). Smoke evidence only, not a benchmark: no warm-up handling, single repetition, shortened stop conditions. rtt_ms measured at preflight when left null."
 }

@@ -140,3 +140,50 @@ func TestEventMarshalScheduledSend(t *testing.T) {
 		}
 	}
 }
+
+// send_slip_seconds is optional: a nil pointer must leave the key ABSENT
+// (send never completed — "not measured"), never emit a fabricated value.
+func TestEventMarshalSendSlipAbsent(t *testing.T) {
+	ev := Event{
+		RunID: "run-1", Repetition: 1, RequestID: "r", WorkloadItem: 0,
+		ScheduledSendTS: ts("2026-07-10T09:00:59.988000Z"),
+		SendTS:          ts("2026-07-10T09:01:00Z"), // request-start fallback
+		EndTS:           ts("2026-07-10T09:01:01Z"),
+		Status:          StatusError, ErrorClass: strPtr("upstream_error"),
+	}
+	raw, err := json.Marshal(&ev)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(raw), "send_slip_seconds") {
+		t.Fatalf("send_slip_seconds must be absent when not measured: %s", raw)
+	}
+}
+
+// cancellation_point marshals with tokens-at-cancel for canceled events.
+func TestEventMarshalCancellationPoint(t *testing.T) {
+	tokens := 8
+	ev := Event{
+		RunID: "run-1", Repetition: 1, RequestID: "r", WorkloadItem: 0,
+		ScheduledSendTS: ts("2026-07-10T09:00:59Z"),
+		SendTS:          ts("2026-07-10T09:01:00Z"),
+		EndTS:           ts("2026-07-10T09:01:01Z"),
+		Status:          StatusCanceled, ErrorClass: strPtr("canceled"),
+		CancellationPoint: &CancellationPoint{
+			ElapsedSeconds:       0.42,
+			OutputTokensAtCancel: &tokens,
+		},
+	}
+	raw, err := json.Marshal(&ev)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(raw)
+	for _, want := range []string{
+		`"elapsed_seconds":0.42`, `"output_tokens_at_cancel":8`,
+	} {
+		if !strings.Contains(s, want) {
+			t.Errorf("missing %s in %s", want, s)
+		}
+	}
+}

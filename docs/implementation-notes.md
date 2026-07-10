@@ -258,6 +258,114 @@ correctly FAIL the amended schema — verified — and were pre-publication smok
 - `send_slip_seconds` on healthy local runs: p50 ≈ 0.9 ms — the newly measured segment is small
   when the client keeps up, which is exactly what makes it safe to assert on and abort over.
 
+### 2026-07-10 — IB-T004: streaming client correctness (calibration PASSED)
+
+**Scope delivered:** the client-side measurement features that IB-T003 refused with typed
+errors are now real, plus the calibration evidence that makes them trustworthy.
+
+- **Monotonic-clock audit (requirement 1):** every latency in the measurement path is a
+  `time.Time` subtraction where both stamps come from `time.Now()` or `Add` on such stamps
+  (epoch + plan offset), so Go's monotonic reading is always present and wall-clock steps
+  cannot corrupt a measurement: `scheduled_send_ts` basis = `epoch.Add(SendOffset)` (run.go),
+  wire stamp = `httptrace.WroteRequest` callback, first-byte stamp = `firstByteReader`,
+  per-chunk stamps = taken in `readStream` **at line arrival, before any parsing** (IB-T004
+  refinement: parse cost can no longer smear a gap), cancel timer = `time.AfterFunc(time.Until
+  (scheduledAt.Add(point)))`. Serialized RFC 3339 strings (`events.Timestamp`) are never fed
+  back into latency arithmetic (replay/tests parse them only for joining/verification).
+  No wall-clock arithmetic was found in the measurement path; audit clean.
+- **Cancellation issuance (`cancellation.rate > 0`):** the seeded schedule assigns cancels per
+  item (independent PCG streams `CNLS1000`/`CNLP1000`; realized assignment rate asserted in
+  tests) and samples the point per the schema trigger. *elapsed-seconds* arms a timer at
+  `scheduled_send_ts + point` (plan basis — issuance is response-independent and
+  deterministic in intent); *output-tokens* fires when the client has observed N content
+  deltas. The cancel is the request-context cancel → connection close (Contract 1 propagation).
+  Events record the honest `cancellation_point` (`elapsed_seconds` measured after `send_ts`
+  per the raw-event schema, clamped ≥ 0 for pre-send cancels; `output_tokens_at_cancel`);
+  TTFT/ITL/tokens measured before the cancel are kept (billable per Contract 1). A planned
+  cancel that loses the race against stream completion stays an `ok` event —
+  planned-vs-realized counts go to the run log/summary (`cancel_planned=` vs `canceled=`).
+  `--stream` is required for the output-tokens trigger (typed CLI refusal otherwise).
+- **Slow-client emulation (`slow_client.fraction > 0`):** seeded per-item assignment (stream
+  `SLOW1000`); throttled body reads paced at `read_bytes_per_second` (read chunk = bps/10 →
+  ~100 ms pacing granularity) with optional `initial_read_delay_seconds`, context-aware so
+  cancels/timeouts interrupt slow streams. The client-side mirror series honestly include the
+  self-imposed pacing (TTFT includes the initial delay). Caveat recorded in calibration.md:
+  throttling is above kernel/transport buffers (~4 KB + socket), so loopback servers run a few
+  KB ahead before feeling backpressure.
+- **Prefix-sharing prompts (`prefix_sharing.ratio > 0`):** seeded assignment (stream
+  `PRFX1000`), sequential group fill of `group_size`, prompt = byte-identical shared prefix per
+  group (`workload.SharedPrompt`, PRNG from (seed, group)) + unique per-item suffix; enforced
+  in tests (identical prefix within group, no fully duplicated prompt, realized ratio ≈
+  declared). Was grouped into IB-T004 by the IB-T003 deferral-boundary note.
+- **CO re-review residual fixed:** `Outcome.SendCompleted` tracks whether
+  `httptrace.WroteRequest` fired; when it never fired (connect failure, pre-send cancel or
+  timeout) the event emits `send_slip_seconds` **ABSENT** (not a fabricated ~0) and `send_ts`
+  falls back to the request-start instant — semantics documented in `internal/events/event.go`
+  and the client package comment. The wire-stage watchdog skips send-incomplete requests (they
+  are classified failure events with full scheduled-send latency, not schedule-keeping
+  violations). Contracts proposal recorded below.
+- **Also:** completed streams without usage still warn (`UsageMissing` now set only for
+  completed 2xx streams — canceled/failed streams legitimately lack usage and fall back to
+  client-observed chunk counts, which for cancels is the honest billable count).
+
+**Verification (all commands run 2026-07-10):**
+
+1. `gofmt -l .` clean; `go vet ./...` clean; `go test -race -count=1 ./...` → 6 packages ok.
+   New tests: deliberate cancel pre-first-token / mid-stream (elapsed + token triggers, server
+   observes the disconnect), cancel-vs-completion race stays `ok`, slow-client bounded read
+   rate (+ body integrity), send-slip-absent on connect failure, cancellation/slow/prefix
+   planning determinism + realized-rate + group-structure, run-level profile execution
+   (schema-shaped canceled events, fast neighbors unaffected by a slow item), send-slip-absent
+   marshaling.
+2. **Calibration vs the pinned pair PASSED** (`scripts/calibrate-mock.sh`; gateway+mock built
+   read-only from infergate @ **`5d69aeb`** — infergate's HEAD advanced twice during this task
+   (IG-T003 → IG-T006 → IG-T004 work), so the harness takes an explicit pin argument and
+   injects the built commit into every manifest, keeping binaries and manifests desync-proof;
+   final evidence pin held at `5d69aeb`): TTFT p50 +2.84 ms / +2.97 ms over configured
+   (100 ms / 300 ms points), pooled ITL p50 +0.81 ms / +0.47 ms (20 ms / 5 ms points), all
+   within the declared tolerance (TTFT p50 [−2, +15] ms, ITL p50 [−2, +5] ms; p95 bounds also
+   met). Full tables + tolerance statement: `docs/evidence/ib-t004/calibration.md`.
+3. **Cancellation verified two-sided at all 3 points** (client events AND mock
+   `/debug/state`): queued (cancel at 0 s → 30/30 canceled, 0 tokens, no TTFT, 20/30 sends
+   never completed → slip ABSENT, mock `requests_total: 0`), pre-first-token (0.15 s < TTFT
+   0.3 s → 30/30 canceled, mock 30× `phase=pre_first_token` `chunks_sent=0`), mid-stream
+   (8 output tokens → 29/30 canceled with exactly 8 tokens at cancel + kept TTFT/ITL, mock
+   29× `phase=mid_stream` `chunks_sent=9`; 1 short stream completed ok — honest realized
+   accounting).
+4. **Slow-client bounded rate demonstrated:** e2e p50 2.113 s at 4096 B/s vs 0.230 s
+   full-speed control (9.2×), TTFT p50 0.223 s includes the 0.2 s first-read delay, ITL
+   bimodal at the 100 ms pacing granularity.
+5. **IB-T003 evidence regenerated** (deviation follow-up closed): full 8/8 suite dry-run
+   green, STREAMING, vs the pair @ `5d69aeb` (`scripts/dryrun-workloads.sh`; shared-prefix
+   60/60 ok, cancel-storm 90 sent / 7 canceled of 39 planned — most sampled points 0.2–3.0 s
+   land after the mock's short streams end (mock caps completions at 256 tokens), honest
+   planned-vs-realized; slow-client 40/40 ok, wall 50 s dominated by throttled reads).
+6. **Kit validation green at pin `8d81492`**: 53/53 PASS — canonical suite (8 workloads),
+   regenerated ib-t003 artifacts (8 derived workloads + 8 events.jsonl + 8 manifests), ib-t004
+   scenarios (7 workloads + 7 events.jsonl + 7 manifests). `docs/evidence/ib-t004/
+   kit-validate.log`.
+
+**Contracts observations (proposals for the orchestrator — NO local schema/contract edits):**
+
+1. **`metrics/metrics.md` §4 "Client-side TTFT" start point is stale** relative to the
+   raw-event v0.2.0 amendment (`8d81492`): metrics.md still says start = "client completes
+   writing the request body", while raw-event.schema.json (same repo, same pin) normatively
+   defines client TTFT from `scheduled_send_ts` (CO safety). The schema is what this repo
+   emits against; metrics.md §4 should be re-worded to match at the next contracts release.
+2. **`send_ts` should arguably be nullable** for requests whose send never completed; today it
+   is required non-null, so this repo emits the documented request-start fallback with
+   `send_slip_seconds` absent. If contracts agree, a nullable `send_ts` (null exactly when the
+   body write never finished) states the truth directly.
+3. **Workload `cancellation.point` trigger `elapsed-seconds` says "since send"** — ambiguous
+   between scheduled send and wire send. Implemented as *scheduled* send (deterministic,
+   response-independent issuance), while the raw-event `cancellation_point.elapsed_seconds` is
+   recorded relative to `send_ts` per its schema text. Suggest the workload schema say
+   "since the scheduled send time" explicitly.
+
+**Evidence:** `docs/evidence/ib-t004/` (calibration.md, per-scenario run dirs with manifest /
+events / run log / derived workload / stats / mock debug-state, infergate-pin.txt,
+kit-validate.log) and regenerated `docs/evidence/ib-t003/`.
+
 ## Deviations
 
 > Program deviation policy: when repository evidence forces a deviation from the approved plan,
@@ -292,3 +400,8 @@ correctly FAIL the amended schema — verified — and were pre-publication smok
 - **Follow-up:** regenerate `docs/evidence/ib-t003/` with the fixed binary via
   `scripts/dryrun-workloads.sh` at the next IB-T003-touching change (or IB-T004 start,
   whichever comes first).
+- **RESOLVED 2026-07-10 (IB-T004):** evidence regenerated with the IB-T004 binary as a full
+  8/8 streaming suite dry-run vs infergate @ `5d69aeb`; everything under
+  `docs/evidence/ib-t003/` now kit-validates at pin `8d81492` (see the IB-T004 log entry and
+  `docs/evidence/ib-t004/kit-validate.log`). This also closes the IB-T002 deviation above:
+  the pinned live streaming verification happened (IG-T003 landed at infergate HEAD).

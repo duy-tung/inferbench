@@ -69,6 +69,13 @@ func cmdRun(args []string) error {
 		}
 		w.Arrival.RateRPS = rate
 	}
+	// The output-tokens cancellation trigger counts content deltas as they
+	// stream in; without --stream there is nothing to count until the full
+	// body has already arrived, so running it non-streaming would silently
+	// realize zero cancellations. Refuse instead (typed, never silent).
+	if *w.Cancel.Rate > 0 && w.Cancel.Point.Trigger == workload.CancelTriggerTokens && !*stream {
+		return errors.New("cancellation trigger output-tokens requires --stream")
+	}
 
 	plan, err := schedule.Build(w)
 	if err != nil {

@@ -1,0 +1,39 @@
+{
+  "file": "/tmp/claude-0/-home-user-ai-infra/f9d2a869-bab7-54d8-a091-357b56be5c68/scratchpad/ib-t004-final/cancel-pre-first-token/events.jsonl",
+  "events": 30,
+  "status_counts": {
+    "canceled": 30
+  },
+  "client_ttft_seconds": null,
+  "client_itl_seconds_pooled": null,
+  "max_stall_seconds": null,
+  "client_e2e_seconds": {
+    "count": 30,
+    "mean": 0.15074341297149657,
+    "p50": 0.15079283714294434,
+    "p95": 0.15120291709899902,
+    "max": 0.15133213996887207
+  },
+  "send_slip_seconds": {
+    "count": 30,
+    "mean": 0.0012346030333333334,
+    "p50": 0.001270759,
+    "p95": 0.001668404,
+    "max": 0.001788877
+  },
+  "send_slip_absent_events": 0,
+  "cancellation_elapsed_seconds": {
+    "count": 30,
+    "mean": 0.14935675340000001,
+    "p50": 0.149367427,
+    "p95": 0.149885953,
+    "max": 0.150369729
+  },
+  "cancellation_tokens_at_cancel": {
+    "count": 30,
+    "mean": 0.0,
+    "p50": 0,
+    "p95": 0,
+    "max": 0
+  }
+}

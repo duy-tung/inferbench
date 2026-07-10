@@ -1,0 +1,33 @@
+{
+  "name": "slow-on",
+  "version": "1.0.0",
+  "seed": 1004001,
+  "description": "IB-T004 calibration base: moderate open-loop rate, bounded lengths; scenario scripts derive variants (name/seed kept, mutation recorded in the derived file).",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 3
+  },
+  "input_length_distribution": {
+    "type": "uniform",
+    "min": 64,
+    "max": 256
+  },
+  "output_length_distribution": {
+    "type": "constant",
+    "value": 64
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 1.0,
+    "read_bytes_per_second": 4096,
+    "initial_read_delay_seconds": 0.2
+  },
+  "stop": {
+    "request_count": 30
+  }
+}

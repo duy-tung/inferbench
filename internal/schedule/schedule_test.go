@@ -1,7 +1,6 @@
 package schedule
 
 import (
-	"errors"
 	"math"
 	"reflect"
 	"testing"
@@ -173,36 +172,163 @@ func TestPhasesExhaustedWithoutRepeat(t *testing.T) {
 	}
 }
 
-// Deferred features refuse with the typed error, never run silently.
-func TestDeferredFeaturesRefuse(t *testing.T) {
-	cases := map[string]func(w *workload.Workload){
-		"prefix": func(w *workload.Workload) {
-			r := 0.5
-			n := 128
-			w.Prefix.Ratio = &r
-			w.Prefix.SharedPrefixLengthTokens = &n
-		},
-		"cancellation": func(w *workload.Workload) {
-			r := 0.2
-			w.Cancel.Rate = &r
-			w.Cancel.Point = &workload.CancelPoint{
-				Trigger:      "elapsed-seconds",
-				Distribution: constDist(1),
-			}
-		},
-		"slow-client": func(w *workload.Workload) {
-			f := 0.1
-			bps := 1024
-			w.SlowClient.Fraction = &f
-			w.SlowClient.ReadBytesPerSecond = &bps
-		},
+// withCancel adds an elapsed-seconds cancellation profile.
+func withCancel(w *workload.Workload, rate float64, trigger string, dist *workload.Dist) {
+	w.Cancel.Rate = &rate
+	w.Cancel.Point = &workload.CancelPoint{Trigger: trigger, Distribution: dist}
+}
+
+// Cancellation planning (IB-T004): assignment and points are seeded and
+// deterministic; the realized assignment rate tracks the profile; the
+// sampled points respect the distribution bounds.
+func TestCancellationPlanning(t *testing.T) {
+	min, max := 0.2, 3.0
+	uni := &workload.Dist{Type: "uniform", Min: &min, Max: &max}
+
+	w := baseWorkload(t, 21)
+	withCancel(w, 0.5, workload.CancelTriggerElapsed, uni)
+	p1, err := Build(w)
+	if err != nil {
+		t.Fatal(err)
 	}
-	for name, mutate := range cases {
-		w := baseWorkload(t, 1)
-		mutate(w)
-		if _, err := Build(w); !errors.Is(err, workload.ErrNotImplemented) {
-			t.Fatalf("%s: want ErrNotImplemented, got %v", name, err)
+	w2 := baseWorkload(t, 21)
+	withCancel(w2, 0.5, workload.CancelTriggerElapsed, uni)
+	p2, err := Build(w2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	planned := 0
+	for i, it := range p1.Items {
+		if p2.Items[i] != it {
+			t.Fatalf("cancel planning not deterministic at item %d", i)
 		}
+		switch it.CancelTrigger {
+		case "":
+		case workload.CancelTriggerElapsed:
+			planned++
+			if it.CancelAfterSeconds < min || it.CancelAfterSeconds > max {
+				t.Fatalf("item %d cancel point %.3fs outside declared [%.1f, %.1f]",
+					i, it.CancelAfterSeconds, min, max)
+			}
+		default:
+			t.Fatalf("item %d unexpected trigger %q", i, it.CancelTrigger)
+		}
+	}
+	// 2000 items at rate 0.5: realized assignment within ±10% of intent.
+	if frac := float64(planned) / float64(len(p1.Items)); frac < 0.4 || frac > 0.6 {
+		t.Fatalf("planned cancel fraction %.3f, want ~0.5", frac)
+	}
+
+	// Token trigger: sampled values round to integers >= 0.
+	w3 := baseWorkload(t, 22)
+	five := 5.0
+	withCancel(w3, 0.3, workload.CancelTriggerTokens, &workload.Dist{Type: "constant", Value: &five})
+	p3, err := Build(w3)
+	if err != nil {
+		t.Fatal(err)
+	}
+	tokenPlanned := 0
+	for _, it := range p3.Items {
+		if it.CancelTrigger == workload.CancelTriggerTokens {
+			tokenPlanned++
+			if it.CancelAfterTokens != 5 {
+				t.Fatalf("token cancel point %d, want 5", it.CancelAfterTokens)
+			}
+		}
+	}
+	if tokenPlanned == 0 {
+		t.Fatal("no token-trigger cancels planned at rate 0.3")
+	}
+}
+
+// Slow-client planning (IB-T004): seeded assignment at the declared
+// fraction, carrying the read-rate and initial-delay parameters.
+func TestSlowClientPlanning(t *testing.T) {
+	w := baseWorkload(t, 31)
+	f := 0.25
+	bps := 1024
+	delay := 0.5
+	w.SlowClient.Fraction = &f
+	w.SlowClient.ReadBytesPerSecond = &bps
+	w.SlowClient.InitialReadDelaySeconds = &delay
+	p, err := Build(w)
+	if err != nil {
+		t.Fatal(err)
+	}
+	slow := 0
+	for _, it := range p.Items {
+		if it.SlowReadBytesPerSec == 0 {
+			continue
+		}
+		slow++
+		if it.SlowReadBytesPerSec != 1024 || it.SlowInitialDelay != 500*time.Millisecond {
+			t.Fatalf("slow item carries wrong profile: %+v", it)
+		}
+	}
+	if frac := float64(slow) / float64(len(p.Items)); frac < 0.18 || frac > 0.32 {
+		t.Fatalf("slow fraction %.3f, want ~0.25", frac)
+	}
+}
+
+// Prefix-sharing planning (IB-T004): sharing items share a byte-identical
+// prefix within their group, carry unique suffixes, and the realized ratio
+// tracks the profile.
+func TestPrefixSharingPlanning(t *testing.T) {
+	w := baseWorkload(t, 41)
+	ratio := 0.8
+	prefixTokens := 128
+	group := 16
+	w.Prefix.Ratio = &ratio
+	w.Prefix.SharedPrefixLengthTokens = &prefixTokens
+	w.Prefix.GroupSize = &group
+	// Input floor above the prefix length so every sharing prompt has a
+	// unique suffix (mirrors the canonical shared-prefix design rule).
+	fmin, fmax := 200.0, 400.0
+	w.InputLen = &workload.Dist{Type: "uniform", Min: &fmin, Max: &fmax}
+
+	p, err := Build(w)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	prompts := map[int][]string{} // group -> prompts
+	sharing := 0
+	for _, it := range p.Items {
+		if it.PrefixGroup == 0 {
+			continue
+		}
+		sharing++
+		prompts[it.PrefixGroup] = append(prompts[it.PrefixGroup], p.Prompt(it))
+	}
+	if frac := float64(sharing) / float64(len(p.Items)); frac < 0.72 || frac > 0.88 {
+		t.Fatalf("sharing fraction %.3f, want ~0.8", frac)
+	}
+
+	prefixBytes := prefixTokens*4 - 28 // fillWords target for the prefix
+	distinctPrefixes := map[string]bool{}
+	for g, ps := range prompts {
+		if len(ps) > group {
+			t.Fatalf("group %d has %d members, group_size %d", g, len(ps), group)
+		}
+		prefix := ps[0][:prefixBytes]
+		distinctPrefixes[prefix] = true
+		seen := map[string]bool{}
+		for _, prompt := range ps {
+			if prompt[:prefixBytes] != prefix {
+				t.Fatalf("group %d prompts do not share a byte-identical prefix", g)
+			}
+			if seen[prompt] {
+				t.Fatalf("group %d contains fully duplicated prompts (suffix must be unique)", g)
+			}
+			seen[prompt] = true
+		}
+	}
+	// Sequential fill: number of groups ~= sharing / group_size, each with
+	// its own distinct prefix text.
+	wantGroups := (sharing + group - 1) / group
+	if len(prompts) != wantGroups || len(distinctPrefixes) != wantGroups {
+		t.Fatalf("got %d groups / %d distinct prefixes, want %d", len(prompts), len(distinctPrefixes), wantGroups)
 	}
 }
 

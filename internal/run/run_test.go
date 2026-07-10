@@ -434,3 +434,138 @@ func TestEpochJoinsEventsToPlan(t *testing.T) {
 		}
 	}
 }
+
+// slowSSEHandler streams content chunks at the given cadence until maxChunks
+// or client disconnect, Contract 1-shaped.
+func slowSSEHandler(ttft, gap time.Duration, maxChunks int) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/event-stream")
+		f := w.(http.Flusher)
+		select {
+		case <-r.Context().Done():
+			return
+		case <-time.After(ttft):
+		}
+		for i := 0; i < maxChunks; i++ {
+			if i > 0 {
+				select {
+				case <-r.Context().Done():
+					return
+				case <-time.After(gap):
+				}
+			}
+			if _, err := fmt.Fprintf(w,
+				`data: {"id":"c","object":"chat.completion.chunk","created":1,"model":"m","choices":[{"index":0,"delta":{"content":"tok%d "}}]}`+"\n\n", i); err != nil {
+				return
+			}
+			f.Flush()
+		}
+		fmt.Fprint(w, "data: [DONE]\n\n")
+		f.Flush()
+	}
+}
+
+// Workload cancellation profile end-to-end (IB-T004): planned cancel items
+// emit schema-shaped canceled events (error_class canceled, honest
+// cancellation_point, kept TTFT), non-cancel items complete, and the run
+// summary reports planned vs realized.
+func TestCancellationProfileEmitsHonestEvents(t *testing.T) {
+	srv := httptest.NewServer(slowSSEHandler(20*time.Millisecond, 20*time.Millisecond, 200))
+	defer srv.Close()
+
+	plan := fixedPlan(6, 20*time.Millisecond)
+	for i := range plan.Items {
+		if i%2 == 0 {
+			plan.Items[i].CancelTrigger = workload.CancelTriggerElapsed
+			plan.Items[i].CancelAfterSeconds = 0.3
+		}
+	}
+
+	var sink, logBuf bytes.Buffer
+	cl := client.New(client.Config{BaseURL: srv.URL, Model: "mock-8b", Stream: true, RequestTimeout: 30 * time.Second})
+	res, err := Execute(context.Background(), Options{
+		Plan: plan, Client: cl, RunID: "cancel-profile", Repetition: 1,
+		EventSink: &sink, Log: &logBuf,
+	})
+	if err != nil {
+		t.Fatalf("run aborted: %v", err)
+	}
+	if res.CancelPlanned != 3 || res.Canceled != 3 || res.OK != 3 {
+		t.Fatalf("want 3 planned/3 canceled/3 ok, got %+v", res)
+	}
+	if !bytes.Contains(logBuf.Bytes(), []byte("cancel_planned=3")) {
+		t.Fatal("run log must state the planned cancel count")
+	}
+
+	sc := bufio.NewScanner(bytes.NewReader(sink.Bytes()))
+	for sc.Scan() {
+		var ev events.Event
+		if err := json.Unmarshal(sc.Bytes(), &ev); err != nil {
+			t.Fatal(err)
+		}
+		if ev.WorkloadItem%2 == 0 {
+			if ev.Status != events.StatusCanceled || ev.ErrorClass == nil || *ev.ErrorClass != "canceled" {
+				t.Fatalf("item %d: want canceled, got %s/%v", ev.WorkloadItem, ev.Status, ev.ErrorClass)
+			}
+			if ev.CancellationPoint == nil || ev.CancellationPoint.OutputTokensAtCancel == nil {
+				t.Fatalf("item %d: canceled event missing cancellation_point/tokens", ev.WorkloadItem)
+			}
+			// Cancel at 0.3s into a 20ms-cadence stream: several tokens
+			// received, all billable.
+			if got := *ev.CancellationPoint.OutputTokensAtCancel; got < 3 || got > 40 {
+				t.Fatalf("item %d: tokens at cancel %d, want mid-stream", ev.WorkloadItem, got)
+			}
+			if ev.TTFTSeconds == nil {
+				t.Fatalf("item %d: canceled mid-stream must keep ttft", ev.WorkloadItem)
+			}
+			if ev.SendSlipSeconds == nil {
+				t.Fatalf("item %d: send completed; send_slip_seconds must be present", ev.WorkloadItem)
+			}
+		} else if ev.Status != events.StatusOK {
+			t.Fatalf("item %d: want ok, got %s", ev.WorkloadItem, ev.Status)
+		}
+	}
+}
+
+// Slow-client profile end-to-end: the planned slow item's e2e window
+// reflects the bounded read rate while fast items are unaffected.
+func TestSlowClientProfileBoundsReadRate(t *testing.T) {
+	// 40 chunks emitted immediately (~5KB): fast items finish in ms; the
+	// slow item at 4096 B/s needs >= ~1s.
+	srv := httptest.NewServer(slowSSEHandler(0, 0, 40))
+	defer srv.Close()
+
+	plan := fixedPlan(3, 10*time.Millisecond)
+	plan.Items[1].SlowReadBytesPerSec = 4096
+	plan.Items[1].SlowInitialDelay = 200 * time.Millisecond
+
+	var sink bytes.Buffer
+	cl := client.New(client.Config{BaseURL: srv.URL, Model: "mock-8b", Stream: true, RequestTimeout: 30 * time.Second})
+	res, err := Execute(context.Background(), Options{
+		Plan: plan, Client: cl, RunID: "slow-profile", Repetition: 1, EventSink: &sink,
+	})
+	if err != nil {
+		t.Fatalf("run aborted: %v", err)
+	}
+	if res.OK != 3 || res.SlowPlanned != 1 {
+		t.Fatalf("want 3 ok / 1 slow planned, got %+v", res)
+	}
+
+	e2e := map[int]float64{}
+	sc := bufio.NewScanner(bytes.NewReader(sink.Bytes()))
+	for sc.Scan() {
+		var ev events.Event
+		if err := json.Unmarshal(sc.Bytes(), &ev); err != nil {
+			t.Fatal(err)
+		}
+		e2e[ev.WorkloadItem] = time.Time(ev.EndTS).Sub(time.Time(ev.ScheduledSendTS)).Seconds()
+	}
+	if e2e[1] < 1.0 {
+		t.Fatalf("slow item e2e %.3fs; bounded read rate not applied", e2e[1])
+	}
+	for _, i := range []int{0, 2} {
+		if e2e[i] > 0.5 {
+			t.Fatalf("fast item %d e2e %.3fs; slow neighbor must not degrade it", i, e2e[i])
+		}
+	}
+}

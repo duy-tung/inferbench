@@ -1,0 +1,243 @@
+run_id=ib-t004-calib-A repetition=1 requests=120 max_slip=100ms cancel_planned=0 slow_planned=0 prefix_sharing=0
+schedule item=0 offset=132.812097ms input_tokens=252 max_tokens=128
+schedule item=1 offset=162.096568ms input_tokens=211 max_tokens=128
+schedule item=2 offset=444.916571ms input_tokens=110 max_tokens=128
+schedule item=3 offset=1.441567254s input_tokens=149 max_tokens=128
+schedule item=4 offset=1.502963694s input_tokens=149 max_tokens=128
+schedule item=5 offset=1.770450977s input_tokens=75 max_tokens=128
+schedule item=6 offset=1.805319388s input_tokens=234 max_tokens=128
+schedule item=7 offset=2.084614917s input_tokens=252 max_tokens=128
+schedule item=8 offset=2.59806167s input_tokens=72 max_tokens=128
+schedule item=9 offset=4.087900767s input_tokens=237 max_tokens=128
+schedule item=10 offset=4.226858468s input_tokens=107 max_tokens=128
+schedule item=11 offset=4.443245281s input_tokens=168 max_tokens=128
+schedule item=12 offset=4.500986066s input_tokens=212 max_tokens=128
+schedule item=13 offset=4.603502359s input_tokens=239 max_tokens=128
+schedule item=14 offset=4.8962841s input_tokens=172 max_tokens=128
+schedule item=15 offset=5.867735589s input_tokens=97 max_tokens=128
+schedule item=16 offset=6.360369473s input_tokens=244 max_tokens=128
+schedule item=17 offset=6.733578383s input_tokens=161 max_tokens=128
+schedule item=18 offset=6.746909391s input_tokens=102 max_tokens=128
+schedule item=19 offset=7.141628663s input_tokens=112 max_tokens=128
+schedule item=20 offset=7.195586978s input_tokens=226 max_tokens=128
+schedule item=21 offset=7.218498799s input_tokens=125 max_tokens=128
+schedule item=22 offset=7.627410932s input_tokens=97 max_tokens=128
+schedule item=23 offset=7.661454996s input_tokens=234 max_tokens=128
+schedule item=24 offset=8.532791536s input_tokens=174 max_tokens=128
+schedule item=25 offset=8.97821664s input_tokens=190 max_tokens=128
+schedule item=26 offset=9.374178312s input_tokens=116 max_tokens=128
+schedule item=27 offset=9.641567279s input_tokens=249 max_tokens=128
+schedule item=28 offset=9.661108475s input_tokens=223 max_tokens=128
+schedule item=29 offset=9.840388754s input_tokens=227 max_tokens=128
+schedule item=30 offset=10.045443632s input_tokens=225 max_tokens=128
+schedule item=31 offset=10.743189s input_tokens=191 max_tokens=128
+schedule item=32 offset=10.819733193s input_tokens=168 max_tokens=128
+schedule item=33 offset=11.306920853s input_tokens=83 max_tokens=128
+schedule item=34 offset=11.635181443s input_tokens=71 max_tokens=128
+schedule item=35 offset=11.779995425s input_tokens=184 max_tokens=128
+schedule item=36 offset=12.193974454s input_tokens=172 max_tokens=128
+schedule item=37 offset=12.194329916s input_tokens=108 max_tokens=128
+schedule item=38 offset=12.429245446s input_tokens=238 max_tokens=128
+schedule item=39 offset=12.805460896s input_tokens=179 max_tokens=128
+schedule item=40 offset=13.028821704s input_tokens=83 max_tokens=128
+schedule item=41 offset=13.094282543s input_tokens=139 max_tokens=128
+schedule item=42 offset=13.097784205s input_tokens=178 max_tokens=128
+schedule item=43 offset=13.149505645s input_tokens=205 max_tokens=128
+schedule item=44 offset=13.377080181s input_tokens=76 max_tokens=128
+schedule item=45 offset=13.581500533s input_tokens=156 max_tokens=128
+schedule item=46 offset=13.787984988s input_tokens=100 max_tokens=128
+schedule item=47 offset=13.941961488s input_tokens=176 max_tokens=128
+schedule item=48 offset=14.58025018s input_tokens=160 max_tokens=128
+schedule item=49 offset=14.656258749s input_tokens=240 max_tokens=128
+schedule item=50 offset=14.799630337s input_tokens=144 max_tokens=128
+schedule item=51 offset=15.233685479s input_tokens=143 max_tokens=128
+schedule item=52 offset=15.346646818s input_tokens=150 max_tokens=128
+schedule item=53 offset=15.388306289s input_tokens=219 max_tokens=128
+schedule item=54 offset=15.506954088s input_tokens=233 max_tokens=128
+schedule item=55 offset=15.654198371s input_tokens=231 max_tokens=128
+schedule item=56 offset=16.277593327s input_tokens=166 max_tokens=128
+schedule item=57 offset=16.737349596s input_tokens=179 max_tokens=128
+schedule item=58 offset=16.973395434s input_tokens=163 max_tokens=128
+schedule item=59 offset=18.774003337s input_tokens=65 max_tokens=128
+schedule item=60 offset=18.79332965s input_tokens=233 max_tokens=128
+schedule item=61 offset=19.648397483s input_tokens=220 max_tokens=128
+schedule item=62 offset=20.099260003s input_tokens=247 max_tokens=128
+schedule item=63 offset=20.30834425s input_tokens=73 max_tokens=128
+schedule item=64 offset=20.426492547s input_tokens=121 max_tokens=128
+schedule item=65 offset=20.628430941s input_tokens=151 max_tokens=128
+schedule item=66 offset=20.772841917s input_tokens=73 max_tokens=128
+schedule item=67 offset=20.955281103s input_tokens=111 max_tokens=128
+schedule item=68 offset=21.82764261s input_tokens=197 max_tokens=128
+schedule item=69 offset=21.952036316s input_tokens=165 max_tokens=128
+schedule item=70 offset=22.151198747s input_tokens=256 max_tokens=128
+schedule item=71 offset=22.379260648s input_tokens=230 max_tokens=128
+schedule item=72 offset=22.506107604s input_tokens=167 max_tokens=128
+schedule item=73 offset=23.768690792s input_tokens=236 max_tokens=128
+schedule item=74 offset=24.62681266s input_tokens=148 max_tokens=128
+schedule item=75 offset=24.714727601s input_tokens=224 max_tokens=128
+schedule item=76 offset=24.723698177s input_tokens=220 max_tokens=128
+schedule item=77 offset=24.858930648s input_tokens=241 max_tokens=128
+schedule item=78 offset=25.548283286s input_tokens=95 max_tokens=128
+schedule item=79 offset=25.584427533s input_tokens=169 max_tokens=128
+schedule item=80 offset=26.005847524s input_tokens=125 max_tokens=128
+schedule item=81 offset=26.996281169s input_tokens=214 max_tokens=128
+schedule item=82 offset=27.37674449s input_tokens=230 max_tokens=128
+schedule item=83 offset=27.684072681s input_tokens=76 max_tokens=128
+schedule item=84 offset=27.742951267s input_tokens=169 max_tokens=128
+schedule item=85 offset=27.803231539s input_tokens=247 max_tokens=128
+schedule item=86 offset=27.872603203s input_tokens=192 max_tokens=128
+schedule item=87 offset=27.909293659s input_tokens=138 max_tokens=128
+schedule item=88 offset=28.176696021s input_tokens=142 max_tokens=128
+schedule item=89 offset=28.281357768s input_tokens=66 max_tokens=128
+schedule item=90 offset=28.830593632s input_tokens=252 max_tokens=128
+schedule item=91 offset=29.031767975s input_tokens=157 max_tokens=128
+schedule item=92 offset=29.101491993s input_tokens=78 max_tokens=128
+schedule item=93 offset=29.209913096s input_tokens=124 max_tokens=128
+schedule item=94 offset=29.37075575s input_tokens=105 max_tokens=128
+schedule item=95 offset=29.557449107s input_tokens=180 max_tokens=128
+schedule item=96 offset=30.314651883s input_tokens=249 max_tokens=128
+schedule item=97 offset=30.504938246s input_tokens=250 max_tokens=128
+schedule item=98 offset=30.511481353s input_tokens=102 max_tokens=128
+schedule item=99 offset=30.561948689s input_tokens=160 max_tokens=128
+schedule item=100 offset=30.873905777s input_tokens=169 max_tokens=128
+schedule item=101 offset=31.959636387s input_tokens=96 max_tokens=128
+schedule item=102 offset=32.195099646s input_tokens=131 max_tokens=128
+schedule item=103 offset=32.399574833s input_tokens=181 max_tokens=128
+schedule item=104 offset=32.537158849s input_tokens=183 max_tokens=128
+schedule item=105 offset=32.562984787s input_tokens=176 max_tokens=128
+schedule item=106 offset=33.100697862s input_tokens=79 max_tokens=128
+schedule item=107 offset=33.491068233s input_tokens=155 max_tokens=128
+schedule item=108 offset=33.581804562s input_tokens=103 max_tokens=128
+schedule item=109 offset=33.994917371s input_tokens=70 max_tokens=128
+schedule item=110 offset=34.121859944s input_tokens=71 max_tokens=128
+schedule item=111 offset=34.434952788s input_tokens=145 max_tokens=128
+schedule item=112 offset=34.483822005s input_tokens=143 max_tokens=128
+schedule item=113 offset=34.578293229s input_tokens=244 max_tokens=128
+schedule item=114 offset=34.698430809s input_tokens=128 max_tokens=128
+schedule item=115 offset=35.263620123s input_tokens=125 max_tokens=128
+schedule item=116 offset=35.27393047s input_tokens=231 max_tokens=128
+schedule item=117 offset=35.938901781s input_tokens=231 max_tokens=128
+schedule item=118 offset=36.923971265s input_tokens=162 max_tokens=128
+schedule item=119 offset=36.97611555s input_tokens=199 max_tokens=128
+epoch=2026-07-10T14:43:52.681247Z
+request item=0 id=ib-t004-calib-A-r1-000000 status=ok send_slip=1.47627ms body_sha256=31c2a0034c8ab763c9a271448e78d3d26d101b084d10625ee170edaa0761c8b6
+request item=1 id=ib-t004-calib-A-r1-000001 status=ok send_slip=1.579285ms body_sha256=2fcd2466d44b9dbb64aa03957ebd7beab7225603ec159ffaeed2b70841af5d9c
+request item=4 id=ib-t004-calib-A-r1-000004 status=ok send_slip=714.913µs body_sha256=7ebb1b07468a5fd6902d803308a0a1db4c8ac9e7f4e198e9207f135681b2ab17
+request item=2 id=ib-t004-calib-A-r1-000002 status=ok send_slip=1.79301ms body_sha256=c713325e12c9681518cb181ea80d78723d08cd7d822e337da4fbd516f4d2d33f
+request item=6 id=ib-t004-calib-A-r1-000006 status=ok send_slip=743.996µs body_sha256=5c48437e3bbe073183274d659966b9bd22bbaed9cdf1b6df9189ee9623eb2bdc
+request item=7 id=ib-t004-calib-A-r1-000007 status=ok send_slip=1.450612ms body_sha256=4d0022c309fcff71360e999d818c1e19bf34209761eae659adc8f30426e91df5
+request item=3 id=ib-t004-calib-A-r1-000003 status=ok send_slip=1.220876ms body_sha256=65f34e06c2a222b7b9ed182123a9f50d18e9596c69e8fd0284af8b3648f256b7
+request item=5 id=ib-t004-calib-A-r1-000005 status=ok send_slip=786.226µs body_sha256=e9f4fd2f4d389c0e7bf95ff7e7ff99e5f2c965ba78f59bc1a682e1d87cb9c317
+request item=8 id=ib-t004-calib-A-r1-000008 status=ok send_slip=1.018412ms body_sha256=32fcef30e15bc8fc8bd90853012f2edb6475458c556a7318f014001e9b26c148
+request item=9 id=ib-t004-calib-A-r1-000009 status=ok send_slip=1.326897ms body_sha256=d06f3e654a712f6797834bd52f8ba72d65fc612530f8dedda9e553d5a3af2e2b
+request item=10 id=ib-t004-calib-A-r1-000010 status=ok send_slip=298.397µs body_sha256=db51d8b629e4a1afbc41ca56acd1b2445bbce0314098165e83f318ee6cfc1c06
+request item=14 id=ib-t004-calib-A-r1-000014 status=ok send_slip=578.746µs body_sha256=02a9359c35e182ffc7125fcdd7bb8abf5c2763d493796f7ec265284f76ec5bc6
+request item=11 id=ib-t004-calib-A-r1-000011 status=ok send_slip=1.031094ms body_sha256=009eeee24a6f87f36e20834baf2087b3a2350dbbd971fb7db74c3a003e291bb6
+request item=12 id=ib-t004-calib-A-r1-000012 status=ok send_slip=1.121146ms body_sha256=71b055e62b16347ff93b7bb9f5baa2062465ecf0e099e7cc778300fa3de18b9d
+request item=13 id=ib-t004-calib-A-r1-000013 status=ok send_slip=571.457µs body_sha256=eecd6181f7a39dbafd99399598caafaaa39f75956c789c339f38476c1cf9bfc6
+request item=18 id=ib-t004-calib-A-r1-000018 status=ok send_slip=1.594428ms body_sha256=8a11167febe9da26e2fb3ad0ecd349d6bd615541cec9dafcc409a87fd10d18f1
+request item=15 id=ib-t004-calib-A-r1-000015 status=ok send_slip=1.193089ms body_sha256=08d641b23e21c673fdf9e33726b13b3dcf73e70fa85fa7c4810bbf63b2966ccf
+request item=22 id=ib-t004-calib-A-r1-000022 status=ok send_slip=1.129351ms body_sha256=6fce96ccd040e685e7f41da503c76b6c96fdd431e79220fdfe49ac6d85d97730
+request item=16 id=ib-t004-calib-A-r1-000016 status=ok send_slip=764.574µs body_sha256=75173ae54cfa761da98d20e4f3d1c4d304aa45388f769d2661931828e8c2d162
+request item=24 id=ib-t004-calib-A-r1-000024 status=ok send_slip=666.81µs body_sha256=59863058d8582699f3d1b50f5d6e62cb63cda3e9295da7d3767a1ebcf556b7c1
+request item=20 id=ib-t004-calib-A-r1-000020 status=ok send_slip=863.426µs body_sha256=2cba7bab2e7f39528fa4e3ef91bf511b253e4cdd637246d947abfed6b38aabf5
+request item=23 id=ib-t004-calib-A-r1-000023 status=ok send_slip=911.945µs body_sha256=1a88ad602b219cfb9a15bf3e9ac9cb8b7260965d81168ec489bf028ac04a5b05
+request item=17 id=ib-t004-calib-A-r1-000017 status=ok send_slip=1.178786ms body_sha256=bd9f501453f233cd3b30302f916ba2589d31ca651d820a09fdf9e9ee97af916d
+request item=19 id=ib-t004-calib-A-r1-000019 status=ok send_slip=1.314469ms body_sha256=c94cb7fe1f58d63bfe947370883e917ac9e66f7454c8496fc36f4d95a747e090
+request item=21 id=ib-t004-calib-A-r1-000021 status=ok send_slip=534.535µs body_sha256=6868d416e14e72ce331607207ec73df2cb2d68c5ba2f299f82f9ce6a01b467e2
+request item=25 id=ib-t004-calib-A-r1-000025 status=ok send_slip=329.747µs body_sha256=6e49f59b032113ddc7bb8c3d25e3c45dd78edbb081a5428532cb1d68afb103c2
+request item=27 id=ib-t004-calib-A-r1-000027 status=ok send_slip=568.737µs body_sha256=95be7f2ef1b6f21f445e943144aa4bdcae33183f96840cbedab35641cf120e8b
+request item=30 id=ib-t004-calib-A-r1-000030 status=ok send_slip=1.257773ms body_sha256=f3112d45bcac0b9198187fb0525e991fce57ae23cf437ff1f83e6790bd7c731b
+request item=26 id=ib-t004-calib-A-r1-000026 status=ok send_slip=222.234µs body_sha256=d1077b141eec4905c86e2aff9635412a64356da9dad93eda83e0eec650c2658e
+request item=29 id=ib-t004-calib-A-r1-000029 status=ok send_slip=1.162266ms body_sha256=4c4328926369ce91fb3fea77567d5124a583c0b7f1a280340cb5994240a429e3
+request item=28 id=ib-t004-calib-A-r1-000028 status=ok send_slip=1.509488ms body_sha256=57a6a1fa608a45bb10eab5d9d9c605ff3d17eea28f2f382fc477fa1594e4df95
+request item=34 id=ib-t004-calib-A-r1-000034 status=ok send_slip=1.572979ms body_sha256=0de9c36ef3c19b7e99f1ba2522a052af4c88b7e26f3c4f0f1bc1b5a4a6c154f4
+request item=36 id=ib-t004-calib-A-r1-000036 status=ok send_slip=577.725µs body_sha256=ba0d8f25381627734c6ce63d3fcc4a08532979bcb13ec630908a574ca1736341
+request item=31 id=ib-t004-calib-A-r1-000031 status=ok send_slip=1.361448ms body_sha256=5f36842143b540fced907ccf62f4816f47a255729f421ac7633f6415860758bc
+request item=39 id=ib-t004-calib-A-r1-000039 status=ok send_slip=656.145µs body_sha256=44acdb63d6fcc3f83a4fdc4fb9898a493fd6a59c75ac5729be0e4c2f1b47ea80
+request item=35 id=ib-t004-calib-A-r1-000035 status=ok send_slip=1.351565ms body_sha256=479f7be8dc24eb181b411454d249c0b1cc7f273370895cf44ccb39020bb9b563
+request item=32 id=ib-t004-calib-A-r1-000032 status=ok send_slip=780.254µs body_sha256=7b711d4f8d15d06830cf39bded498408ea92c093e1f9b1e3425860c2c33f2cfc
+request item=43 id=ib-t004-calib-A-r1-000043 status=ok send_slip=649.191µs body_sha256=5b72afa8f778b2cb15e9fa32b0a0db3e9cfcfbdbb401076d02bbf63b185cdeb7
+request item=37 id=ib-t004-calib-A-r1-000037 status=ok send_slip=268.705µs body_sha256=4b36ed49c967d5579558b57f92618a0600466f5c41d6126659447d0f20cc32ca
+request item=40 id=ib-t004-calib-A-r1-000040 status=ok send_slip=841.811µs body_sha256=02de2498f92758bd9f3097e606e44fede4cb14e9dc8dd9a3d3219c348c7118ab
+request item=33 id=ib-t004-calib-A-r1-000033 status=ok send_slip=562.596µs body_sha256=831437b824e6ccb563fae8d7c47508dccaad18c0dd8a6b458f43a9222af5d584
+request item=42 id=ib-t004-calib-A-r1-000042 status=ok send_slip=1.571331ms body_sha256=f5cd9764d937f2e4de3e130d207b452f31bec13e2a0774839e750c3b118e05d2
+request item=44 id=ib-t004-calib-A-r1-000044 status=ok send_slip=1.391956ms body_sha256=92068a6089e238f0acafb460fbf847afc885b8c98e1323e539c3cfab750a1a05
+request item=47 id=ib-t004-calib-A-r1-000047 status=ok send_slip=696.899µs body_sha256=caaaf2f2252f0e9a7a491484e096cd1b9800d38257f91a0d114a0a187a8263a6
+request item=38 id=ib-t004-calib-A-r1-000038 status=ok send_slip=875.805µs body_sha256=c3a1e28dd26617b7703cb8ade7d04916e570e7063888579a52d22a82919d8160
+request item=46 id=ib-t004-calib-A-r1-000046 status=ok send_slip=1.335718ms body_sha256=16ee72c9a781e38bd50978d419ed13480a624bd449760943789ba0e362361571
+request item=41 id=ib-t004-calib-A-r1-000041 status=ok send_slip=1.397434ms body_sha256=be75d73e3e738e0191918129eb70f2acb304997fbe7c0282cb004c18d8c38bea
+request item=45 id=ib-t004-calib-A-r1-000045 status=ok send_slip=1.239597ms body_sha256=76a06cf502e7ea933913967592f061265407431e766e9ef7f8b99fb3ab70bb8f
+request item=48 id=ib-t004-calib-A-r1-000048 status=ok send_slip=1.152861ms body_sha256=658497e43bb61d0cabd27df2116acaa5db5cfc72003e5054ba3e8f7be5d232bd
+request item=53 id=ib-t004-calib-A-r1-000053 status=ok send_slip=784.584µs body_sha256=97a14cd568693bfcff97e249991bbbfda67518ee36b41a6bc64225e4399e9e1d
+request item=51 id=ib-t004-calib-A-r1-000051 status=ok send_slip=1.083741ms body_sha256=ace03536c974f1698e9db98d9908403f94064142c37ddfb5d3fd0feac56ebc69
+request item=56 id=ib-t004-calib-A-r1-000056 status=ok send_slip=1.308637ms body_sha256=f12c61213ed0811f5b04e01131b74bd5a70b607bd71bdcf276ba03e70df83f78
+request item=52 id=ib-t004-calib-A-r1-000052 status=ok send_slip=565µs body_sha256=ed8567a0903f7e8def6f23a5eca829a3b23aad638bd8da9c3a90885ad68ef488
+request item=49 id=ib-t004-calib-A-r1-000049 status=ok send_slip=2.101117ms body_sha256=16da3ffe06968540bf596ad9ccfc7098798e1248261863eeef98a919707e4b41
+request item=50 id=ib-t004-calib-A-r1-000050 status=ok send_slip=1.646335ms body_sha256=f1f2cfa2c7980d5b910f785f068b0dfcd311b9b059ebcfe6f336d6db3f9b9423
+request item=58 id=ib-t004-calib-A-r1-000058 status=ok send_slip=666.637µs body_sha256=52895ec66c00f72781c56d0511a3800ddb746de49228c4f059603cd8b93099d0
+request item=55 id=ib-t004-calib-A-r1-000055 status=ok send_slip=1.440092ms body_sha256=3c37067225d06b2184825cefeb056653cb32637392b584f5b43ed0cdc706df83
+request item=54 id=ib-t004-calib-A-r1-000054 status=ok send_slip=319.086µs body_sha256=e146add3c1af16bdc7ced69ca780eb318280721d821c490e38855fc0fe76cbef
+request item=57 id=ib-t004-calib-A-r1-000057 status=ok send_slip=926.2µs body_sha256=07dc40fb1c33e4bd07e060f8a62da5aed5a137bf1d185121b420ab6b152749e5
+request item=59 id=ib-t004-calib-A-r1-000059 status=ok send_slip=361.845µs body_sha256=06f46a655eefb49830d4567baaf2a57377ba2b2cf44d74ae531e67245605f75e
+request item=63 id=ib-t004-calib-A-r1-000063 status=ok send_slip=248.73µs body_sha256=da5833831994d017e86cdd38967a7178eb3575ab46cb9f3f329d69831d8c211d
+request item=62 id=ib-t004-calib-A-r1-000062 status=ok send_slip=1.387333ms body_sha256=03367be752e65b3030467865fd8c29c0e4b7cf832adb07f8c84c3aa2eca50643
+request item=60 id=ib-t004-calib-A-r1-000060 status=ok send_slip=596.693µs body_sha256=a085be282a354240d5e54bd655fa931ee4c304b637ed3a002e9bf774e9087543
+request item=67 id=ib-t004-calib-A-r1-000067 status=ok send_slip=1.398938ms body_sha256=97c6cf70e25396d4117bb2a65746b6e8f2717482dd7f37adf17f075c82a0ec09
+request item=65 id=ib-t004-calib-A-r1-000065 status=ok send_slip=811.774µs body_sha256=ee8e25a051a3796d734180f17856a979ff59e44f4e3c1fd877c1368f6f44b8ad
+request item=64 id=ib-t004-calib-A-r1-000064 status=ok send_slip=1.206132ms body_sha256=27775a4a1cf10a83a7f60ef49bcbbc76651f7da3ac22ddfa019740589c99ea1b
+request item=61 id=ib-t004-calib-A-r1-000061 status=ok send_slip=1.295913ms body_sha256=e2ed09ebacd7f2835cd798a9de57951cd05706c9137665121b5eeef8db429f25
+request item=66 id=ib-t004-calib-A-r1-000066 status=ok send_slip=742.796µs body_sha256=ee21d77851c666afb988654fb2798e0d0539241446537d47bd195c7a51c7a00c
+request item=72 id=ib-t004-calib-A-r1-000072 status=ok send_slip=1.420653ms body_sha256=7fa0b98b3955465ef9250fffab5345fbaaa35446db72568df7a24f3cd338455b
+request item=73 id=ib-t004-calib-A-r1-000073 status=ok send_slip=1.071957ms body_sha256=1586b4cc8123e2041bbd7b42230a383a5773d8ab949f55fd390e6f2f3e79cde2
+request item=68 id=ib-t004-calib-A-r1-000068 status=ok send_slip=995.03µs body_sha256=eb96876e7447f0256b18006c5d2c95a0d3c07d194f3b97bf0f3c23d3c28a9cf0
+request item=70 id=ib-t004-calib-A-r1-000070 status=ok send_slip=1.067727ms body_sha256=8f46c49a17bb80d96058cd76adf371f49eb41392722c232c11bb21b610c7e562
+request item=69 id=ib-t004-calib-A-r1-000069 status=ok send_slip=526.703µs body_sha256=9341cb43726a1284f93da5ed2b305a2dde43d70b061d5e6adb027d3dbbda4633
+request item=71 id=ib-t004-calib-A-r1-000071 status=ok send_slip=836.767µs body_sha256=7521c1a7a8e79bf96f8a565920f86fbc28cf4157cfa20513cf087f7a1471498b
+request item=77 id=ib-t004-calib-A-r1-000077 status=ok send_slip=1.026879ms body_sha256=9b3ab240323ebeb64b09b94344e712b3ee8aa6d3b161f30acbeecee2ffb882e4
+request item=74 id=ib-t004-calib-A-r1-000074 status=ok send_slip=844.326µs body_sha256=00b2774cfe8ea6142a550ed4f860a6e5b28211345e1ca3890a709bbd80bc986a
+request item=75 id=ib-t004-calib-A-r1-000075 status=ok send_slip=1.264025ms body_sha256=ed4cc85bcd70cc23f74812c9bcafb86aaf0f618cc2c3ecc83e301c2c066f11c7
+request item=79 id=ib-t004-calib-A-r1-000079 status=ok send_slip=1.081499ms body_sha256=f94301f23732dd674b9a932f50c1b5f9ed3ce99be883238c7dab0a7165e7ea96
+request item=76 id=ib-t004-calib-A-r1-000076 status=ok send_slip=969.484µs body_sha256=47ed539b23917040e57b6bf21b2513bf18dd4884698acb98652bcf0641f40129
+request item=80 id=ib-t004-calib-A-r1-000080 status=ok send_slip=914.211µs body_sha256=c3b01c74954a150d69251f79d9f2c125c01bb3d691df1d4fe877f53785230f52
+request item=81 id=ib-t004-calib-A-r1-000081 status=ok send_slip=1.111233ms body_sha256=dc9af7790453cd4da0a5a42a5e6ccda5ff0ebf221dbd6f525fe559b8cc52caa6
+request item=82 id=ib-t004-calib-A-r1-000082 status=ok send_slip=840.082µs body_sha256=db686591955911999a16511c387bf343f802c28b3d39bb300850944fc257de0f
+request item=78 id=ib-t004-calib-A-r1-000078 status=ok send_slip=877.736µs body_sha256=b29bf91afacd47129c0abeeabf1a1ca4d04e24bd8524a9def32486bb0f59d593
+request item=89 id=ib-t004-calib-A-r1-000089 status=ok send_slip=1.32665ms body_sha256=f8f505d45f9e9dd4c8fee55c6bd1ee04fc5f5986742d8d51688e0a7cb62e3b5e
+request item=84 id=ib-t004-calib-A-r1-000084 status=ok send_slip=1.343185ms body_sha256=ad14e7af68086b9620fe26b88b96101f5c6499caecd2617a343c09fa20afce44
+request item=86 id=ib-t004-calib-A-r1-000086 status=ok send_slip=866.188µs body_sha256=04598b30681e03bdb138f421943c59252164f8c8301a6e51d3371b9d56e404f7
+request item=87 id=ib-t004-calib-A-r1-000087 status=ok send_slip=850.733µs body_sha256=395eb1b3e41fff8a930b6f3a206a756146e09d5713e849620c80e3751bb73d8d
+request item=85 id=ib-t004-calib-A-r1-000085 status=ok send_slip=764.911µs body_sha256=019393d75c3f08ffb7229c31bbc4266c8add6ed406ce34844fc190f5ff68257d
+request item=83 id=ib-t004-calib-A-r1-000083 status=ok send_slip=611.999µs body_sha256=01c2d509449522bb385c0961b17ae260e35ef584b8cc7898d1d4f87ec57c0d06
+request item=88 id=ib-t004-calib-A-r1-000088 status=ok send_slip=286.667µs body_sha256=75080d5dff02539ecfdd49b5b1067b8764c24e49384d8e32aa85ec178273eee1
+request item=90 id=ib-t004-calib-A-r1-000090 status=ok send_slip=999.654µs body_sha256=1211a524d98a29839f7078cb09756945067721777967299b31d9e534bbcc46eb
+request item=93 id=ib-t004-calib-A-r1-000093 status=ok send_slip=361.463µs body_sha256=1b1f67e3f05ce69d61d74624a786fdad89402a156f68a51a293ca84b964aed25
+request item=98 id=ib-t004-calib-A-r1-000098 status=ok send_slip=1.053665ms body_sha256=60b4f02daf664be61b8e5b3b19f041d622f678231522644e66af630a12b62ff4
+request item=95 id=ib-t004-calib-A-r1-000095 status=ok send_slip=698.654µs body_sha256=bf48173a8c94c3e8ee386e0e339d81762af435d2b7c211676a6fc8c9e45a0926
+request item=91 id=ib-t004-calib-A-r1-000091 status=ok send_slip=522.537µs body_sha256=60f3920dc2ae117710c939210cd65642e77682b7d53cb5bb5eef25af58713a10
+request item=92 id=ib-t004-calib-A-r1-000092 status=ok send_slip=735.636µs body_sha256=b683edb1fdf341f1293cb638783f990b430a9f13484631d1dc81ff7410c34a7c
+request item=100 id=ib-t004-calib-A-r1-000100 status=ok send_slip=976.754µs body_sha256=09562895e24e14bc888693334f1f1a71499a6ffcec3fbdb18a8bab030b697600
+request item=96 id=ib-t004-calib-A-r1-000096 status=ok send_slip=1.164306ms body_sha256=f4d4947dbf24bc6fdc85d5c376f7140d2664c869480ecc7efdacccf1bee86083
+request item=94 id=ib-t004-calib-A-r1-000094 status=ok send_slip=1.164931ms body_sha256=5115c4d5cbf6b478d799288d02e1cb4b3510d1fb6c597732b5a64182273df79c
+request item=102 id=ib-t004-calib-A-r1-000102 status=ok send_slip=723.875µs body_sha256=656378fcbe8fd3204349db19685ec514f0f93a2dc8e78468bebc096a848d675b
+request item=97 id=ib-t004-calib-A-r1-000097 status=ok send_slip=297.726µs body_sha256=c918dd3976399137c6955d3c5a5088b4a1a93d48492cf0d074658af3e6b89b6d
+request item=103 id=ib-t004-calib-A-r1-000103 status=ok send_slip=879.425µs body_sha256=f6c2590a2da3dd6f12d0860d41605f2b5a73ea4425e63581158a1343d8e7119b
+request item=104 id=ib-t004-calib-A-r1-000104 status=ok send_slip=1.279514ms body_sha256=e3d698b4d355f9e8f000d4896d3bb8713f72070cf6288c8b8cbaf6ceb9267ded
+request item=105 id=ib-t004-calib-A-r1-000105 status=ok send_slip=934.92µs body_sha256=8f3b2fcef9a8cd1311fe9e01d02caeb9fe16b9112b1b205f438e1357c96981e5
+request item=99 id=ib-t004-calib-A-r1-000099 status=ok send_slip=902.308µs body_sha256=da3d0d35c3cbeecd558cee996748b3614f263647218b9c5ee6a028732644ca56
+request item=106 id=ib-t004-calib-A-r1-000106 status=ok send_slip=500.671µs body_sha256=b9a13f2ac37d2816ab8e747ec6c3b0e88f122b1eedf1642c52f32de180bf01ec
+request item=101 id=ib-t004-calib-A-r1-000101 status=ok send_slip=861.443µs body_sha256=f53c26b62fa3df46419ac0c87fc5501ba235dfeddc18cbcc5467365b44132fd1
+request item=109 id=ib-t004-calib-A-r1-000109 status=ok send_slip=720.406µs body_sha256=9d615caf9ed2b2bce67ad1805bb8353cfda1714f5b3406a8c1fe92125625e3e4
+request item=112 id=ib-t004-calib-A-r1-000112 status=ok send_slip=1.478894ms body_sha256=6f345896e1c5ae8b034f1ad4b74fc152ec3c99a935c891df5a480080feba430a
+request item=107 id=ib-t004-calib-A-r1-000107 status=ok send_slip=824.841µs body_sha256=5c3ac17458afdcd810b6f7763b964a3a8005712cdab95a5339d610854083300d
+request item=110 id=ib-t004-calib-A-r1-000110 status=ok send_slip=1.186261ms body_sha256=8cefe321c55f5f3e1d4e2606ae635306ac60da3491ad57a04b75297fdb07dc3d
+request item=113 id=ib-t004-calib-A-r1-000113 status=ok send_slip=1.338766ms body_sha256=6c1d821112d2fc6d2b19edc2b0ebfd26e63cf72f88cd6c6f3c3fd7ae7cc26bd4
+request item=116 id=ib-t004-calib-A-r1-000116 status=ok send_slip=1.179068ms body_sha256=bc70ef8b39624c838d51bcf44abb717eda65cbe5476072d9e332fd0dc534b95c
+request item=108 id=ib-t004-calib-A-r1-000108 status=ok send_slip=1.167099ms body_sha256=2f27cd398cdcd889627bade2fe5451120c5fae8b00bf20e6752d429cf0343d4a
+request item=115 id=ib-t004-calib-A-r1-000115 status=ok send_slip=1.118435ms body_sha256=add285fbee1e60fe011bf94ee92598171829920c491e79d621b499ed2602f1fb
+request item=111 id=ib-t004-calib-A-r1-000111 status=ok send_slip=904.671µs body_sha256=cea684d40d00634cc65f2b2ce59d1fd5a648fabb99d17354e5dca7b7a68c079b
+request item=114 id=ib-t004-calib-A-r1-000114 status=ok send_slip=1.532463ms body_sha256=8fbf232e4ae5462f9bf65f9cd9954ed1a69cafda423619884d8036e6fe466d0b
+request item=117 id=ib-t004-calib-A-r1-000117 status=ok send_slip=1.255329ms body_sha256=bac4887a7dd95c0dd8f1d1dad63c5d05d698d392d97b38a3d67b26befa418916
+request item=118 id=ib-t004-calib-A-r1-000118 status=ok send_slip=669.671µs body_sha256=5705898bd395e184bdabb8cad3fe3a4db96f65cadb0d6b6a521e9e507316c5c7
+request item=119 id=ib-t004-calib-A-r1-000119 status=ok send_slip=1.207032ms body_sha256=bd9fdbdab8a0ca865b068f9d03678340b46f80ee00a4904beaac3934e8616f7c
+summary sent=120 ok=120 errors=0 shed=0 canceled=0 cancel_planned=0 slow_planned=0 max_dispatch_slip=1.722385ms max_send_slip=2.101117ms usage_missing=0 wall=38.625s

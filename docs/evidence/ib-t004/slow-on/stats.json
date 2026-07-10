@@ -1,0 +1,45 @@
+{
+  "file": "/tmp/claude-0/-home-user-ai-infra/f9d2a869-bab7-54d8-a091-357b56be5c68/scratchpad/ib-t004-final/slow-on/events.jsonl",
+  "events": 30,
+  "status_counts": {
+    "ok": 30
+  },
+  "client_ttft_seconds": {
+    "count": 30,
+    "mean": 0.22319654586666665,
+    "p50": 0.223153498,
+    "p95": 0.224048441,
+    "max": 0.224230562
+  },
+  "client_itl_seconds_pooled": {
+    "count": 1059,
+    "mean": 0.04580685622474031,
+    "p50": 5.9165e-05,
+    "p95": 0.10043204,
+    "max": 0.114201019
+  },
+  "max_stall_seconds": {
+    "count": 28,
+    "mean": 0.10145010153571425,
+    "p50": 0.1005578,
+    "p95": 0.10574937,
+    "max": 0.114201019
+  },
+  "client_e2e_seconds": {
+    "count": 30,
+    "mean": 1.9437561670939127,
+    "p50": 2.113118886947632,
+    "p95": 3.012315034866333,
+    "max": 3.1119308471679688
+  },
+  "send_slip_seconds": {
+    "count": 30,
+    "mean": 0.0008542131666666666,
+    "p50": 0.000777933,
+    "p95": 0.001531909,
+    "max": 0.001610701
+  },
+  "send_slip_absent_events": 0,
+  "cancellation_elapsed_seconds": null,
+  "cancellation_tokens_at_cancel": null
+}

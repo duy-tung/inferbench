@@ -36,12 +36,12 @@ bottleneck" in `risks.md`).
 Per Contract 2, gateway-side and client-side measurements are **separate named series, never
 conflated**:
 
-| Client series | Definition (client-side measurement point) | Gateway counterpart |
+| Client series (contract §8 names) | Definition (client-side measurement point) | Gateway counterpart |
 |---|---|---|
-| `client_ttft` | request send (scheduler fire) → first response body byte at the client | `inference_ttft_seconds` (first upstream body byte at the gateway) |
-| `client_itl` | gap between successive SSE chunks observed at the client | `inference_itl_seconds` |
-| `client_e2e` | send → stream close at the client | `inference_e2e_duration_seconds` |
-| `client_max_stall` | maximum inter-chunk gap within one stream | — (client-only) |
+| `client_ttft_seconds` | `scheduled_send_ts` (schedule-plan send time; raw-event v0.2.0 CO-safe basis) → first response body byte at the client | `inference_ttft_seconds` (first upstream body byte at the gateway) |
+| `client_itl_seconds` | gap between successive content-bearing SSE chunks observed at the client (stamped at arrival, before parsing) | `inference_itl_seconds` |
+| `client_e2e_duration_seconds` | `scheduled_send_ts` → stream close at the client | `inference_e2e_duration_seconds` |
+| `client_max_stall` | maximum inter-chunk gap within one stream (`raw-event.itl.max_stall_seconds`) | — (client-only) |
 
 The difference between a client series and its gateway counterpart (network RTT, client
 scheduling, kernel buffering) is expected, measured, and **explainable — never mysterious**.

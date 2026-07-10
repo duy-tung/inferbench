@@ -1,0 +1,45 @@
+{
+  "file": "/tmp/claude-0/-home-user-ai-infra/f9d2a869-bab7-54d8-a091-357b56be5c68/scratchpad/ib-t004-final/calib-B/events.jsonl",
+  "events": 120,
+  "status_counts": {
+    "ok": 120
+  },
+  "client_ttft_seconds": {
+    "count": 120,
+    "mean": 0.3046813492166668,
+    "p50": 0.302967486,
+    "p95": 0.304936382,
+    "max": 0.439569347
+  },
+  "client_itl_seconds_pooled": {
+    "count": 7530,
+    "mean": 0.005654524601859231,
+    "p50": 0.005471865,
+    "p95": 0.005905458,
+    "max": 0.227278103
+  },
+  "max_stall_seconds": {
+    "count": 117,
+    "mean": 0.014380817940170942,
+    "p50": 0.006076448,
+    "p95": 0.013995879,
+    "max": 0.227278103
+  },
+  "client_e2e_seconds": {
+    "count": 120,
+    "mean": 0.6596534411112468,
+    "p50": 0.6508839130401611,
+    "p95": 0.9760901927947998,
+    "max": 1.2135848999023438
+  },
+  "send_slip_seconds": {
+    "count": 120,
+    "mean": 0.001151266716666667,
+    "p50": 0.001000149,
+    "p95": 0.001501644,
+    "max": 0.021641511
+  },
+  "send_slip_absent_events": 0,
+  "cancellation_elapsed_seconds": null,
+  "cancellation_tokens_at_cancel": null
+}

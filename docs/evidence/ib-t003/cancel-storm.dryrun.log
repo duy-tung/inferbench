@@ -1,0 +1,2 @@
+run dryrun-cancel-storm: sent=90 ok=83 errors=0 shed=0 canceled=7 max_dispatch_slip=1.157776ms max_send_slip=1.885832ms wall=15.082s
+artifacts: /tmp/claude-0/-home-user-ai-infra/f9d2a869-bab7-54d8-a091-357b56be5c68/scratchpad/ib-t003-final/cancel-storm

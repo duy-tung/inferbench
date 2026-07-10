@@ -1,0 +1,58 @@
+{
+  "file": "/tmp/claude-0/-home-user-ai-infra/f9d2a869-bab7-54d8-a091-357b56be5c68/scratchpad/ib-t004-final/cancel-mid-stream/events.jsonl",
+  "events": 30,
+  "status_counts": {
+    "canceled": 29,
+    "ok": 1
+  },
+  "client_ttft_seconds": {
+    "count": 30,
+    "mean": 0.3031481076666666,
+    "p50": 0.303179815,
+    "p95": 0.303852806,
+    "max": 0.30405677
+  },
+  "client_itl_seconds_pooled": {
+    "count": 209,
+    "mean": 0.030691338411483242,
+    "p50": 0.030557083,
+    "p95": 0.031075926,
+    "max": 0.050047097
+  },
+  "max_stall_seconds": {
+    "count": 30,
+    "mean": 0.03166073946666667,
+    "p50": 0.030898212,
+    "p95": 0.035342536,
+    "max": 0.050047097
+  },
+  "client_e2e_seconds": {
+    "count": 30,
+    "mean": 0.5170809745788574,
+    "p50": 0.5172939300537109,
+    "p95": 0.5236420631408691,
+    "max": 0.535581111907959
+  },
+  "send_slip_seconds": {
+    "count": 30,
+    "mean": 0.0010849998000000002,
+    "p50": 0.001115522,
+    "p95": 0.001624935,
+    "max": 0.001635986
+  },
+  "send_slip_absent_events": 0,
+  "cancellation_elapsed_seconds": {
+    "count": 29,
+    "mean": 0.5170391331724138,
+    "p50": 0.516413237,
+    "p95": 0.522872327,
+    "max": 0.534004582
+  },
+  "cancellation_tokens_at_cancel": {
+    "count": 29,
+    "mean": 8.0,
+    "p50": 8,
+    "p95": 8,
+    "max": 8
+  }
+}

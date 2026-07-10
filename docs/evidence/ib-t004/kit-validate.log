@@ -1,0 +1,129 @@
+# kit validation vs serving-contracts @ 8d81492 (v0.2.0 tag pending), 2026-07-10
+# covers: canonical suite, regenerated ib-t003 dry-run artifacts (8/8 streaming, pair @ 5d69aeb), ib-t004 calibration/cancellation/slow-client artifacts
+## kit selftest
+selftest: negatives 29/29 failed-as-required
+selftest: GREEN
+## canonical suite: validate --schema workload workloads/*.json
+PASS  workloads/bursty.json  [workload]
+PASS  workloads/cancel-storm.json  [workload]
+PASS  workloads/chat-short.json  [workload]
+PASS  workloads/gen-long-out.json  [workload]
+PASS  workloads/mixed.json  [workload]
+PASS  workloads/rag-long-in.json  [workload]
+PASS  workloads/shared-prefix.json  [workload]
+PASS  workloads/slow-client.json  [workload]
+
+validate: 8/8 file(s) valid against 'workload'
+## ib-t003 derived dry-run variants
+PASS  docs/evidence/ib-t003/derived/bursty.json  [workload]
+PASS  docs/evidence/ib-t003/derived/cancel-storm.json  [workload]
+PASS  docs/evidence/ib-t003/derived/chat-short.json  [workload]
+PASS  docs/evidence/ib-t003/derived/gen-long-out.json  [workload]
+PASS  docs/evidence/ib-t003/derived/mixed.json  [workload]
+PASS  docs/evidence/ib-t003/derived/rag-long-in.json  [workload]
+PASS  docs/evidence/ib-t003/derived/shared-prefix.json  [workload]
+PASS  docs/evidence/ib-t003/derived/slow-client.json  [workload]
+
+validate: 8/8 file(s) valid against 'workload'
+## ib-t003 emitted artifacts (8 streaming dry runs)
+PASS  docs/evidence/ib-t003/chat-short/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t003/chat-short/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t003/rag-long-in/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t003/rag-long-in/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t003/gen-long-out/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t003/gen-long-out/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t003/shared-prefix/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t003/shared-prefix/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t003/mixed/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t003/mixed/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t003/bursty/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t003/bursty/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t003/cancel-storm/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t003/cancel-storm/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t003/slow-client/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t003/slow-client/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+## ib-t004 scenario workloads
+PASS  docs/evidence/ib-t004/calib-A/workload.json  [workload]
+PASS  docs/evidence/ib-t004/calib-B/workload.json  [workload]
+PASS  docs/evidence/ib-t004/cancel-mid-stream/workload.json  [workload]
+PASS  docs/evidence/ib-t004/cancel-pre-first-token/workload.json  [workload]
+PASS  docs/evidence/ib-t004/cancel-queued/workload.json  [workload]
+PASS  docs/evidence/ib-t004/slow-control/workload.json  [workload]
+PASS  docs/evidence/ib-t004/slow-on/workload.json  [workload]
+
+validate: 7/7 file(s) valid against 'workload'
+## ib-t004 emitted artifacts (calibration + cancellation + slow-client)
+PASS  docs/evidence/ib-t004/calib-A/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t004/calib-A/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t004/calib-B/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t004/calib-B/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t004/cancel-queued/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t004/cancel-queued/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t004/cancel-pre-first-token/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t004/cancel-pre-first-token/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t004/cancel-mid-stream/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t004/cancel-mid-stream/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t004/slow-control/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t004/slow-control/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t004/slow-on/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t004/slow-on/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'

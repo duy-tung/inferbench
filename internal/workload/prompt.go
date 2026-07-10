@@ -6,8 +6,12 @@ import (
 )
 
 // promptStream is the PRNG stream selector for prompt text (see
-// schedule.Build for the arrival/length stream selectors).
-const promptStream = 0x50524f4d50543031 // "PROMPT01"
+// schedule.Build for the arrival/length stream selectors); prefixStream
+// derives the shared-prefix text per prefix group.
+const (
+	promptStream = 0x50524f4d50543031 // "PROMPT01"
+	prefixStream = 0x5052464958543031 // "PRFXT01" + pad
+)
 
 // Prompt builds the deterministic synthetic prompt for one workload item:
 // a sequence of dictionary words sized to approximately targetTokens under
@@ -21,7 +25,31 @@ func Prompt(seed int64, item int, targetTokens int) string {
 	rng := rand.New(rand.NewPCG(uint64(seed)^promptStream, uint64(item)))
 	// ~4 bytes/token; subtract a small fixed message overhead so short
 	// prompts do not overshoot.
-	targetBytes := targetTokens*4 - 28
+	return fillWords(rng, targetTokens*4-28)
+}
+
+// SharedPrompt builds the deterministic prompt for a prefix-sharing item
+// (IB-T004, workload.schema.json prefix_sharing): a shared prefix derived
+// from (seed, group) only — byte-identical for every item in the group, so
+// prefix caching is exercised by construction — followed by a unique suffix
+// derived from (seed, item), sized so the whole prompt approximates
+// targetTokens. The suffix is never empty: every sharing request is a
+// distinct request (the sharing ratio is a controlled variable, and a fully
+// duplicated prompt would conflate prefix caching with response caching).
+func SharedPrompt(seed int64, group, prefixTokens, item, targetTokens int) string {
+	prefixRNG := rand.New(rand.NewPCG(uint64(seed)^prefixStream, uint64(group)))
+	prefix := fillWords(prefixRNG, prefixTokens*4-28)
+
+	suffixTokens := targetTokens - prefixTokens
+	if suffixTokens < 1 {
+		suffixTokens = 1
+	}
+	suffixRNG := rand.New(rand.NewPCG(uint64(seed)^promptStream, uint64(item)))
+	return prefix + " " + fillWords(suffixRNG, suffixTokens*4)
+}
+
+// fillWords draws dictionary words until the text reaches targetBytes.
+func fillWords(rng *rand.Rand, targetBytes int) string {
 	if targetBytes < 4 {
 		targetBytes = 4
 	}

@@ -33,7 +33,7 @@
     "initial_read_delay_seconds": 0.5
   },
   "stop": {
-    "duration_seconds": 600
+    "request_count": 40
   },
   "tags": [
     "backpressure",

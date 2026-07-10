@@ -22,15 +22,21 @@ import (
 // deterministic stream derived from the workload seed, so e.g. changing the
 // input-length distribution never perturbs arrival times.
 const (
-	streamArrivals = 0x4152525631303030 // "ARRV1000"
-	streamInputLen = 0x494e505631303030 // "INPV1000"
-	streamOutput   = 0x4f55545631303030 // "OUTV1000"
+	streamArrivals  = 0x4152525631303030 // "ARRV1000"
+	streamInputLen  = 0x494e505631303030 // "INPV1000"
+	streamOutput    = 0x4f55545631303030 // "OUTV1000"
+	streamCancelSel = 0x434e4c5331303030 // "CNLS1000" — cancel assignment
+	streamCancelPt  = 0x434e4c5031303030 // "CNLP1000" — cancel point value
+	streamSlowSel   = 0x534c4f5731303030 // "SLOW1000" — slow-client assignment
+	streamPrefixSel = 0x5052465831303030 // "PRFX1000" — prefix-sharing assignment
 )
 
 // maxPlannedRequests bounds schedule precomputation (bounded everything).
 const maxPlannedRequests = 5_000_000
 
 // Item is one planned request: when to send it and its sampled parameters.
+// All fields are plain values so Items stay comparable (determinism tests
+// compare plans with ==).
 type Item struct {
 	// Index is the deterministic workload item index (raw-event
 	// workload_item).
@@ -43,21 +49,45 @@ type Item struct {
 	// MaxTokens is the sampled output length cap (drives max_tokens —
 	// output length is always directed, never uncontrolled).
 	MaxTokens int
+	// CancelTrigger is "" (no planned cancel) or one of the workload
+	// cancellation triggers; the corresponding CancelAfter* field holds the
+	// sampled point (IB-T004 cancellation issuance).
+	CancelTrigger      string
+	CancelAfterSeconds float64
+	CancelAfterTokens  int
+	// SlowReadBytesPerSec > 0 marks a slow-client item (bounded read rate);
+	// SlowInitialDelay optionally delays the first response-body read.
+	SlowReadBytesPerSec int
+	SlowInitialDelay    time.Duration
+	// PrefixGroup is 0 for a unique prompt (the zero value is always safe),
+	// or the 1-based shared-prefix group id: all items with the same group
+	// share a byte-identical prompt prefix.
+	PrefixGroup int
 }
 
 // Plan is the precomputed, response-independent send schedule.
 type Plan struct {
-	Seed  int64
-	Items []Item
+	Seed int64
+	// PrefixTokens is the shared prefix length in tokens for items with
+	// PrefixGroup >= 0 (0 when the workload declares no sharing).
+	PrefixTokens int
+	Items        []Item
 }
 
 // Prompt builds the deterministic synthetic prompt for one planned item.
 func (p *Plan) Prompt(it Item) string {
+	if it.PrefixGroup > 0 {
+		return workload.SharedPrompt(p.Seed, it.PrefixGroup, p.PrefixTokens, it.Index, it.InputTokens)
+	}
 	return workload.Prompt(p.Seed, it.Index, it.InputTokens)
 }
 
 // Build computes the full schedule from the workload definition. It is pure:
-// no clocks, no network, no I/O.
+// no clocks, no network, no I/O. Every sampled parameter — arrivals,
+// lengths, cancellation assignment + point, slow-client assignment,
+// prefix-group assignment — derives from the workload seed on an
+// independent PRNG stream (workload.schema.json seed rule), so changing one
+// profile never perturbs the others.
 func Build(w *workload.Workload) (*Plan, error) {
 	if err := w.CheckRunnable(); err != nil {
 		return nil, err
@@ -69,16 +99,71 @@ func Build(w *workload.Workload) (*Plan, error) {
 	}
 	inRNG := rand.New(rand.NewPCG(uint64(seed), streamInputLen))
 	outRNG := rand.New(rand.NewPCG(uint64(seed), streamOutput))
+
+	cancelRate := *w.Cancel.Rate
+	var cancelSelRNG, cancelPtRNG *rand.Rand
+	if cancelRate > 0 {
+		cancelSelRNG = rand.New(rand.NewPCG(uint64(seed), streamCancelSel))
+		cancelPtRNG = rand.New(rand.NewPCG(uint64(seed), streamCancelPt))
+	}
+
+	slowFraction := *w.SlowClient.Fraction
+	var slowRNG *rand.Rand
+	if slowFraction > 0 {
+		slowRNG = rand.New(rand.NewPCG(uint64(seed), streamSlowSel))
+	}
+
+	prefixRatio := *w.Prefix.Ratio
+	var prefixRNG *rand.Rand
+	prefixTokens, sharingCount := 0, 0
+	if prefixRatio > 0 {
+		prefixRNG = rand.New(rand.NewPCG(uint64(seed), streamPrefixSel))
+		prefixTokens = *w.Prefix.SharedPrefixLengthTokens
+	}
+
 	items := make([]Item, len(offsets))
 	for i, off := range offsets {
-		items[i] = Item{
+		it := Item{
 			Index:       i,
 			SendOffset:  off,
 			InputTokens: w.InputLen.SampleTokens(inRNG, 1),
 			MaxTokens:   w.OutputLen.SampleTokens(outRNG, 1),
 		}
+		if cancelRate > 0 && cancelSelRNG.Float64() < cancelRate {
+			it.CancelTrigger = w.Cancel.Point.Trigger
+			switch it.CancelTrigger {
+			case workload.CancelTriggerElapsed:
+				v := w.Cancel.Point.Distribution.Sample(cancelPtRNG)
+				if v < 0 {
+					v = 0
+				}
+				it.CancelAfterSeconds = v
+			case workload.CancelTriggerTokens:
+				// Schema: token-valued samples round to the nearest
+				// integer >= 0.
+				it.CancelAfterTokens = w.Cancel.Point.Distribution.SampleTokens(cancelPtRNG, 0)
+			}
+		}
+		if slowFraction > 0 && slowRNG.Float64() < slowFraction {
+			it.SlowReadBytesPerSec = *w.SlowClient.ReadBytesPerSecond
+			if w.SlowClient.InitialReadDelaySeconds != nil {
+				it.SlowInitialDelay = time.Duration(*w.SlowClient.InitialReadDelaySeconds * float64(time.Second))
+			}
+		}
+		if prefixRatio > 0 && prefixRNG.Float64() < prefixRatio {
+			// Sequential group fill: the first group_size sharing items
+			// form group 1, and so on. Absent group_size means one global
+			// shared prefix (schema).
+			if w.Prefix.GroupSize != nil {
+				it.PrefixGroup = sharingCount / *w.Prefix.GroupSize + 1
+			} else {
+				it.PrefixGroup = 1
+			}
+			sharingCount++
+		}
+		items[i] = it
 	}
-	return &Plan{Seed: seed, Items: items}, nil
+	return &Plan{Seed: seed, PrefixTokens: prefixTokens, Items: items}, nil
 }
 
 // arrivalOffsets samples the Poisson arrival times (exponential

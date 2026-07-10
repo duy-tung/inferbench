@@ -5,11 +5,10 @@
 // re-checks the structural rules the generator depends on at run time so an
 // invalid or unversioned workload refuses to run even without the kit.
 //
-// Scope note: prefix-sharing (ratio > 0), cancellation (rate > 0),
-// slow-client (fraction > 0) and closed-loop arrival are parsed and
-// validated but their behaviors are NOT implemented yet; attempting to run
-// such a workload returns a typed ErrNotImplemented (client-side execution
-// is deferred to IB-T004, closed-loop to IB-T008, per docs/tasks.md).
+// Scope note: prefix-sharing, cancellation, and slow-client profiles are
+// fully executable since IB-T004. Closed-loop arrival is parsed and
+// validated but NOT implemented yet; attempting to run such a workload
+// returns a typed ErrNotImplemented (deferred to IB-T008 per docs/tasks.md).
 package workload
 
 import (
@@ -29,6 +28,12 @@ var ErrNotImplemented = errors.New("workload feature not implemented in this bui
 const (
 	ArrivalOpenLoopPoisson = "open-loop-poisson"
 	ArrivalClosedLoop      = "closed-loop"
+)
+
+// Cancellation point triggers (workload.schema.json cancellation.point.trigger).
+const (
+	CancelTriggerElapsed = "elapsed-seconds"
+	CancelTriggerTokens  = "output-tokens"
 )
 
 var nameRe = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
@@ -166,7 +171,7 @@ func (w *Workload) Validate() error {
 	}
 	if *w.Cancel.Rate > 0 {
 		if w.Cancel.Point == nil || w.Cancel.Point.Distribution == nil ||
-			(w.Cancel.Point.Trigger != "elapsed-seconds" && w.Cancel.Point.Trigger != "output-tokens") {
+			(w.Cancel.Point.Trigger != CancelTriggerElapsed && w.Cancel.Point.Trigger != CancelTriggerTokens) {
 			return errors.New("workload: cancellation.point (trigger + distribution) required when rate > 0")
 		}
 		if err := w.Cancel.Point.Distribution.Validate("cancellation.point.distribution"); err != nil {
@@ -237,18 +242,12 @@ func (w *Workload) validateArrival() error {
 
 // CheckRunnable returns a typed ErrNotImplemented for schema-valid features
 // this build cannot execute yet. Deferred scope is recorded in docs/tasks.md.
+// Since IB-T004 the client-side traffic features (prefix-sharing prompt
+// construction, cancellation issuance, slow-client read throttling) are
+// implemented; only closed-loop arrival execution remains deferred.
 func (w *Workload) CheckRunnable() error {
 	if w.Arrival.Type == ArrivalClosedLoop {
 		return fmt.Errorf("%w: closed-loop arrival (throughput-ceiling mode, ADR-0003) lands with the sweep work (IB-T008)", ErrNotImplemented)
-	}
-	if *w.Prefix.Ratio > 0 {
-		return fmt.Errorf("%w: prefix_sharing.ratio > 0 (deferred to IB-T004)", ErrNotImplemented)
-	}
-	if *w.Cancel.Rate > 0 {
-		return fmt.Errorf("%w: cancellation.rate > 0 (deferred to IB-T004)", ErrNotImplemented)
-	}
-	if *w.SlowClient.Fraction > 0 {
-		return fmt.Errorf("%w: slow_client.fraction > 0 (deferred to IB-T004)", ErrNotImplemented)
 	}
 	return nil
 }

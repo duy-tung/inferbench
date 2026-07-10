@@ -11,11 +11,11 @@ cited as the benchmark configuration.
 | `chat-short.json` | interactive chat baseline | short input/output distributions, output cap 384 | yes |
 | `rag-long-in.json` | prefill-heavy (long context in) | input uniform 2048–8192, output cap 512 | yes |
 | `gen-long-out.json` | decode-heavy (long generation) | output directed: floor 512, cap 2048 | yes |
-| `shared-prefix.json` | prefix-cache behavior | **ratio 0.8, prefix 1024 tokens, groups of 16** | typed refusal (IB-T004) |
+| `shared-prefix.json` | prefix-cache behavior | **ratio 0.8, prefix 1024 tokens, groups of 16** | yes (IB-T004) |
 | `mixed.json` | realistic blend | declared 60/25/15 mixture proportions | yes |
 | `bursty.json` | queueing/admission behavior | 2 rps base, 10× burst 15 s, period 75 s | yes |
-| `cancel-storm.json` | cancellation correctness under load | cancel rate 0.5, point uniform 0.2–3.0 s | typed refusal (IB-T004) |
-| `slow-client.json` | backpressure/write-buffer behavior | 25% readers at 1024 B/s | typed refusal (IB-T004) |
+| `cancel-storm.json` | cancellation correctness under load | cancel rate 0.5, point uniform 0.2–3.0 s | yes (IB-T004) |
+| `slow-client.json` | backpressure/write-buffer behavior | 25% readers at 1024 B/s | yes (IB-T004) |
 
 ## Design rules (enforced by `internal/workload/suite_test.go`)
 
@@ -48,16 +48,19 @@ request can pair, say, a RAG-like input with a generation-like output cap. If co
 archetype pairs become necessary for realism claims, that is a schema change to propose to
 `serving-contracts` — never to hack in here (this repo owns no schema).
 
-## Deferred execution (typed, honest)
+## Execution status
 
-`shared-prefix` (ratio > 0), `cancel-storm` (rate > 0), and `slow-client` (fraction > 0) are
-schema-valid and load/validate today, but the generator refuses to execute them with a typed
-`ErrNotImplemented` until the corresponding client behaviors land in IB-T004. A refusal is not a
-silent downgrade: the workload never runs with its defining feature quietly disabled.
+Since IB-T004 the whole suite executes end-to-end: prefix-sharing prompt construction (shared
+prefix per group, unique suffix per request), cancellation issuance (elapsed-seconds and
+output-tokens triggers; honest `cancellation_point` per event, planned-vs-realized counts in
+the run log), and slow-client read throttling (bounded bytes/second + initial read delay) are
+implemented in the client. Closed-loop arrival remains the only typed `ErrNotImplemented`
+refusal (IB-T008). A refusal is not a silent downgrade: a workload never runs with its defining
+feature quietly disabled.
 
 ## Dry-running the suite
 
 `scripts/dryrun-workloads.sh <target-url> <out-dir>` derives short, low-volume variants (stop
-condition shortened; bursty phases compressed 5×) and runs each against an already-running
-target, recording per-workload artifacts and asserting the typed refusals for the three deferred
-workloads. Derived variants are for smoke only — published results always use these files as-is.
+condition shortened; bursty phases compressed 5×) and runs all eight as streaming runs against
+an already-running target, recording per-workload artifacts. Derived variants are for smoke
+only — published results always use these files as-is.

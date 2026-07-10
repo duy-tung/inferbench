@@ -1,0 +1,83 @@
+run_id=dryrun-slow-client repetition=1 requests=40 max_slip=100ms cancel_planned=0 slow_planned=9 prefix_sharing=0
+schedule item=0 offset=420.721103ms input_tokens=215 max_tokens=642
+schedule item=1 offset=492.861004ms input_tokens=179 max_tokens=787
+schedule item=2 offset=1.458038325s input_tokens=244 max_tokens=655
+schedule item=3 offset=1.707215859s input_tokens=248 max_tokens=332
+schedule item=4 offset=1.853149674s input_tokens=186 max_tokens=587
+schedule item=5 offset=2.174350334s input_tokens=253 max_tokens=471
+schedule item=6 offset=2.662916131s input_tokens=181 max_tokens=493
+schedule item=7 offset=2.867021916s input_tokens=211 max_tokens=658
+schedule item=8 offset=2.867310489s input_tokens=103 max_tokens=943
+schedule item=9 offset=3.290593719s input_tokens=248 max_tokens=299 slow_read_bps=1024 slow_delay=500ms
+schedule item=10 offset=3.538609145s input_tokens=315 max_tokens=502
+schedule item=11 offset=3.603628253s input_tokens=109 max_tokens=626 slow_read_bps=1024 slow_delay=500ms
+schedule item=12 offset=3.641768878s input_tokens=190 max_tokens=699
+schedule item=13 offset=3.914994528s input_tokens=136 max_tokens=401 slow_read_bps=1024 slow_delay=500ms
+schedule item=14 offset=4.332166774s input_tokens=315 max_tokens=582
+schedule item=15 offset=5.867350821s input_tokens=223 max_tokens=340
+schedule item=16 offset=6.132103601s input_tokens=306 max_tokens=323 slow_read_bps=1024 slow_delay=500ms
+schedule item=17 offset=6.151097577s input_tokens=167 max_tokens=369
+schedule item=18 offset=6.225032223s input_tokens=275 max_tokens=664 slow_read_bps=1024 slow_delay=500ms
+schedule item=19 offset=6.495660757s input_tokens=222 max_tokens=314 slow_read_bps=1024 slow_delay=500ms
+schedule item=20 offset=6.565977463s input_tokens=120 max_tokens=498
+schedule item=21 offset=6.645058578s input_tokens=139 max_tokens=784
+schedule item=22 offset=6.938537291s input_tokens=85 max_tokens=679
+schedule item=23 offset=7.070710289s input_tokens=75 max_tokens=602 slow_read_bps=1024 slow_delay=500ms
+schedule item=24 offset=7.138111439s input_tokens=75 max_tokens=414
+schedule item=25 offset=7.552130285s input_tokens=255 max_tokens=366
+schedule item=26 offset=7.967246595s input_tokens=185 max_tokens=491
+schedule item=27 offset=8.396911562s input_tokens=223 max_tokens=405
+schedule item=28 offset=8.885219041s input_tokens=203 max_tokens=116
+schedule item=29 offset=8.910101879s input_tokens=434 max_tokens=592
+schedule item=30 offset=9.523186119s input_tokens=195 max_tokens=877 slow_read_bps=1024 slow_delay=500ms
+schedule item=31 offset=9.975276358s input_tokens=143 max_tokens=490
+schedule item=32 offset=10.094600102s input_tokens=212 max_tokens=525
+schedule item=33 offset=10.601110715s input_tokens=160 max_tokens=402
+schedule item=34 offset=10.648843889s input_tokens=206 max_tokens=426
+schedule item=35 offset=10.730797328s input_tokens=293 max_tokens=598
+schedule item=36 offset=11.328235817s input_tokens=317 max_tokens=642
+schedule item=37 offset=11.469419901s input_tokens=32 max_tokens=613 slow_read_bps=1024 slow_delay=500ms
+schedule item=38 offset=11.51701915s input_tokens=312 max_tokens=642
+schedule item=39 offset=11.713844703s input_tokens=208 max_tokens=381
+epoch=2026-07-10T14:49:48.761210Z
+request item=1 id=dryrun-slow-client-r1-000001 status=ok send_slip=800.87µs body_sha256=0d6cf997a9f9f204e6e8fde6860f1d72b55e81a41f2d175aaa6fa2c189007cf2
+request item=0 id=dryrun-slow-client-r1-000000 status=ok send_slip=1.746757ms body_sha256=c6b1b252200c94190fc46242c70191a5c1310f5fe9131749de8c8be29bb1d131
+request item=2 id=dryrun-slow-client-r1-000002 status=ok send_slip=1.506278ms body_sha256=90554770cc6f7ff6e77961ccd7c8d0487e578dfe192d70fedcb4b5c4c45a27b8
+request item=3 id=dryrun-slow-client-r1-000003 status=ok send_slip=1.132549ms body_sha256=145f011dc42e4df5a67395d3f5cb221fa9026f6681db082612e7274423b36737
+request item=8 id=dryrun-slow-client-r1-000008 status=ok send_slip=968.383µs body_sha256=7828d03246a2e9fc5359d2c6e4d65d7befa251bab565c2ba8a22992e198b53ee
+request item=5 id=dryrun-slow-client-r1-000005 status=ok send_slip=1.407505ms body_sha256=d98a96c218a216f31310b83e49e685c1978578ada20b2388c0617e8180f6d94d
+request item=6 id=dryrun-slow-client-r1-000006 status=ok send_slip=1.51134ms body_sha256=abd2fe47399f9d23f341cde606cad4bffda7c9dc5b2c9aab4affe5e850115b97
+request item=4 id=dryrun-slow-client-r1-000004 status=ok send_slip=1.271429ms body_sha256=5a695749a4e9d0763f4b124aefe8e91df16eee63b2bfb29fc7b1e72209d6ada5
+request item=12 id=dryrun-slow-client-r1-000012 status=ok send_slip=1.752843ms body_sha256=2b12fba2686a7ca6fd1b275c1e67d84713fb23119dd2dee7b51b7b5b0161e356
+request item=7 id=dryrun-slow-client-r1-000007 status=ok send_slip=1.221972ms body_sha256=10464732dd17e7285bd57f2a5e66e1c2a42a9a9658f616cb0f43ee8e8fad9a0f
+request item=10 id=dryrun-slow-client-r1-000010 status=ok send_slip=284.794µs body_sha256=bd680b1809b3e6e24df2a36cc05a8a5c60e35b154ddb32c687d6459612189ffa
+request item=14 id=dryrun-slow-client-r1-000014 status=ok send_slip=1.405196ms body_sha256=31916e861273d51c4604134a2e10d51e1d89f12178ab16f6d2e488db85e46f4d
+request item=17 id=dryrun-slow-client-r1-000017 status=ok send_slip=1.058202ms body_sha256=7c17da2ba7bcaf65af261d1171319a0655420b3e2fedbdbb7cab4eeecfc7f5ac
+request item=22 id=dryrun-slow-client-r1-000022 status=ok send_slip=1.492731ms body_sha256=b8df61f080f66fc3bc2c283ac8eab959986c79d96ae6f28e65592275add89f9a
+request item=15 id=dryrun-slow-client-r1-000015 status=ok send_slip=782.1µs body_sha256=f1dec3d5f2e7ccda6e416f5ed6d98e56e11a1ae7a8e5dc95cf8ccd22756a08ca
+request item=24 id=dryrun-slow-client-r1-000024 status=ok send_slip=551.472µs body_sha256=5c79844ae72dce901ed5f2409f50100c0bc5507bc1d0858bf0eea56a9877ad5f
+request item=21 id=dryrun-slow-client-r1-000021 status=ok send_slip=1.162439ms body_sha256=b8656a3cb892f31f99a93004f78ebb944bde752683c4968b8d07293436702c22
+request item=20 id=dryrun-slow-client-r1-000020 status=ok send_slip=487.104µs body_sha256=2bf8a056387039aa35c32a9fb413af3ab68895e9e30461aa643216ca60356ee3
+request item=25 id=dryrun-slow-client-r1-000025 status=ok send_slip=540.833µs body_sha256=bcb70bb8fffc7a580fe2557566a7a7a2c3ee9539a41b207082f042b5546b925d
+request item=26 id=dryrun-slow-client-r1-000026 status=ok send_slip=1.312721ms body_sha256=db65197dbe77b8e539b7811d43f25e611e8694671068f23fda9aed466cb3c3af
+request item=28 id=dryrun-slow-client-r1-000028 status=ok send_slip=1.227797ms body_sha256=3fc999ed6209d9df91c1904215882a7c1aace2c15b7989df3a37d6f5b86ad6b2
+request item=27 id=dryrun-slow-client-r1-000027 status=ok send_slip=566.238µs body_sha256=11c6c92a4292709c16de9ce73114cf4890d46fe4642102b411726caa5a9ffc5c
+request item=29 id=dryrun-slow-client-r1-000029 status=ok send_slip=1.385536ms body_sha256=a46d2d0be2c5343aea25a986ba0eb1a13a1476fc5fba9a1cae6d5b038a66ae9b
+request item=31 id=dryrun-slow-client-r1-000031 status=ok send_slip=1.565874ms body_sha256=cbea21126c8be978b5d406954c0324d3024e3af8a54d771cd12714ab5c9205c8
+request item=32 id=dryrun-slow-client-r1-000032 status=ok send_slip=958.885µs body_sha256=b96484a598711ce9e32844cde2ba4697cfe321d2932ba68b1d18e4c9eacbb77c
+request item=33 id=dryrun-slow-client-r1-000033 status=ok send_slip=1.030904ms body_sha256=73a62bb3cad31b36d5d16d19f2974397aea2b6eeaddd6c96bb8079ad91642409
+request item=36 id=dryrun-slow-client-r1-000036 status=ok send_slip=876.489µs body_sha256=313288fa5bf26b47d00b5d535a5454274a7d769f50e308a8be9b94754e1b067e
+request item=35 id=dryrun-slow-client-r1-000035 status=ok send_slip=481.33µs body_sha256=d0e9371b4778f509684063418bc87937d99246c0767d0cf11351d743d0103c69
+request item=34 id=dryrun-slow-client-r1-000034 status=ok send_slip=1.063657ms body_sha256=ebc4f19db5c117d33a9975e3d56904770eb2b3e15c445facde98b9c08bdf9053
+request item=38 id=dryrun-slow-client-r1-000038 status=ok send_slip=584.74µs body_sha256=84360c4baa8c5f8eb3985bb19d10e5bfbe735c5d5a026b5cb8129acc9765ca04
+request item=39 id=dryrun-slow-client-r1-000039 status=ok send_slip=1.172049ms body_sha256=61439427f0a9a2c25b05c0ac04bc869e496120bbef5dc5f4a19aeee65512c133
+request item=19 id=dryrun-slow-client-r1-000019 status=ok send_slip=684.363µs body_sha256=cb0019067f786d8ded5c01e1f2f510cf848b287514dc74cc7890cc77385e718e
+request item=37 id=dryrun-slow-client-r1-000037 status=ok send_slip=907.446µs body_sha256=21c7408707495ae98d5aea1d82c9e95fd5a5c900438eace1a1c96f08371a66a2
+request item=11 id=dryrun-slow-client-r1-000011 status=ok send_slip=470.375µs body_sha256=388fe3bc959ca40144dbdc785c066a815b513bba0d44f6061a92175f386f436d
+request item=18 id=dryrun-slow-client-r1-000018 status=ok send_slip=426.624µs body_sha256=69e817970af7f5f3b7c6817da7bc1fea27e72b1d2f1e8f63c61b01c382aa7425
+request item=30 id=dryrun-slow-client-r1-000030 status=ok send_slip=610.008µs body_sha256=8b15f2131b5faf448fa40520a9d30412d8ed94277637177ecfab466cb0635c22
+request item=16 id=dryrun-slow-client-r1-000016 status=ok send_slip=651.977µs body_sha256=064776ff3d540f1ba8811638fa6832c84b0adf7d4330d65ac89b2443a1b6140f
+request item=23 id=dryrun-slow-client-r1-000023 status=ok send_slip=852.852µs body_sha256=f1b953bbce8f0cf566f4a2ecd3cf268d8963ac888d26d7252088d2dcd0477e19
+request item=13 id=dryrun-slow-client-r1-000013 status=ok send_slip=979.899µs body_sha256=3fe9eadcfe043505a7abfe5165895f6b43b3e18757c5c8b29d804d22ed503a20
+request item=9 id=dryrun-slow-client-r1-000009 status=ok send_slip=299.379µs body_sha256=5e1c8f05645e29fac1147b8a6595dddfb9071e0d1ec4e02b6605bce8f8d20df6
+summary sent=40 ok=40 errors=0 shed=0 canceled=0 cancel_planned=0 slow_planned=9 max_dispatch_slip=1.116436ms max_send_slip=1.752843ms usage_missing=0 wall=50.2s

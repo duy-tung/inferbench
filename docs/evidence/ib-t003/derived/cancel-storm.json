@@ -39,7 +39,7 @@
     "fraction": 0
   },
   "stop": {
-    "duration_seconds": 600
+    "request_count": 90
   },
   "tags": [
     "cancellation",
