@@ -1,0 +1,39 @@
+{
+  "name": "shared-prefix",
+  "version": "1.0.0",
+  "seed": 1003004,
+  "description": "Controlled prefix-cache probe: 80% of requests begin with a shared 1024-token prefix in groups of 16 (system-prompt / few-shot template reuse); the input floor (1152) always exceeds the prefix, so every sharing request carries a unique suffix. The sharing ratio is the experiment's single controlled variable - prefix-caching experiments (IB-T011) compare this workload against a ratio-0 variant published as a version bump, everything else identical. Output capped at 384 tokens. Requires target prefix-cache capability (Contract 4). Canonical suite v1 (IB-T003).",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 6
+  },
+  "input_length_distribution": {
+    "type": "normal",
+    "mean": 1400,
+    "stddev": 200,
+    "min": 1152,
+    "max": 2048
+  },
+  "output_length_distribution": {
+    "type": "normal",
+    "mean": 160,
+    "stddev": 64,
+    "min": 16,
+    "max": 384
+  },
+  "prefix_sharing": {
+    "ratio": 0.8,
+    "shared_prefix_length_tokens": 1024,
+    "group_size": 16
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "duration_seconds": 600
+  },
+  "tags": ["prefix-cache", "controlled-variable"]
+}

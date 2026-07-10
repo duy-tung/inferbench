@@ -1,6 +1,6 @@
 # ADR-0003 — Closed-loop mode exists but is flagged everywhere
 
-**Status:** Accepted · **Date:** 2026-07-10 · **Owner tasks:** IB-T002 (generator), IB-T006 (report)
+**Status:** Accepted (user review passed at the Wave-1 exit review, 2026-07-10) · **Date:** 2026-07-10 · **Owner tasks:** IB-T002 (generator), IB-T006 (report)
 
 ## Context
 

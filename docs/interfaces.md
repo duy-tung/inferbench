@@ -9,10 +9,10 @@ protocols. No shared application library with any repo. The dependency graph is 
 golden fixtures and its own emitted artifacts against it in CI (`make contracts-verify` pattern;
 this repo's arm of integration milestone I1).
 
-> **Pin status:** pinned at IB-T002 (2026-07-10) to `serving-contracts` commit **`8c58863`**
-> ("release: prepare v0.1.0" — the v0.1.0 tag is not cut yet; reversible assumption recorded in
-> `implementation-notes.md`, re-pin to the tag when it exists). Emitted manifests carry
-> `contracts_bundle_version: "8c58863 (v0.1.0 tag pending)"`.
+> **Pin status:** pinned to the released **`v0.1.0`** tag (commit `2df9f81`), re-pinned at
+> IB-T003 (2026-07-10) from the pre-release commit `8c58863` recorded at IB-T002
+> (schema-identical apart from the `$id` namespace; see `implementation-notes.md`). Emitted
+> manifests carry `contracts_bundle_version: "v0.1.0"`.
 
 ### Contract 1 — Inference API (OpenAI-compatible subset) — inferbench DRIVES it
 

@@ -1,0 +1,45 @@
+{
+  "name": "cancel-storm",
+  "version": "1.0.0",
+  "seed": 1003007,
+  "description": "Cancellation correctness under load: 50% of requests are deliberately canceled (connection close per Contract 1), at a point sampled uniformly 0.2-3.0 s after send. Against typical TTFTs that spread covers queued, pre-first-token, and mid-stream cancellation; the sampled point is recorded per event. Long directed outputs (capped 1536) guarantee most streams are still generating when the cancel fires, so upstream propagation and engine resource release are actually exercised. Tokens emitted before cancel are billable. Canonical suite v1 (IB-T003); execution lands at IB-T004.",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 6
+  },
+  "input_length_distribution": {
+    "type": "normal",
+    "mean": 220,
+    "stddev": 80,
+    "min": 16,
+    "max": 768
+  },
+  "output_length_distribution": {
+    "type": "normal",
+    "mean": 768,
+    "stddev": 256,
+    "min": 128,
+    "max": 1536
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0.5,
+    "point": {
+      "trigger": "elapsed-seconds",
+      "distribution": {
+        "type": "uniform",
+        "min": 0.2,
+        "max": 3.0
+      }
+    }
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "duration_seconds": 600
+  },
+  "tags": ["cancellation", "fault-adjacent"]
+}

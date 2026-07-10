@@ -1,0 +1,39 @@
+{
+  "name": "slow-client",
+  "version": "1.0.0",
+  "seed": 1003008,
+  "description": "Backpressure/write-buffer probe: 25% of requests are issued by throttled-read clients (1024 B/s sustained, first read delayed 0.5 s), the rest read at full speed. Exercises gateway bounded write buffers and write deadlines (fault scenario 4): the slow stream must be closed and engine resources released without degrading the co-scheduled fast clients. Outputs directed (capped 1536) so a slow stream represents a bounded, known number of bytes. Canonical suite v1 (IB-T003); execution lands at IB-T004.",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 4
+  },
+  "input_length_distribution": {
+    "type": "normal",
+    "mean": 220,
+    "stddev": 80,
+    "min": 16,
+    "max": 768
+  },
+  "output_length_distribution": {
+    "type": "normal",
+    "mean": 512,
+    "stddev": 192,
+    "min": 64,
+    "max": 1536
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0.25,
+    "read_bytes_per_second": 1024,
+    "initial_read_delay_seconds": 0.5
+  },
+  "stop": {
+    "duration_seconds": 600
+  },
+  "tags": ["backpressure", "fault-adjacent"]
+}

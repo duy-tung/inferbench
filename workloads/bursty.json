@@ -1,0 +1,41 @@
+{
+  "name": "bursty",
+  "version": "1.0.0",
+  "seed": 1003006,
+  "description": "Queueing/admission probe: piecewise-constant open-loop rate - 60 s base at 2 rps, then a 15 s burst at 20 rps (10x amplitude), repeating every 75 s for eight cycles. Arrivals stay open-loop within each phase, so queue growth during bursts is fully visible (no coordinated omission). Exercises admission control, shedding, and Retry-After behavior at the gateway. Chat-like lengths, output capped at 512 tokens. Canonical suite v1 (IB-T003).",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "phases": [
+      { "duration_seconds": 60, "rate_rps": 2 },
+      { "duration_seconds": 15, "rate_rps": 20 }
+    ],
+    "repeat_phases": true
+  },
+  "input_length_distribution": {
+    "type": "normal",
+    "mean": 220,
+    "stddev": 80,
+    "min": 16,
+    "max": 1024
+  },
+  "output_length_distribution": {
+    "type": "normal",
+    "mean": 256,
+    "stddev": 96,
+    "min": 16,
+    "max": 512
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "duration_seconds": 600
+  },
+  "tags": ["burst", "admission-control", "queueing"]
+}

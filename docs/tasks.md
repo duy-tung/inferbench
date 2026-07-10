@@ -67,6 +67,17 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
 - **Evidence:** workload files + dry-run logs.
 - **Integration impact:** shared with fleetlab arrival models (same versioned files).
 - **Stop condition:** 8 workloads run.
+- **Status:** implemented 2026-07-10 — canonical suite v1.0.0 authored in `workloads/` (8 files,
+  fixed distinct seeds `1003001`–`1003008`, every input/output length distribution
+  capped/directed, intent documented per file + `workloads/README.md`); all 8 kit-validate
+  against the released contracts bundle **v0.1.0** (re-pinned from `8c58863`). Dry-runs vs the
+  pinned gateway+mock pair (infergate @ `a5a2c02`, built read-only via `git archive`):
+  `chat-short`/`rag-long-in`/`gen-long-out`/`mixed`/`bursty` complete end-to-end (0 errors, slip
+  ≪ watchdog), `shared-prefix`/`cancel-storm`/`slow-client` demonstrate the typed
+  `ErrNotImplemented` refusal (execution deferred to IB-T004 — recorded honest behavior; full
+  dry-runs when those client features land). Suite rules enforced in code by
+  `internal/workload/suite_test.go`; dry-run script `scripts/dryrun-workloads.sh`; evidence
+  under `docs/evidence/ib-t003/`.
 
 ## IB-T004 — Streaming client correctness
 

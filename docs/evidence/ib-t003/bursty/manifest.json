@@ -1,0 +1,49 @@
+{
+  "run_id": "dryrun-bursty",
+  "target_topology": "gateway-mock",
+  "workload_ref": {
+    "name": "bursty",
+    "version": "1.0.0",
+    "seed": 1003006
+  },
+  "engine": {
+    "name": "mock",
+    "version": "dev",
+    "commit": "a5a2c021557bcb73ca8f6673c8f4503d586704e1",
+    "flags": {
+      "error_rate": 0,
+      "itl": "5ms",
+      "seed": 42,
+      "ttft": "20ms"
+    }
+  },
+  "model": {
+    "checkpoint": "mock-8b",
+    "revision": "mockengine@a5a2c02",
+    "tokenizer": "mockengine-estimator (~4 bytes/token, deterministic)"
+  },
+  "hardware": {
+    "gpu_model": null,
+    "gpu_count": 0,
+    "vram_gb": null,
+    "driver_version": null,
+    "cuda_version": null,
+    "instance_type": "local-dev-container (linux/amd64, CPU-only)"
+  },
+  "gateway": {
+    "version": "dev@a5a2c02",
+    "config_version": "flags-v1 (static flag config; snapshots land at IG-T004)"
+  },
+  "client": {
+    "location": "same-host (loopback)",
+    "rtt_ms": 1.178612
+  },
+  "warm_up": {
+    "policy": "none"
+  },
+  "repetitions": 1,
+  "hypothesis": "IB-T003 dry run: each canonical workload's traffic shape executes end-to-end against the pinned gateway+mock pair (short derived variant, unchanged seed/distributions), or refuses with the typed ErrNotImplemented when its defining feature is deferred to IB-T004.",
+  "started_at": "2026-07-10T09:04:12Z",
+  "contracts_bundle_version": "v0.1.0",
+  "notes": "IB-T003 suite dry run. Smoke evidence only, not a benchmark: no warm-up handling, single repetition, shortened stop conditions. rtt_ms measured at preflight when left null."
+}

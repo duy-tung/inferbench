@@ -1,6 +1,6 @@
 # ADR-0001 — Open-loop seeded arrival scheduler
 
-**Status:** Accepted · **Date:** 2026-07-10 · **Owner task:** IB-T002
+**Status:** Accepted (user review passed at the Wave-1 exit review, 2026-07-10) · **Date:** 2026-07-10 · **Owner task:** IB-T002
 
 ## Context
 

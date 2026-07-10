@@ -118,6 +118,87 @@ execution = one repetition).
 events, run log with schedule dump + body hashes) and `docs/evidence/ib-t002/stream-SA/`
 (informational streaming run, same layout).
 
+### 2026-07-10 — IB-T003: workload suite v1 (+ Wave-1 exit-review items)
+
+**Scope delivered:** the canonical versioned workload suite in `workloads/` — `chat-short`,
+`rag-long-in`, `gen-long-out`, `shared-prefix`, `mixed`, `bursty`, `cancel-storm`,
+`slow-client` — all at suite version **1.0.0** with fixed distinct seeds `1003001`–`1003008`
+(1003 = IB-T003, last digit = suite position) and per-file documented intent
+(+ `workloads/README.md` design rules). The similarly named files in
+`serving-contracts/examples/workloads/` remain NON-NORMATIVE fixtures; this suite is what
+fleetlab and reports consume.
+
+**Design decisions (recorded):**
+- **Every length distribution is bounded** (anti-pattern rule 12): output distributions are
+  capped/directed via max clamps (`chat-short` 384, `rag-long-in` 512, `gen-long-out` 2048 with
+  a 512 floor so "long" is guaranteed, `bursty` 512, `cancel-storm`/`slow-client` 1536, `mixed`
+  per-component); inputs are bounded too because prompts are generated to the sampled length.
+  Enforced in code by `internal/workload/suite_test.go` (fails if anyone reintroduces an
+  unbounded normal/lognormal without a max clamp).
+- **`shared-prefix` controls its variable:** ratio 0.8, prefix 1024 tokens, group size 16;
+  input floor 1152 > prefix length so every sharing request has a unique suffix (sharing is
+  designed, not incidental). Ratio-sweep experiments (IB-T011) publish other levels as
+  versioned variants.
+- **`mixed` blends by declared proportions (60% chat / 25% RAG / 15% gen)** via mixture
+  distributions with the same weights on both sides. Known limitation: the schema samples input
+  and output independently, so proportions hold per dimension but requests do not carry
+  correlated archetype pairs. If correlated pairs become necessary, that is a schema proposal to
+  `serving-contracts`, not a local hack. `mixed` v1 keeps prefix/cancel/slow at 0 so it stays
+  fully runnable today; adding low-rate cancellation later is a version bump.
+- **`bursty` declares amplitude and period** (2 rps base, 10× burst for 15 s, period 75 s,
+  repeating) instead of free-form phases, so queueing results can cite "the burst" precisely.
+- **Canonical suite is open-loop only** (ADR-0001/0003); closed-loop stays a schema capability,
+  not a suite member.
+- **Deferral boundary corrected:** IB-T002's loader comment deferred prefix-sharing execution
+  "to IB-T003"; the program plan groups all client-side traffic features (prefix-prompt
+  construction, cancellation issuance, slow-client throttling) under the streaming-client work,
+  so the typed refusal now says **deferred to IB-T004** and IB-T003 ships the suite definitions
+  only. Conservative and reversible; no behavior existed to remove.
+
+**Contracts re-pin:** `serving-contracts` **v0.1.0 tag is now cut** (commit `2df9f81`);
+re-pinned from pre-release `8c58863` as promised at IB-T002. Diff `8c58863..v0.1.0` touches no
+schema semantics (only the `$id` namespace → `github.com/duy-tung`, plus LICENSE/release docs).
+`manifest.ContractsBundleVersion` now emits `"v0.1.0"`; `interfaces.md` updated.
+
+**Verification (all commands run 2026-07-10, outputs under `docs/evidence/ib-t003/`):**
+
+1. `gofmt -l .` clean; `go vet ./...` clean; `go test -race -count=1 ./...` green — includes the
+   new suite tests (suite complete/versioned/seeded; bounded-distribution rule; open-loop-only;
+   prefix-sharing-controlled; runnable-vs-typed-refusal split).
+2. **Kit validation vs the released bundle** (extracted read-only via
+   `git -C ../serving-contracts archive v0.1.0`): `contracts-validate.py validate --schema
+   workload workloads/*.json` → **PASS 8/8**; the 8 derived dry-run variants and all emitted
+   run artifacts (5× `events.jsonl` raw-event, 5× `manifest.json` benchmark-run) also PASS —
+   26/26 total (`docs/evidence/ib-t003/kit-validate.log`).
+3. **Dry-runs vs the pinned mock pair** — gateway + mock-backend built read-only from
+   `infergate` @ **`a5a2c02`** (`git -C ../infergate log --oneline -1` at run time; still the
+   IG-T002 HEAD) via `git archive`; mock flags `-seed 42 -ttft 20ms -itl 5ms`, gateway in front
+   on loopback. `scripts/dryrun-workloads.sh http://127.0.0.1:8180 <out>` derives short
+   variants (stop shortened; bursty phases compressed 5×; seeds/distributions unchanged) and
+   ran all eight:
+   - `chat-short` sent=120 ok=120 errors=0 shed=0, max dispatch slip 43.3 ms, wall 16.6 s
+   - `rag-long-in` sent=60 ok=60 errors=0, slip 3.0 ms, wall 31.0 s
+   - `gen-long-out` sent=45 ok=45 errors=0, slip 1.1 ms, wall 25.8 s
+   - `mixed` sent=100 ok=100 errors=0, slip 3.5 ms, wall 18.8 s
+   - `bursty` sent=249 ok=249 errors=0 (three compressed 10× burst cycles), slip 39.0 ms,
+     wall 45.8 s
+   - `shared-prefix` / `cancel-storm` / `slow-client` → **typed refusal demonstrated** (the
+     honest current behavior): `workload feature not implemented in this build:
+     prefix_sharing.ratio > 0 | cancellation.rate > 0 | slow_client.fraction > 0 (deferred to
+     IB-T004)` (`docs/evidence/ib-t003/*.refusal.log`). Full dry-runs of these three happen when
+     IB-T004 lands.
+   All runs non-streaming: infergate HEAD `a5a2c02` still rejects `stream: true` (IB-T002
+   deviation stands; suite dry-runs rerun streaming once IG-T003 lands).
+
+**Wave-1 exit-review items (same session):** the four ADR statuses annotated to
+"Accepted (user review passed at the Wave-1 exit review, 2026-07-10)" — note the files already
+carried status "Accepted" since IB-T001 (`f65f15d`), never "Proposed"; the annotation adds the
+review provenance. Apache-2.0 `LICENSE` added (copied from `serving-contracts`; user selected
+Apache-2.0 for all portfolio repos).
+
+**Evidence:** `docs/evidence/ib-t003/` — per-workload run dirs (manifest, raw events, run log),
+`derived/` dry-run variants, `*.refusal.log` typed-refusal transcripts, `kit-validate.log`.
+
 ## Deviations
 
 > Program deviation policy: when repository evidence forces a deviation from the approved plan,

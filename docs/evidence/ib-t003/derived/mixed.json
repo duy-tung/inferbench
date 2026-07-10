@@ -1,0 +1,94 @@
+{
+  "name": "mixed",
+  "version": "1.0.0",
+  "seed": 1003005,
+  "description": "Realistic blend with declared mix proportions: 60% chat-like, 25% RAG-like, 15% generation-heavy, expressed as mixture length distributions (same weights on the input and output side). Note: the schema samples input and output lengths independently, so the proportions hold per dimension but individual requests do not carry correlated (input, output) archetype pairs - recorded limitation, see workloads/README.md. All output components capped (max 2048). v1 keeps prefix-sharing, cancellation, and slow-client at 0 so the blend isolates length/arrival realism; a later version bump may add low-rate cancellation once IB-T004 lands. Canonical suite v1 (IB-T003).",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 5
+  },
+  "input_length_distribution": {
+    "type": "mixture",
+    "components": [
+      {
+        "weight": 0.6,
+        "distribution": {
+          "type": "normal",
+          "mean": 200,
+          "stddev": 80,
+          "min": 16,
+          "max": 1024
+        }
+      },
+      {
+        "weight": 0.25,
+        "distribution": {
+          "type": "uniform",
+          "min": 2048,
+          "max": 8192
+        }
+      },
+      {
+        "weight": 0.15,
+        "distribution": {
+          "type": "normal",
+          "mean": 120,
+          "stddev": 50,
+          "min": 16,
+          "max": 384
+        }
+      }
+    ]
+  },
+  "output_length_distribution": {
+    "type": "mixture",
+    "components": [
+      {
+        "weight": 0.6,
+        "distribution": {
+          "type": "lognormal",
+          "mu": 4.8,
+          "sigma": 0.6,
+          "min": 8,
+          "max": 384
+        }
+      },
+      {
+        "weight": 0.25,
+        "distribution": {
+          "type": "normal",
+          "mean": 200,
+          "stddev": 80,
+          "min": 24,
+          "max": 512
+        }
+      },
+      {
+        "weight": 0.15,
+        "distribution": {
+          "type": "normal",
+          "mean": 1024,
+          "stddev": 256,
+          "min": 512,
+          "max": 2048
+        }
+      }
+    ]
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "request_count": 100
+  },
+  "tags": [
+    "mixture",
+    "realistic"
+  ]
+}

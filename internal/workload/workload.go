@@ -5,11 +5,11 @@
 // re-checks the structural rules the generator depends on at run time so an
 // invalid or unversioned workload refuses to run even without the kit.
 //
-// IB-T002 scope note: prefix-sharing (ratio > 0), cancellation (rate > 0),
+// Scope note: prefix-sharing (ratio > 0), cancellation (rate > 0),
 // slow-client (fraction > 0) and closed-loop arrival are parsed and
 // validated but their behaviors are NOT implemented yet; attempting to run
-// such a workload returns a typed ErrNotImplemented (deferred to
-// IB-T003/IB-T004 per docs/tasks.md).
+// such a workload returns a typed ErrNotImplemented (client-side execution
+// is deferred to IB-T004, closed-loop to IB-T008, per docs/tasks.md).
 package workload
 
 import (
@@ -242,7 +242,7 @@ func (w *Workload) CheckRunnable() error {
 		return fmt.Errorf("%w: closed-loop arrival (throughput-ceiling mode, ADR-0003) lands with the sweep work (IB-T008)", ErrNotImplemented)
 	}
 	if *w.Prefix.Ratio > 0 {
-		return fmt.Errorf("%w: prefix_sharing.ratio > 0 (deferred to IB-T003)", ErrNotImplemented)
+		return fmt.Errorf("%w: prefix_sharing.ratio > 0 (deferred to IB-T004)", ErrNotImplemented)
 	}
 	if *w.Cancel.Rate > 0 {
 		return fmt.Errorf("%w: cancellation.rate > 0 (deferred to IB-T004)", ErrNotImplemented)

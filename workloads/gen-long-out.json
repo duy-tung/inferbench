@@ -1,0 +1,37 @@
+{
+  "name": "gen-long-out",
+  "version": "1.0.0",
+  "seed": 1003003,
+  "description": "Decode-heavy generation: short prompts, long directed completions (normal, mean 1024 tokens, hard floor 512 and cap 2048 via max_tokens). Long-lived streams expose ITL tails, mid-stream stalls, and batching-policy trade-offs (the Sarathi-Serve TTFT/ITL axis). Output length is directed, never uncontrolled. Longer stop horizon because each request lives seconds, not milliseconds. Canonical suite v1 (IB-T003).",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 2
+  },
+  "input_length_distribution": {
+    "type": "normal",
+    "mean": 120,
+    "stddev": 50,
+    "min": 16,
+    "max": 384
+  },
+  "output_length_distribution": {
+    "type": "normal",
+    "mean": 1024,
+    "stddev": 256,
+    "min": 512,
+    "max": 2048
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "duration_seconds": 900
+  },
+  "tags": ["decode-heavy", "long-streams"]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "chat-short",
+  "version": "1.0.0",
+  "seed": 1003001,
+  "description": "Interactive chat baseline: short prompts, short completions, steady open-loop arrivals. The reference point every other workload is contrasted against. Output length is directed via max_tokens and capped at 384 tokens (lognormal body, median ~120) so runs are comparable and decode time is bounded. Canonical suite v1 (IB-T003); results are comparable only across identical workload version + seed.",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 8
+  },
+  "input_length_distribution": {
+    "type": "normal",
+    "mean": 200,
+    "stddev": 80,
+    "min": 16,
+    "max": 1024
+  },
+  "output_length_distribution": {
+    "type": "lognormal",
+    "mu": 4.8,
+    "sigma": 0.6,
+    "min": 8,
+    "max": 384
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "duration_seconds": 600
+  },
+  "tags": ["interactive", "baseline"]
+}

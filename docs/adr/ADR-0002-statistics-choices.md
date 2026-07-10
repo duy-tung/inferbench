@@ -1,6 +1,6 @@
 # ADR-0002 — Statistics choices: pooled percentiles, bootstrap CIs, warm-up exclusion, knee detection
 
-**Status:** Accepted · **Date:** 2026-07-10 · **Owner task:** IB-T005 (parameters finalized there)
+**Status:** Accepted (user review passed at the Wave-1 exit review, 2026-07-10) · **Date:** 2026-07-10 · **Owner task:** IB-T005 (parameters finalized there)
 
 ## Context
 

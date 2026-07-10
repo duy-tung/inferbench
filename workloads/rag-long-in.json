@@ -1,0 +1,35 @@
+{
+  "name": "rag-long-in",
+  "version": "1.0.0",
+  "seed": 1003002,
+  "description": "Prefill-heavy retrieval-augmented traffic: long stuffed-context prompts (uniform 2048-8192 tokens), short grounded answers capped at 512 tokens. Stresses prefill compute and admission of large requests; the low rate keeps offered prefill work per second comparable to chat-short's total token throughput. Canonical suite v1 (IB-T003).",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 2
+  },
+  "input_length_distribution": {
+    "type": "uniform",
+    "min": 2048,
+    "max": 8192
+  },
+  "output_length_distribution": {
+    "type": "normal",
+    "mean": 200,
+    "stddev": 80,
+    "min": 24,
+    "max": 512
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "duration_seconds": 600
+  },
+  "tags": ["rag", "prefill-heavy"]
+}

@@ -19,9 +19,9 @@ import (
 )
 
 // ContractsBundleVersion is the serving-contracts pin this build emits.
-// Reversible assumption (docs/implementation-notes.md): pinned to commit
-// 8c58863 pre-release; re-pin to the v0.1.0 tag when it is cut.
-const ContractsBundleVersion = "8c58863 (v0.1.0 tag pending)"
+// Re-pinned at IB-T003 (2026-07-10) from pre-release commit 8c58863 to the
+// released v0.1.0 tag (commit 2df9f81); see docs/implementation-notes.md.
+const ContractsBundleVersion = "v0.1.0"
 
 var versionRe = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
 
