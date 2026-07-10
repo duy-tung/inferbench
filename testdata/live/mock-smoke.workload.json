@@ -1,0 +1,37 @@
+{
+  "name": "mock-smoke",
+  "version": "0.1.0",
+  "seed": 20260710,
+  "description": "IB-T002 verification workload: short seeded open-loop run against the local infergate gateway + deterministic mock pair. NOT part of the canonical suite (IB-T003).",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 20
+  },
+  "input_length_distribution": {
+    "type": "normal",
+    "mean": 120,
+    "stddev": 40,
+    "min": 16,
+    "max": 512
+  },
+  "output_length_distribution": {
+    "type": "lognormal",
+    "mu": 3.5,
+    "sigma": 0.5,
+    "min": 8,
+    "max": 128
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "request_count": 200
+  },
+  "tags": ["smoke", "ib-t002"]
+}
