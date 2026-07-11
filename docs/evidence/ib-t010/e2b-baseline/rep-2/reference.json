@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t010-e2-baseline",
+  "workload_version": "1.0.0",
+  "seed": 10010202,
+  "item_count": 350,
+  "schedule_fingerprint": "02ebb8e13d5aca89c9c614c973e1be631870e116fd975325d7d2faeacc63e973"
+}

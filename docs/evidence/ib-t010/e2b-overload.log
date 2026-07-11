@@ -1,0 +1,6 @@
+run ib-t010-e2b-overload-r1: sent=900 ok=203 errors=0 shed=697 canceled=0 max_dispatch_slip=1.78039ms max_send_slip=2.170198ms wall=5.287s
+experiment ib-t010-e2b-overload-r1 (hypothesis EXP-ib-t010-e2b-queue-cap) OK: artifacts docs/evidence/ib-t010/e2b-overload/rep-1
+run ib-t010-e2b-overload-r2: sent=900 ok=207 errors=0 shed=693 canceled=0 max_dispatch_slip=1.217277ms max_send_slip=1.705311ms wall=5.296s
+experiment ib-t010-e2b-overload-r2 (hypothesis EXP-ib-t010-e2b-queue-cap) OK: artifacts docs/evidence/ib-t010/e2b-overload/rep-2
+run ib-t010-e2b-overload-r3: sent=900 ok=205 errors=0 shed=695 canceled=0 max_dispatch_slip=1.243249ms max_send_slip=1.630908ms wall=5.407s
+experiment ib-t010-e2b-overload-r3 (hypothesis EXP-ib-t010-e2b-queue-cap) OK: artifacts docs/evidence/ib-t010/e2b-overload/rep-3

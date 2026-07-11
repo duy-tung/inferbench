@@ -1,0 +1,32 @@
+{
+  "name": "ib-t010-e2-baseline",
+  "version": "1.0.0",
+  "seed": 10010202,
+  "description": "IB-T010 E2 capacity-boundary (~1x estimated capacity) baseline, admission-sane-v1 only. Reference point for the G5 TTFT-degradation-at-5x criterion.",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 37.8072
+  },
+  "input_length_distribution": {
+    "type": "uniform",
+    "min": 24,
+    "max": 64
+  },
+  "output_length_distribution": {
+    "type": "uniform",
+    "min": 10,
+    "max": 20
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "request_count": 350
+  }
+}

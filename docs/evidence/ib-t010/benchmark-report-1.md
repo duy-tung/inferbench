@@ -107,6 +107,15 @@ Gateway-side cross-check: queue wait p95 <1 ms here too (`e1-llamacpp-gateway-si
 
 ---
 
+**Erratum (added post-publication, 2026-07-11, non-substantive):** the "37.66 rps" capacity
+figure quoted in prose below (§3, x3 occurrences) is a transcription rounding error; the
+measured value on file (`e2-capacity-estimate-rps.txt`, `e2-probe.log`) is **37.807 rps**
+(37.80724254139287, 5× = 189.0362). The 1×/5× *workload files* already used the correct value
+(`e2-baseline-workload.json` rate 37.8072, `e2-overload-workload.json` rate 189.0362) — only
+this report's prose rounded it wrong; no measured number, table, or verdict in this report
+changes. See `benchmark-report-1b.md` (IB-T010 E2b) for the corrected citation and the
+pre-declared queue-cap follow-up to this section's REFUTED verdict.
+
 ## 3. E2 — Admission value at ~5× capacity (G5)
 
 **Design.** Mock backend (TTFT=80 ms, ITL=10 ms, seed 43). Two gateway processes, single

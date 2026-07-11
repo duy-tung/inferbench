@@ -1,0 +1,19 @@
+result_id: ib-t010-e2b-baseline-1x-sane
+measured window: 24.184s, 900 events (3 repetition(s)); warm-up: 150 excluded
+throughput: 31.0122 ok-req/s, 242.43 out-tok/s
+error rate 0.0000 + shed rate 0.1667 vs declared gate threshold 0.2
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=750 p50=0.082959 p90=0.104252 p95=0.115553 p99=0.140214 max=0.169913 mean=0.088298  p99 95% CI [0.131506, 0.156728]
+  e2e_duration_seconds: n=750 p50=0.157874 p90=0.227074 p95=0.245460 p99=0.264353 max=0.278019 mean=0.161210  p99 95% CI [0.255469, 0.275595]
+  itl_seconds: n=5113 p50=0.010681 p90=0.011029 p95=0.011119 p99=0.011270 p999=0.011435 max=0.011503 mean=0.010677  p99 95% CI [0.011253, 0.011292]
+  max_stall_seconds: n=698 p50=0.011012 p90=0.011235 p95=0.011295 p99=0.011393 max=0.011503 mean=0.010985  p99 95% CI [0.011362, 0.011452]
+goodput@SLO[ib-t010-e2-baseline@1.0.0]: ratio=0.8333 (750/900), 31.0122 req/s meeting SLO | shed_rate=0.1667 | stall_rate=0.0000 (threshold 0.1s, 0/698 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - capacity-boundary point: offered rate equals E2's own probe-estimated capacity (37.8072 rps, reused verbatim for single-variable purity vs the queue-cap change), so a shed rate around the E2 baseline's ~10% (here elevated further by the shallower cap=1 queue) is expected boundary behavior, not a failure; the declared gate threshold is raised to 0.20 (from the 0.05 default) for exactly this point, disclosed here
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t010/results/ib-t010-e2b-baseline-1x-sane.benchmark-result.json

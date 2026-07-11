@@ -1,0 +1,21 @@
+{
+  "baseline_n": 750,
+  "overload_n": 563,
+  "baseline_p95_s": 0.11555349154999996,
+  "baseline_p95_ci95": [
+    0.11040455701374999,
+    0.12357149145499997
+  ],
+  "sane5x_p95_s": 0.1456898684,
+  "sane5x_p95_ci95": [
+    0.1407122218,
+    0.153585099
+  ],
+  "degradation_pct": 26.080022720005868,
+  "degradation_ci95_pct": [
+    16.299362263629526,
+    35.1723426661256
+  ],
+  "p_degradation_le_20pct": 0.184,
+  "method": "bootstrap (B=1000, seed 20260710, numpy default_rng) over pooled post-warm-up accepted-request TTFT samples; ratio CI from paired resample draws (each of the B iterations resamples BOTH pools independently and recomputes the ratio for that iteration) -- identical method to E2's e2-degradation.json"
+}

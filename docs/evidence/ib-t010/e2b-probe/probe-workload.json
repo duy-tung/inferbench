@@ -1,0 +1,32 @@
+{
+  "name": "ib-t010-e2-probe-base-capacity-probe",
+  "version": "1.0.0",
+  "seed": 10010200,
+  "description": "IB-T010 E2 base workload for the capacity-estimate probe (rate overridden by the sweep probe) and for deriving the 1x/5x measured-point workloads. Short prompts/short directed completions against the mock backend.",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 200
+  },
+  "input_length_distribution": {
+    "type": "uniform",
+    "min": 24,
+    "max": 64
+  },
+  "output_length_distribution": {
+    "type": "uniform",
+    "min": 10,
+    "max": 20
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "request_count": 400
+  }
+}

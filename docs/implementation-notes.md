@@ -900,3 +900,91 @@ Decisions/notes:
   result exists (`scripts/ib-t010-e2-admission-value.sh`). No generator code changed.
 - **Host reboot mid-task** between the E1-mock and E1-llama.cpp/E2 runs. No compared arms
   span the reboot; box-quiet checks logged before each measured run.
+
+### IB-T010 E2b — queue-cap follow-up (2026-07-11)
+
+Prescribed by the fresh-context G5 gate verifier after E2's honest REFUTED verdict (+25.16%
+accepted-TTFT p95 degradation at 5×, root-caused to queue-transit: the shallow cap=3 queue was
+perpetually full at 5×). Hypothesis file `hypotheses/EXP-ib-t010-e2b-queue-cap.json` written
+BEFORE any measured run. Single changed variable: `-admission-tenant-queue-cap` and
+`-admission-global-queue-cap` move together, 3→1 (paired and documented as such — the
+prescription explicitly names this pairing); `-admission-global-inflight-budget=6` and
+`-admission-queue-deadline=500ms` held fixed at E2's values. cap=0 is degenerate (out of
+scope by construction); cap=1 is the declared floor. Same infergate pin `6827d8c` (built
+read-only via `git archive`, same binaries reused). Report:
+`docs/evidence/ib-t010/benchmark-report-1b.md`.
+
+**Design decision — workload reuse for single-variable purity.** E2's own baseline/overload
+workload files (`e2-baseline-workload.json` rate 37.8072 rps seed 10010202,
+`e2-overload-workload.json` rate 189.0362 rps seed 10010201) are reused **verbatim** rather
+than re-derived from a fresh probe against the new cap=1 gateway. A fresh probe was still run
+for structural/box-quiet parity and as a cross-check (36.8786 rps achieved — close to E2's
+37.8072 rps, consistent with capacity being budget-bound, not queue-cap-bound, at steady
+state) but its result was NOT used to re-derive the measured-point rates: holding the offered
+rate byte-identical to E2's own points means the ONLY thing differing between E2's and E2b's
+sane-arm numbers is the queue-cap value, not a second re-probed rate that could drift for
+unrelated reasons.
+
+**Design decision — no repeated admission-off control, no `experiment compare`.** The
+variable under test is the queue-cap *value*, not admission on/off, so both measured points
+(1× baseline, 5× overload) used `experiment run` (not `compare`) with 2 declared hypothesis
+levels (`admission-sane-v1b`, `admission-sane-v1` — the E2 reference config the mechanism
+argument is stated against), exactly mirroring how E2 itself ran its own baseline via `run`
+rather than `compare`. E2's own admission-off-v1 5× point remains the on-file off-control
+reference; nothing about that config changed, so it was not re-run.
+
+**Measured facts (2026-07-11, same host, loopback, 4 vCPU):**
+
+- Baseline 1× (cap=1): n=750/900 accepted, shed rate 16.67% (vs E2's cap=3 baseline 10.11%),
+  p95 **0.115553 s** (vs E2's 0.161199 s — 28.3% lower in absolute terms).
+- Overload 5× (cap=1): n=563/2550 accepted, shed rate 77.92% (vs E2's cap=3 5× 77.53% —
+  barely moved, since at 5× nearly everything sheds regardless of cap depth), p95
+  **0.145690 s** (vs E2's 0.201764 s — 27.8% lower in absolute terms).
+- **Degradation p95 (5× vs 1×) = +26.08%** (bootstrap 95% CI [+16.30%, +35.17%],
+  P(≤20%)=18.4%, B=1000 seed 20260710, method identical to E2's `e2-degradation.json` —
+  `compute_degradation_e2b.py` → `e2b-degradation.json`). **> 20% → REFUTED, same as E2, and
+  NOT an improvement over E2's +25.16% point estimate.**
+- **Root-cause update (the honest finding this follow-up adds):** the queue-cap shrink cut
+  absolute p95 by ~28% at BOTH the 1× and 5× points — a roughly proportional effect, not a
+  ratio-shaped one — because the queue-cap parameter governs queue-transit depth uniformly
+  across load levels, including at the nominal "1×" reference (whose own shed rate rose
+  10.11%→16.67% under the shallower cap, i.e. the baseline itself sits further into the
+  shedding regime too). A uniform queue-cap shrink therefore cannot fix a *ratio*-shaped G5
+  criterion by this mechanism; a genuinely different structural lever (load-adaptive queue
+  cap, priority-aware shedding, or a baseline redefinition further below capacity) would be a
+  different hypothesis, out of scope for this task.
+- Sheds: 2259/2259 raw events typed `overloaded`; gateway counters reconcile exactly
+  (4170 total sent = 1579 accepted + 2591 shed, process-cumulative across probe + baseline +
+  spot-check + overload traffic on the one long-lived process — same limitation as E2,
+  disclosed the same way). Raw-HTTP spot check: 20-burst → 7 accepted (6 in-flight + 1
+  queued) + 13 typed 503 + `Retry-After: 1` (E2's same burst against cap=3 gave 9 accepted).
+- No starvation (single-tenant scope, same as E2): time-to-shed p99 2.02 ms, max 3.42 ms,
+  0/2259 deadline-aged, max accepted TTFT 185.4 ms ≪ 500 ms deadline.
+
+**Stop condition honored:** per the G5-verifier's explicit prescription, E2b failing the
+≤20% criterion is the SECOND REFUTED result for the same underlying cause (queue-transit at
+this offered-rate regime) — this task does not iterate to a third queue-cap value. Recorded
+and stopped; gate review pauses to the user per the roadmap.
+
+**Verification:** `go test -race -count=1 ./...` still green (all 11 packages); 90 pytest /
+13 skipped still green (analysis package unchanged); kit validation 9/9 PASS
+(`e2b-kit-validate.log`, carries E1's 4 + E2's 3 original results forward alongside E2b's 2
+new ones).
+
+**One-line erratum (non-substantive):** `benchmark-report-1.md` §3 prose cites "37.66 rps"
+(×3) — a transcription rounding error; the measured value on file is **37.807 rps**
+(`e2-capacity-estimate-rps.txt`: 37.80724254139287). The workload files themselves already
+used the correct rate; only the prose rounded it wrong. A one-line erratum callout was added
+to `benchmark-report-1.md` immediately before §3 rather than rewriting its published numbers
+(per the prescription: "correct in the E2b addendum; add a one-line erratum note... rather
+than rewriting its published numbers").
+
+Files added: `hypotheses/EXP-ib-t010-e2b-queue-cap.json`,
+`scripts/ib-t010-e2b-queue-cap.sh`, `docs/evidence/ib-t010/e2b-facts-sane.json`,
+`docs/evidence/ib-t010/compute_degradation_e2b.py`,
+`docs/evidence/ib-t010/benchmark-report-1b.md`, per-point reports
+`ib-t010-e2b-baseline-1x-sane.report.md` / `ib-t010-e2b-overload-5x-sane.report.md`, result
+files under `docs/evidence/ib-t010/results/`, raw-event run directories `e2b-baseline/`,
+`e2b-overload/`, `e2b-probe/`, plus logs/scrapes (`e2b-run.log`, `e2b-analyze-*.log`,
+`e2b-gateway-*`, `e2b-shed-spotcheck.log`, `e2b-kit-validate.log`,
+`e2b-capacity-estimate-rps.txt`).

@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t010-e2-probe-base-capacity-probe",
+  "workload_version": "1.0.0",
+  "seed": 10010200,
+  "item_count": 400,
+  "schedule_fingerprint": "26285c0839bbce8e7574bb1c9af3076375ff42fe6a76b5de22bd30f5a10ce68b"
+}

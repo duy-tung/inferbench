@@ -1,0 +1,19 @@
+result_id: ib-t010-e2b-overload-5x-sane
+measured window: 15.073s, 2550 events (3 repetition(s)); warm-up: 150 excluded
+throughput: 37.3526 ok-req/s, 287.01 out-tok/s
+error rate 0.0000 + shed rate 0.7792 vs declared gate threshold 0.95
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=563 p50=0.095607 p90=0.134519 p95=0.145690 p99=0.164600 max=0.185400 mean=0.102026  p99 95% CI [0.158953, 0.176942]
+  e2e_duration_seconds: n=563 p50=0.167194 p90=0.243430 p95=0.272930 p99=0.307087 max=0.329077 mean=0.173508  p99 95% CI [0.285421, 0.313393]
+  itl_seconds: n=3763 p50=0.010660 p90=0.011035 p95=0.011116 p99=0.011234 p999=0.015607 max=0.034957 mean=0.010678  p99 95% CI [0.011217, 0.011248]
+  max_stall_seconds: n=526 p50=0.011015 p90=0.011210 p95=0.011247 p99=0.011417 max=0.034957 mean=0.011122  p99 95% CI [0.011301, 0.029552]
+goodput@SLO[ib-t010-e2-baseline@1.0.0]: ratio=0.2208 (563/2550), 37.3526 req/s meeting SLO | shed_rate=0.7792 | stall_rate=0.0000 (threshold 0.1s, 0/526 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - deliberate 5x-capacity overload point (E2's own workload file reused verbatim): the elevated typed shed rate IS part of the expected trade at this shallower cap=1 queue (higher than E2's cap=3 5x shed rate of 77.53%, as this hypothesis predicted), not a failure mode being hidden; the declared gate threshold is raised to 0.95 for exactly this point, disclosed here, and the latency table below covers ACCEPTED requests only (shed requests never produce a first byte)
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t010/results/ib-t010-e2b-overload-5x-sane.benchmark-result.json

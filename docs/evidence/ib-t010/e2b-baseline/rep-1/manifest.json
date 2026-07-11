@@ -1,0 +1,50 @@
+{
+  "run_id": "ib-t010-e2b-baseline-r1",
+  "target_topology": "gateway-mock",
+  "workload_ref": {
+    "name": "ib-t010-e2-baseline",
+    "version": "1.0.0",
+    "seed": 10010202
+  },
+  "engine": {
+    "name": "mock",
+    "version": "dev",
+    "commit": "6827d8c3d177464c17fae3b4dc6c2c475323333b",
+    "flags": {
+      "error_rate": 0,
+      "itl_ms": 10,
+      "seed": 43,
+      "ttft_ms": 80
+    }
+  },
+  "model": {
+    "checkpoint": "mock-8b",
+    "revision": "mockengine@6827d8c",
+    "tokenizer": "mockengine-estimator"
+  },
+  "hardware": {
+    "gpu_model": null,
+    "gpu_count": 0,
+    "vram_gb": null,
+    "driver_version": null,
+    "cuda_version": null,
+    "instance_type": "local-dev-container (linux/amd64, 4 vCPU, CPU-only)"
+  },
+  "gateway": {
+    "version": "dev@6827d8c",
+    "config_version": "admission-sane-v1b"
+  },
+  "client": {
+    "location": "same-host (loopback)",
+    "rtt_ms": 0.894052
+  },
+  "warm_up": {
+    "policy": "discard-requests",
+    "value": 50
+  },
+  "repetitions": 3,
+  "hypothesis": "IB-T010 E2b (pre-declared G5-verifier follow-up to E2's REFUTED verdict): shrinking the admission queue cap from 3 (E2 admission-sane-v1) to 1 (E2b admission-sane-v1b), holding -admission-global-inflight-budget=6 and -admission-queue-deadline=500ms fixed, is expected to cut the queue-transit contribution to accepted-request TTFT roughly 3x, pulling the accepted-request TTFT p95 degradation at ~5x offered rate vs the SAME-config ~1x capacity-boundary baseline under the G5 \u003c=20% criterion, at the cost of a higher shed rate than E2's cap=3 arm at the same offered rate. Sheds remain typed 503 overloaded + Retry-After.",
+  "started_at": "2026-07-11T15:51:06Z",
+  "contracts_bundle_version": "v0.2.0",
+  "notes": "gateway.config_version=admission-sane-v1b encodes exactly: -admission-tenant-queue-cap 1 -admission-global-inflight-budget 6 -admission-global-queue-cap 1 -admission-queue-deadline 500ms (single changed variable vs E2's admission-sane-v1: queue cap 3-\u003e1, both tenant and global caps move together; budget and deadline unchanged; see scripts/ib-t010-e2b-queue-cap.sh and hypotheses/EXP-ib-t010-e2b-queue-cap.json)"
+}

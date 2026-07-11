@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t010-e2-overload",
+  "workload_version": "1.0.0",
+  "seed": 10010201,
+  "item_count": 900,
+  "schedule_fingerprint": "ae41460155d801c3c25456867e8874505b0a5e9b64d971f0c14639fe9cdd75c9"
+}

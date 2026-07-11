@@ -360,6 +360,26 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
   can't degrade organically, probe bias, mid-session host reboot) and the E1-mock tail
   anomaly documented in the report. Deviation (discarded first llama.cpp attempt,
   gateway histogram lost at teardown) recorded in `implementation-notes.md`.
+  **E2b follow-up (2026-07-11, prescribed by the fresh-context G5 gate verifier after E2's
+  REFUTED verdict):** `docs/evidence/ib-t010/benchmark-report-1b.md`
+  (`hypotheses/EXP-ib-t010-e2b-queue-cap.json`, written before any measured run). Single
+  changed variable: `-admission-tenant-queue-cap`/`-admission-global-queue-cap` 3→1 (paired),
+  budget=6 and deadline=500ms held fixed; E2's own baseline/overload workload files reused
+  verbatim (same seeds/rates) for single-variable purity. **REFUTED again, same root cause**:
+  accepted-request TTFT p95 degradation at ~5× = **+26.08%** (bootstrap 95% CI [+16.30%,
+  +35.17%], P(≤20%)=18.4%) — not an improvement over E2's +25.16%. Root-cause update: the
+  cap shrink cut absolute p95 by ~28% at **both** the 1× and 5× points (a proportional
+  mechanism, not a ratio-shaped one), and raised the baseline's own shed rate 10.11%→16.67%
+  (the "1×" reference sits further into the shedding regime at the shallower cap too) —
+  explaining why the ratio didn't move even though every absolute latency number improved.
+  Companion criteria held: 2259/2259 sheds typed 503 `overloaded` + `Retry-After`, no
+  starvation (time-to-shed p99 2.02 ms, max 3.42 ms, 0/2259 deadline-aged, max accepted TTFT
+  185.4 ms ≪ 500 ms deadline). Per the G5-verifier's explicit prescription, this is the
+  **second REFUTED result for the same underlying cause — no further queue-cap value is
+  tried**; recorded and stopped, gate review pauses to the user. `go test -race` + 90 pytest
+  still green; kit validation 9/9 PASS (`e2b-kit-validate.log`, carries the original 7 E1/E2
+  results forward). One-line erratum added to `benchmark-report-1.md` (prose "37.66 rps"
+  should read 37.807 rps — transcription rounding only; no measured number changes).
 
 ## IB-T011 — Experiment set 2 (GPU): vLLM behavior
 

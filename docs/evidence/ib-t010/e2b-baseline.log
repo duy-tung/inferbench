@@ -1,0 +1,6 @@
+run ib-t010-e2b-baseline-r1: sent=350 ok=291 errors=0 shed=59 canceled=0 max_dispatch_slip=1.456605ms max_send_slip=1.957664ms wall=9.341s
+experiment ib-t010-e2b-baseline-r1 (hypothesis EXP-ib-t010-e2b-queue-cap) OK: artifacts docs/evidence/ib-t010/e2b-baseline/rep-1
+run ib-t010-e2b-baseline-r2: sent=350 ok=292 errors=0 shed=58 canceled=0 max_dispatch_slip=1.214208ms max_send_slip=1.790584ms wall=9.342s
+experiment ib-t010-e2b-baseline-r2 (hypothesis EXP-ib-t010-e2b-queue-cap) OK: artifacts docs/evidence/ib-t010/e2b-baseline/rep-2
+run ib-t010-e2b-baseline-r3: sent=350 ok=293 errors=0 shed=57 canceled=0 max_dispatch_slip=1.206006ms max_send_slip=1.883626ms wall=9.343s
+experiment ib-t010-e2b-baseline-r3 (hypothesis EXP-ib-t010-e2b-queue-cap) OK: artifacts docs/evidence/ib-t010/e2b-baseline/rep-3

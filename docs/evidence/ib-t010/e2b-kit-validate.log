@@ -1,0 +1,11 @@
+PASS  ib-t010-e1-llamacpp-direct.benchmark-result.json  [benchmark-result]
+PASS  ib-t010-e1-llamacpp-gateway.benchmark-result.json  [benchmark-result]
+PASS  ib-t010-e1-mock-direct.benchmark-result.json  [benchmark-result]
+PASS  ib-t010-e1-mock-gateway.benchmark-result.json  [benchmark-result]
+PASS  ib-t010-e2-baseline-1x-sane.benchmark-result.json  [benchmark-result]
+PASS  ib-t010-e2-overload-5x-off.benchmark-result.json  [benchmark-result]
+PASS  ib-t010-e2-overload-5x-sane.benchmark-result.json  [benchmark-result]
+PASS  ib-t010-e2b-baseline-1x-sane.benchmark-result.json  [benchmark-result]
+PASS  ib-t010-e2b-overload-5x-sane.benchmark-result.json  [benchmark-result]
+
+check: 9/9 artifact(s) valid

@@ -1,0 +1,24 @@
+{
+  "sweep_id": "e2b-probe",
+  "base_workload": "ib-t010-e2-probe-base",
+  "workload_version": "1.0.0",
+  "seed": 10010200,
+  "declared_variable": "arrival_process.rate_rps",
+  "concurrency_cap": 1000,
+  "concurrency_cap_note": "client-transport MaxConnsPerHost, held fixed across the probe and every point: the mock/gateway pair has no admission control of its own at the pinned build (docs/implementation-notes.md), so this models the target's effective capacity for the purpose of this verification sweep. Go's http.Transport blocks (queues) requests past this cap instead of failing them, producing genuine client-visible queueing delay that counts against latency via the scheduled-send basis (ADR-0001).",
+  "target": "http://127.0.0.1:19295",
+  "min_fraction": 1,
+  "max_fraction": 1,
+  "probe": {
+    "offered_rate_rps": 200,
+    "request_count": 400,
+    "ok_count": 81,
+    "elapsed_seconds": 2.1963979670000002,
+    "achieved_rps": 36.8785626361855,
+    "run_dir": "docs/evidence/ib-t010/e2b-probe/probe",
+    "method": "open-loop overload probe (ADR-0003): achieved_rps = ok_count / elapsed_seconds at an offered rate far above any plausible capacity"
+  },
+  "capacity_estimate_rps": 36.8785626361855,
+  "points": null,
+  "created_at": "2026-07-11T15:51:04Z"
+}
