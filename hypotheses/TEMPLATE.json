@@ -1,0 +1,14 @@
+{
+  "id": "EXP-<short-slug>-001",
+  "hypothesis": "A falsifiable statement with an expected direction, e.g.: Raising max_num_batched_tokens from A to B increases output-token throughput and worsens p99 ITL on gen-long-out.",
+  "variable": "<single-dotted-manifest-field-path, e.g. target_topology or engine.flags.max_num_seqs>",
+  "levels": ["<level-A>", "<level-B>"],
+  "expected_direction": "<e.g. throughput up, ITL tail worse>",
+  "workload": "<workload-name>@<version> (seed <seed>)",
+  "constants": "<everything held fixed: engine version+flags, model+revision, hardware, workload version+seed, warm-up policy>",
+  "stop_condition": "<when to stop, including abort criteria and (GPU) the budget cap>",
+  "repeat_policy": "<e.g. 3 runs per point, pooled percentiles>",
+  "slo_reference": "<optional: required if goodput is claimed>",
+  "provenance_notes": "<optional: source-reported baselines being falsified, with dates>",
+  "gpu_session": null
+}

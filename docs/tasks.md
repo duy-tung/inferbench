@@ -285,6 +285,34 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
 - **Evidence:** framework docs + dry-run transcript. **Integration impact:** G6 enforcement arm;
   makes IB-T010/T011 auditable.
 - **Stop condition:** governance demo done. (With IB-T006, closes gate **G4**.)
+- **Status:** implemented 2026-07-11 — `internal/experiment` (`Hypothesis` type + `Load`
+  refusal-first loader + `CheckArms` + `CheckGPUSession`), `hypotheses/` (README + JSON
+  template + the compliant demo hypothesis file), and `inferbench experiment
+  {run,sweep,compare}` (each requires `--hypothesis` before any other flag is even consulted for
+  reachability). **Hypothesis file format is JSON, not the YAML sketch in `docs/experiments.md`
+  §5** — same field set, different serialization; the Go module stays stdlib-only end to end
+  (recorded as a reversible decision, see Deviations below and `hypotheses/README.md`).
+  **Single-variable / no-full-matrix enforcement is ONE mechanism, not two**:
+  `Hypothesis.CheckArms` reuses `internal/manifest.Diff` — the exact structural primitive
+  `compare` (IB-T008) and `sweep` (`internal/sweep.CheckSingleVariable`) already use — so
+  "single-variable rule" and "guard against combinatorial sweeps" are the same code path judged
+  against different call sites, not two independently-maintained checks that could drift.
+  **GPU session (G6):** `CheckGPUSession` refuses any arm whose manifest declares GPU hardware
+  (`hardware.gpu_count > 0` or `gpu_model` non-null) unless the hypothesis carries a complete
+  `gpu_session` block (session manifest ref, auto-stop ref, budget-alert confirmation) —
+  demonstrated structurally (no live GPU needed: the check runs before any network I/O).
+  **Verification:** `go test -race -count=1 ./...` green (`internal/experiment` unit tests:
+  hypothesis-less/incomplete/unknown-field refusals, single-variable pass, combinatorial
+  refusal, degenerate-non-varying refusal, GPU-session pass/refuse). End-to-end demo vs the
+  pinned mock+gateway pair (infergate @ `74f2372`; contracts @ v0.2.0 `484b449`),
+  `scripts/experiment-demo.sh`: **6 refusal demos, all typed, all before any request left the
+  process** (hypothesis-less `run`/`sweep`/`compare`; an incomplete hypothesis file; a
+  combinatorial 2-field arm set; a `--variable`/hypothesis mismatch; a GPU-declaring manifest
+  without a `gpu_session` block) **+ 1 compliant hypothesis-gated `experiment compare` run to
+  completion** against the mock pair (direct vs via-gateway, 40 req/arm, 0 errors) — the
+  transcript is `docs/evidence/ib-t009/refusal-demo-transcript.md`. Emitted artifacts (2
+  manifests, 2 raw-event files, 1 workload) kit-valid. Evidence:
+  `docs/evidence/ib-t009/` (transcript, `compliant-compare/`, `kit-validate.log`).
 
 ## IB-T010 — Experiment set 1 (CPU): gateway overhead + admission value
 

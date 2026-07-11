@@ -1,0 +1,46 @@
+{
+  "run_id": "",
+  "target_topology": "gateway-mock",
+  "workload_ref": {
+    "name": "",
+    "version": "",
+    "seed": 0
+  },
+  "engine": {
+    "name": "mock",
+    "version": "dev",
+    "commit": "74f2372",
+    "flags": {
+      "ttft": "20ms",
+      "itl": "5ms",
+      "seed": 42,
+      "error_rate": 0
+    }
+  },
+  "model": {
+    "checkpoint": "different-model-8b",
+    "revision": "mockengine@74f2372",
+    "tokenizer": "mockengine-estimator"
+  },
+  "hardware": {
+    "gpu_model": null,
+    "gpu_count": 0,
+    "vram_gb": null,
+    "driver_version": null,
+    "cuda_version": null,
+    "instance_type": "local-dev-container (linux/amd64, CPU-only)"
+  },
+  "gateway": {
+    "version": "dev@74f2372",
+    "config_version": "flags-v1"
+  },
+  "client": {
+    "location": "same-host (loopback)",
+    "rtt_ms": null
+  },
+  "warm_up": {
+    "policy": "none"
+  },
+  "repetitions": 1,
+  "hypothesis": "Routing chat-short traffic through infergate (via-gateway) instead of directly at the engine (engine-direct) increases end-to-end latency by a small, bounded amount rather than an unbounded or wildly variable one."
+}

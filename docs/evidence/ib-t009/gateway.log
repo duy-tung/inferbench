@@ -1,0 +1,3 @@
+time=2026-07-11T08:55:51.637Z level=INFO msg="gateway listening" addr=127.0.0.1:18380 backend=mock models=mock-8b config_version=static
+time=2026-07-11T08:55:59.537Z level=INFO msg="shutdown signal received; draining" signal=terminated in_flight=0 drain_timeout=1m5s
+time=2026-07-11T08:55:59.537Z level=INFO msg="drain complete" waited=1.322µs

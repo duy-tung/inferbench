@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t009-experiment-demo",
+  "workload_version": "1.0.0",
+  "seed": 9009001,
+  "item_count": 40,
+  "schedule_fingerprint": "932f861edee5351e037007bb6641a599f334bfc2e74639ddd5a37b86fa71f6a4"
+}

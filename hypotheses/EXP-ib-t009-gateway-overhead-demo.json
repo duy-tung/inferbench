@@ -1,0 +1,12 @@
+{
+  "id": "EXP-ib-t009-gateway-overhead-demo",
+  "hypothesis": "Routing chat-short traffic through infergate (via-gateway) instead of directly at the engine (engine-direct) increases end-to-end latency by a small, bounded amount rather than an unbounded or wildly variable one; the direction is 'gateway adds overhead, does not remove it'.",
+  "variable": "target_topology",
+  "levels": ["engine-direct", "gateway-mock"],
+  "expected_direction": "via-gateway p95/p99 end-to-end latency is higher than engine-direct, by a small bounded margin (non-queue overhead), not by an order of magnitude",
+  "workload": "ib-t009-experiment-demo@1.0.0 (seed 9009001)",
+  "constants": "engine (mock-backend, same seed/ttft/itl/error-rate), model checkpoint, hardware (CPU-only local-dev-container), workload version+seed, warm-up policy (none, smoke-scale) all held fixed; ONLY target_topology (and the gateway block its presence structurally implies) differs between arms",
+  "stop_condition": "both arms complete their declared repetition count against the pinned mock pair, or the target becomes unreachable (typed target_unreachable abort)",
+  "repeat_policy": "1 run per arm for this governance-mechanics demo (IB-T009 scope: prove the framework enforces hypothesis-first + single-variable execution end-to-end); the REAL gateway-overhead claim (IB-T010, experiments.md Set 1) requires >= 3 runs per arm, pooled percentiles, and a validity block before publication",
+  "provenance_notes": "This is IB-T009's compliant end-to-end demo, not the IB-T010 published benchmark report — no external baseline is being falsified here. IB-T010 falsifies against LiteLLM's self-reported 8ms p95 overhead (source-reported, as of 2026-07 — re-verify at use time)."
+}

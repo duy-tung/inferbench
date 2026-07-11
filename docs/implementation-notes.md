@@ -675,6 +675,73 @@ thing tried.
 `replay-mismatch.log`, `compare/`, `compare-refused.log`, `kit-validate.log`),
 `scripts/sweep-mock.sh`.
 
+### 2026-07-11 — IB-T009: controlled-experiment framework
+
+**Scope delivered:** `internal/experiment` (`Hypothesis` load/validate, `CheckArms` reusing
+`internal/manifest.Diff`, `CheckGPUSession`), `hypotheses/` (`README.md`, `TEMPLATE.json`, the
+compliant demo hypothesis), `cmd/inferbench/experiment.go` (`experiment {run,sweep,compare}`).
+
+**Hypothesis file format is JSON, not the `docs/experiments.md` §5 YAML sketch.** Same field
+set (`id`, `hypothesis`, `variable`, `levels`, `expected_direction`, `workload`, `constants`,
+`stop_condition`, `repeat_policy`, optional `slo_reference`/`provenance_notes`, optional
+`gpu_session` for G6), different serialization. The Go module is stdlib-only end to end
+(IB-T002 note above); every other artifact it reads or writes is JSON; a YAML dependency for one
+file type was judged not worth it. Unknown fields are rejected
+(`encoding/json.Decoder.DisallowUnknownFields`), so a mistyped plural `"variables": [...]`
+(a matrix-shaped mistake) is a decode-time refusal, not a silently accepted second variable.
+Recorded as a reversible decision (Deviations below); revisit if a future task needs to consume
+hypothesis files written by a human against the literal §5 YAML template.
+
+**One mechanism, two call sites.** `Hypothesis.CheckArms` does not reimplement the
+single-variable check — it calls `internal/manifest.Diff` (the primitive `compare` and `sweep`
+already use, built same-session for IB-T008) and requires the result to be a subset of
+`{declared variable} ∪ manifest.ImpliedFields(variable)`. "Enforce the single-variable rule" and
+"guard against combinatorial/full-matrix sweeps" are explicitly the same requirement in
+`docs/experiments.md` §5 ("Single-variable rule enforced twice: at hypothesis intake and again
+by the comparison engine") — implementing them as one function call from two places (`compare`'s
+own pre-check, and `experiment compare`'s governance check) means they cannot silently drift
+apart the way two independently-written checks could.
+
+**GPU session (G6), demonstrated without a live GPU.** `CheckGPUSession` runs on the loaded
+manifest facts BEFORE any network I/O (reachability, request), so the refusal is structural and
+testable on CPU: a facts file with `hardware.gpu_count=1`/`gpu_model` set and no `gpu_session`
+block in the hypothesis is refused (`experiment.ErrGPUSessionRequired`); the same manifest with
+a complete `gpu_session` block passes. IB-T011 (real GPU sessions) is unaffected in scope — this
+only proves the gate exists and fires.
+
+**Verification (all commands run 2026-07-11):**
+
+1. `go test -race -count=1 ./...` green, `internal/experiment` tests: empty-path and
+   missing-file refusal (both `ErrHypothesisRequired`); complete-hypothesis accept; 8
+   incomplete-field cases (each `ErrIncompleteHypothesis`); unknown-field (`variables` plural)
+   refusal; `CheckArms` single-variable pass (`target_topology`, `gateway` correctly treated as
+   implied, not a second variable); `CheckArms` combinatorial refusal (`ErrCombinatorial`);
+   `CheckArms` degenerate/non-varying refusal (`ErrNotVarying`); `CheckGPUSession`
+   required-and-missing / complete / not-required-for-CPU.
+2. **Refusal-demo transcript** (`scripts/experiment-demo.sh
+   docs/evidence/ib-t009 ../infergate 74f2372`, vs the pinned mock+gateway pair):
+   6 refusals, **every one before any request left the process** —
+   `experiment run|sweep|compare` with no `--hypothesis` (3 separate invocations); an incomplete
+   hypothesis file (`stop_condition` deleted); a combinatorial 2-arm set (`target_topology`
+   declared, `model.checkpoint` also differs); a `--variable`/`hypothesis.variable` mismatch; a
+   GPU-declaring manifest with no `gpu_session` block. **Then one compliant hypothesis-gated
+   `experiment compare` run to completion**: direct-vs-gateway, `target_topology`, 40
+   requests/arm, 0 errors — `docs/evidence/ib-t009/compliant-compare/comparison.json`.
+   Transcript: `docs/evidence/ib-t009/refusal-demo-transcript.md`.
+   - **Fixture bug caught by the demo itself, fixed in the script (not the framework):** the
+     first version of the "compliant" demo gave the two arms' manifests *different* freeform
+     `hypothesis` text ("gateway arm" vs "direct arm" descriptions), which `CheckArms` correctly
+     flagged as a second differing field (`hypothesis`) beyond the declared `target_topology` —
+     because `manifest.Hypothesis` restates the SAME experiment-level falsifiable statement on
+     every arm (methodology rule 6), not a per-arm label. This is the guard working as intended
+     against sloppy fixture authoring, not a framework defect; fixed by giving both arms the
+     identical hypothesis text.
+3. **Kit validation**: the compliant run's emitted artifacts (2 `benchmark-run`, 2 `raw-event`,
+   1 `workload`) PASS at the `v0.2.0` pin.
+
+**Evidence:** `docs/evidence/ib-t009/` (`refusal-demo-transcript.md`, `compliant-compare/`,
+`kit-validate.log`), `hypotheses/`, `scripts/experiment-demo.sh`.
+
 ## Deviations
 
 > Program deviation policy: when repository evidence forces a deviation from the approved plan,
@@ -740,3 +807,19 @@ thing tried.
 - **Follow-up:** none planned; re-open only if a specific downstream need for literal
   closed-loop execution (not just ceiling estimation) appears.
 
+### 2026-07-11 — IB-T009: hypothesis files are JSON, not the `docs/experiments.md` §5 YAML template
+
+- **Evidence:** `docs/experiments.md` §5 sketches the hypothesis-file fields as a YAML block.
+  The Go module (`go.mod`) has been stdlib-only since IB-T002 by deliberate choice; every
+  artifact the generator reads or writes (workload, manifest, raw-event) is JSON; the Python
+  analysis side rejected PyYAML for the same reason at IB-T005 ("every artifact is JSON").
+- **Decision (conservative, reversible):** `internal/experiment.Hypothesis` is JSON
+  (`encoding/json`, `DisallowUnknownFields`), field set identical to the §5 template. No new
+  dependency added to `go.mod`.
+- **Consequences:** a hypothesis file hand-authored from the literal §5 YAML template needs a
+  one-time JSON conversion (mechanical: same field names, YAML→JSON). `hypotheses/README.md`
+  and `hypotheses/TEMPLATE.json` document the JSON shape directly so this is a non-issue for new
+  hypothesis files going forward.
+- **Follow-up:** none planned; revisit only if a cross-repo consumer specifically needs to parse
+  hypothesis files as YAML (none currently does — hypothesis files are inferbench-local
+  governance artifacts, not a contracts-owned schema).

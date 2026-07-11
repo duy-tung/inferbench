@@ -1,0 +1,11 @@
+PASS  /home/user/inferbench/docs/evidence/ib-t009/compliant-compare/direct/rep-1/manifest.json  [benchmark-run]
+PASS  /home/user/inferbench/docs/evidence/ib-t009/compliant-compare/gateway/rep-1/manifest.json  [benchmark-run]
+
+validate: 2/2 file(s) valid against 'benchmark-run'
+PASS  /home/user/inferbench/docs/evidence/ib-t009/compliant-compare/direct/rep-1/events.jsonl  [raw-event]
+PASS  /home/user/inferbench/docs/evidence/ib-t009/compliant-compare/gateway/rep-1/events.jsonl  [raw-event]
+
+validate: 2/2 file(s) valid against 'raw-event'
+PASS  /home/user/inferbench/docs/evidence/ib-t009/demo-workload.json  [workload]
+
+validate: 1/1 file(s) valid against 'workload'
