@@ -218,3 +218,26 @@ python3 docs/evidence/ib-t010/compute_degradation_e2b.py
 **Provenance of every number:** program SLO target (G5 ≤20% degradation) —
 program-declared target (docs/tasks.md IB-T010, 05-execution-roadmap G5), same target as E2;
 everything else in this addendum — measured in this addendum's linked runs, 2026-07-11.
+
+---
+
+## Program decision on gate G5 (recorded 2026-07-11, post-review)
+
+After E2 (+25.16%) and E2b (+26.08%) both REFUTED the ≤20% accepted-TTFT-degradation
+target, and a fresh-context gate verifier confirmed every number and the mechanism, the
+program owner re-baselined gate **G5 to PASS** under assumption A9 (source-derived targets
+may be re-baselined after first measurement if infeasible-in-principle). Rationale, on the
+evidence in this report and its companion:
+
+- The ≤20% **ratio** criterion is mis-shaped for an admission-by-queueing gateway: admitted
+  requests carry queue transit that scales with the depth parameter **uniformly across load
+  levels** (E2b demonstrated the queue-cap knob cuts absolute latency at the 1× reference
+  point too), so no single-knob change can make the 5×-vs-1× ratio shrink by this mechanism.
+- The **re-framed G5 criterion is MET**: at ~5× capacity, load shedding is 100% typed
+  (`503 overloaded` + `Retry-After`, verified at three layers), accepted-request queue-wait is
+  **bounded** (gateway-side `inference_queue_wait_seconds` p95 = 134 ms), and there is **no
+  starvation** (single-tenant here; multi-tenant fairness p95 shift 0.0–4.6% < 15% at IG-T011).
+
+This negative result and its mechanism analysis are retained, in full, as the published
+finding — not superseded or hidden. The ≤20% ratio figure remains recorded as the original
+source-derived target that measurement showed to be architecture-inappropriate.
