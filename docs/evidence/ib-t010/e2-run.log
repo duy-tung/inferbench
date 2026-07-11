@@ -1,0 +1,121 @@
+=== quiet-box check ===
+no matching processes
+ 15:22:14 up 19 min,  0 user,  load average: 0.34, 1.51, 1.23
+mock + both gateways healthy
+=== capacity probe (admission-sane-v1) ===
+sweep: capacity_estimate=37.8072 rps (probe achieved 37.8072/200.0000 offered)
+inferbench: sweep: fewer than 6 points requested: got 1, want >= 6
+capacity_estimate_rps=37.80724254139287
+RATE_5X=189.0362 RATE_1X=37.8072
+=== baseline @ ~1x capacity (admission-sane-v1) ===
+run ib-t010-e2-baseline-r1: sent=350 ok=315 errors=0 shed=35 canceled=0 max_dispatch_slip=1.187197ms max_send_slip=2.163468ms wall=9.413s
+experiment ib-t010-e2-baseline-r1 (hypothesis EXP-ib-t010-e2-admission-value) OK: artifacts docs/evidence/ib-t010/e2-baseline/rep-1
+run ib-t010-e2-baseline-r2: sent=350 ok=316 errors=0 shed=34 canceled=0 max_dispatch_slip=32.238717ms max_send_slip=32.404217ms wall=9.415s
+experiment ib-t010-e2-baseline-r2 (hypothesis EXP-ib-t010-e2-admission-value) OK: artifacts docs/evidence/ib-t010/e2-baseline/rep-2
+run ib-t010-e2-baseline-r3: sent=350 ok=316 errors=0 shed=34 canceled=0 max_dispatch_slip=1.239896ms max_send_slip=1.690551ms wall=9.411s
+experiment ib-t010-e2-baseline-r3 (hypothesis EXP-ib-t010-e2-admission-value) OK: artifacts docs/evidence/ib-t010/e2-baseline/rep-3
+=== spot-check: raw HTTP shed response (admission-sane-v1, burst beyond budget) ===
+burst of 20 concurrent requests against admission-sane-v1 (budget=6, tenant-queue-cap=20); expect some 200s and some 503s with Retry-After
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+=== 5x overload: admission-sane-v1 vs admission-off-v1 ===
+experiment compare (hypothesis EXP-ib-t010-e2-admission-value): variable=gateway.config_version diff_fields=[gateway.config_version]
+  arm sane: target=http://127.0.0.1:19292 reps=3 sent=2700 ok=633 errors=0 shed=2067 canceled=0
+  arm off: target=http://127.0.0.1:19293 reps=3 sent=2700 ok=2700 errors=0 shed=0 canceled=0
+comparison manifest: docs/evidence/ib-t010/e2-overload-compare/comparison.json
+{
+  "gateway_ttft_seconds": {
+    "n": 1674.0,
+    "p50": 0.11736401673640168,
+    "p90": 0.1874058577405858,
+    "p95": 0.1961610878661088,
+    "p99": 0.3287659574468085
+  },
+  "gateway_queue_wait_seconds": {
+    "n": 1674.0,
+    "p50": 0.03321799307958478,
+    "p90": 0.09444859813084114,
+    "p95": 0.13374999999999995,
+    "p99": 0.22674999999999998
+  },
+  "method": "prometheus histogram_quantile-style linear interpolation within the straddling bucket (bucket boundaries per infergate internal/telemetry/vocabulary.go TTFTBuckets/QueueWaitBuckets); coarse at sub-bucket resolution, reported as a cross-check against client-side pooled percentiles, not a replacement for them"
+}
+inference_requests_total{model="mock-8b",backend="mock",tenant_tier="default",status_class="2xx",error_class="none"} 1674
+inference_requests_total{model="mock-8b",backend="unknown",tenant_tier="default",status_class="5xx",error_class="overloaded"} 2496
+inference_sheds_total{reason="backend_unavailable"} 0
+inference_sheds_total{reason="global_overload"} 0
+inference_sheds_total{reason="queue_full"} 2496
+inference_sheds_total{reason="tenant_rate_limit"} 0
+{
+  "gateway_ttft_seconds": {
+    "n": 2700.0,
+    "p50": 0.07500000000000001,
+    "p90": 0.095,
+    "p95": 0.0975,
+    "p99": 0.0995
+  },
+  "gateway_queue_wait_seconds": {
+    "n": 2700.0,
+    "p50": 0.0005,
+    "p90": 0.0009000000000000001,
+    "p95": 0.00095,
+    "p99": 0.00099
+  },
+  "method": "prometheus histogram_quantile-style linear interpolation within the straddling bucket (bucket boundaries per infergate internal/telemetry/vocabulary.go TTFTBuckets/QueueWaitBuckets); coarse at sub-bucket resolution, reported as a cross-check against client-side pooled percentiles, not a replacement for them"
+}
+inference_requests_total{model="mock-8b",backend="mock",tenant_tier="default",status_class="2xx",error_class="none"} 2700
+inference_sheds_total{reason="backend_unavailable"} 0
+inference_sheds_total{reason="global_overload"} 0
+inference_sheds_total{reason="queue_full"} 0
+inference_sheds_total{reason="tenant_rate_limit"} 0
+burst of 20 concurrent requests against admission-off-v1 (all caps ~1e6); expect all 200s, no Retry-After
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+E2 admission-value experiment complete: docs/evidence/ib-t010/e2-overload-compare (baseline: docs/evidence/ib-t010/e2-baseline)

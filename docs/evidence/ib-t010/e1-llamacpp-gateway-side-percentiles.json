@@ -1,0 +1,17 @@
+{
+  "gateway_ttft_seconds": {
+    "n": 135.0,
+    "p50": 0.3916666666666667,
+    "p90": 2.19,
+    "p95": 2.5949999999999998,
+    "p99": 2.9190000000000005
+  },
+  "gateway_queue_wait_seconds": {
+    "n": 135.0,
+    "p50": 0.0005,
+    "p90": 0.0009000000000000001,
+    "p95": 0.00095,
+    "p99": 0.00099
+  },
+  "method": "prometheus histogram_quantile-style linear interpolation within the straddling bucket (bucket boundaries per infergate internal/telemetry/vocabulary.go TTFTBuckets/QueueWaitBuckets); coarse at sub-bucket resolution, reported as a cross-check against client-side pooled percentiles, not a replacement for them"
+}

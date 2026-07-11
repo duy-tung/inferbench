@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t010-e1-mock",
+  "workload_version": "1.0.0",
+  "seed": 10010101,
+  "item_count": 260,
+  "schedule_fingerprint": "b3d61f0a955f0f8313fd8739923c06a5b6c654876b480b15fc03794574806209"
+}

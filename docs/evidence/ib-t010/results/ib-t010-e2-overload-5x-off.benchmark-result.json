@@ -1,0 +1,91 @@
+{
+  "result_id": "ib-t010-e2-overload-5x-off",
+  "created_at": "2026-07-11T15:24:36Z",
+  "links": {
+    "run_manifests": [
+      "docs/evidence/ib-t010/e2-overload-compare/off/rep-1/manifest.json",
+      "docs/evidence/ib-t010/e2-overload-compare/off/rep-2/manifest.json",
+      "docs/evidence/ib-t010/e2-overload-compare/off/rep-3/manifest.json"
+    ],
+    "raw_events": [
+      "docs/evidence/ib-t010/e2-overload-compare/off/rep-1/events.jsonl",
+      "docs/evidence/ib-t010/e2-overload-compare/off/rep-2/events.jsonl",
+      "docs/evidence/ib-t010/e2-overload-compare/off/rep-3/events.jsonl"
+    ]
+  },
+  "throughput": {
+    "requests_per_second": 168.798001722468,
+    "output_tokens_per_second": 1310.8654227882487,
+    "total_requests": 2550,
+    "total_output_tokens": 19803
+  },
+  "pooled_percentiles": {
+    "method": "pooled-raw-events",
+    "pooled_event_count": 2550,
+    "tables": {
+      "ttft_seconds": {
+        "n": 2550,
+        "p50": 0.082183651,
+        "p90": 0.0829827957,
+        "p95": 0.08322679564999999,
+        "p99": 0.08407825325,
+        "max": 0.101328382,
+        "mean": 0.08226585726196078,
+        "p999": 0.09376799926600028
+      },
+      "e2e_duration_seconds": {
+        "n": 2550,
+        "p50": 0.14816045761108398,
+        "p90": 0.22030289173126222,
+        "p95": 0.24070767164230344,
+        "p99": 0.2706195950508116,
+        "max": 0.283527135848999,
+        "mean": 0.15387665505502737,
+        "p999": 0.27799273753166465
+      },
+      "itl_seconds": {
+        "n": 17253,
+        "p50": 0.010535,
+        "p90": 0.011079619,
+        "p95": 0.011172793399999999,
+        "p99": 0.01139036484,
+        "max": 0.031226586,
+        "mean": 0.010568198238799049,
+        "p999": 0.016251485184005467
+      },
+      "max_stall_seconds": {
+        "n": 2373,
+        "p50": 0.011072707,
+        "p90": 0.0113307416,
+        "p95": 0.0114457252,
+        "p99": 0.012220855760000007,
+        "max": 0.031226586,
+        "mean": 0.01111340646565529,
+        "p999": 0.028599603900000475
+      }
+    }
+  },
+  "goodput": {
+    "slo_ref": {
+      "id": "ib-t010-e2-baseline",
+      "version": "1.0.0"
+    },
+    "requests_per_second_meeting_slo": 168.798001722468,
+    "ratio": 1.0,
+    "shed_rate": 0.0,
+    "stall_rate": 0.0,
+    "stall_threshold_seconds": 0.1
+  },
+  "knee_estimate": null,
+  "cost": null,
+  "validity": {
+    "warm_up_handling": "manifest warm-up policy 'discard-requests' (50 requests per repetition, ordered by scheduled_send_ts): 150 events excluded, 2550 kept (exp-EXP-ib-t010-e2-admission-value-off-r1/rep1: 50 excluded; exp-EXP-ib-t010-e2-admission-value-off-r2/rep2: 50 excluded; exp-EXP-ib-t010-e2-admission-value-off-r3/rep3: 50 excluded)",
+    "run_count": 3,
+    "threats_to_validity": [
+      "admission-off control arm at 5x offered rate: zero shed by construction (all caps ~1e6); the deterministic mock backend serves unbounded concurrency without slowdown, so this arm CANNOT exhibit the queueing collapse a real engine would \u2014 the honest scope of this control is 'admission off produces no backpressure signal', not 'admission off is fine' (see hypothesis file provenance_notes)",
+      "no rate sweep in this run set \u2014 knee_estimate is null; no claim is made about saturation behavior",
+      "no cost profile applies to this run set \u2014 cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)"
+    ],
+    "unexplained_anomalies": []
+  }
+}

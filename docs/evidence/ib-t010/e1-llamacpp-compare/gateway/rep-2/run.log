@@ -1,0 +1,93 @@
+run_id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2 repetition=2 requests=45 max_slip=5s cancel_planned=0 slow_planned=0 prefix_sharing=0
+schedule item=0 offset=1.940508485s input_tokens=55 max_tokens=21
+schedule item=1 offset=5.895169199s input_tokens=36 max_tokens=23
+schedule item=2 offset=10.663663487s input_tokens=59 max_tokens=19
+schedule item=3 offset=11.785687036s input_tokens=60 max_tokens=14
+schedule item=4 offset=13.632234642s input_tokens=42 max_tokens=21
+schedule item=5 offset=17.076496094s input_tokens=61 max_tokens=13
+schedule item=6 offset=19.169945217s input_tokens=47 max_tokens=17
+schedule item=7 offset=19.453180498s input_tokens=41 max_tokens=21
+schedule item=8 offset=20.270549436s input_tokens=30 max_tokens=23
+schedule item=9 offset=20.571755499s input_tokens=53 max_tokens=15
+schedule item=10 offset=22.706925585s input_tokens=37 max_tokens=21
+schedule item=11 offset=26.59888561s input_tokens=25 max_tokens=14
+schedule item=12 offset=27.099659881s input_tokens=63 max_tokens=23
+schedule item=13 offset=27.497343744s input_tokens=55 max_tokens=18
+schedule item=14 offset=28.514340454s input_tokens=45 max_tokens=21
+schedule item=15 offset=29.792495963s input_tokens=26 max_tokens=16
+schedule item=16 offset=34.328462298s input_tokens=46 max_tokens=17
+schedule item=17 offset=36.61858317s input_tokens=37 max_tokens=19
+schedule item=18 offset=37.997191435s input_tokens=53 max_tokens=17
+schedule item=19 offset=41.863641711s input_tokens=32 max_tokens=19
+schedule item=20 offset=44.448231724s input_tokens=49 max_tokens=22
+schedule item=21 offset=44.520586886s input_tokens=47 max_tokens=13
+schedule item=22 offset=48.423844369s input_tokens=54 max_tokens=14
+schedule item=23 offset=49.588900076s input_tokens=27 max_tokens=18
+schedule item=24 offset=49.643101257s input_tokens=28 max_tokens=13
+schedule item=25 offset=55.006537933s input_tokens=34 max_tokens=16
+schedule item=26 offset=56.124840397s input_tokens=44 max_tokens=22
+schedule item=27 offset=57.372885977s input_tokens=26 max_tokens=21
+schedule item=28 offset=1m0.132013864s input_tokens=42 max_tokens=18
+schedule item=29 offset=1m0.492549467s input_tokens=50 max_tokens=16
+schedule item=30 offset=1m3.095589654s input_tokens=62 max_tokens=12
+schedule item=31 offset=1m4.044924734s input_tokens=58 max_tokens=12
+schedule item=32 offset=1m7.480957541s input_tokens=45 max_tokens=20
+schedule item=33 offset=1m10.038570616s input_tokens=60 max_tokens=15
+schedule item=34 offset=1m13.843697864s input_tokens=28 max_tokens=22
+schedule item=35 offset=1m16.105161877s input_tokens=35 max_tokens=21
+schedule item=36 offset=1m17.739721989s input_tokens=44 max_tokens=18
+schedule item=37 offset=1m18.209784362s input_tokens=42 max_tokens=15
+schedule item=38 offset=1m22.572925226s input_tokens=39 max_tokens=21
+schedule item=39 offset=1m22.858952438s input_tokens=45 max_tokens=21
+schedule item=40 offset=1m24.689176898s input_tokens=24 max_tokens=17
+schedule item=41 offset=1m24.693126465s input_tokens=55 max_tokens=24
+schedule item=42 offset=1m25.203058142s input_tokens=31 max_tokens=22
+schedule item=43 offset=1m26.977287363s input_tokens=64 max_tokens=21
+schedule item=44 offset=1m28.129608053s input_tokens=61 max_tokens=23
+epoch=2026-07-11T15:16:46.996883Z
+request item=0 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000000 status=ok send_slip=1.261114ms body_sha256=a143e0e6e4b90ebf9b0a30e3af313eb6fc49b22669e471826a946db4cd46f86a
+request item=1 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000001 status=ok send_slip=563.122µs body_sha256=789cfc2ab96e785e229a0d810e384ebdc255b8aca4b0e2e02f0e588a5ddfb2cb
+request item=2 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000002 status=ok send_slip=1.264871ms body_sha256=a26726fb338b1675896f97c195150f7a145e77dc773ede9f41ac0433f26e111d
+request item=3 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000003 status=ok send_slip=901.109µs body_sha256=fe013a801850d2a9d6fd37c9b2568b6b86ec70f6097e9c94fecda8c5c136489a
+request item=4 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000004 status=ok send_slip=855.735µs body_sha256=c1f8e94b9680473a238356483104ff3d7f97f0d070d3d5c4232634b2adbcd1a3
+request item=5 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000005 status=ok send_slip=448.026µs body_sha256=86cf1843b3d49d85def2f0d1483b46884b09ee808d4dc65547c0d67d62b164a7
+request item=6 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000006 status=ok send_slip=1.089435ms body_sha256=c4a7523bb139f15976434d9e8102baa8d8a5958ac81f87a3062743b406302cde
+request item=7 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000007 status=ok send_slip=6.51257ms body_sha256=b91e2ccb60ca181cff1b279c23cecea128fea29368077a6ffe529b49a41d1362
+request item=8 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000008 status=ok send_slip=1.463707ms body_sha256=6b2419025b93c85899a66d38969dc627e256055e635a7e0acd648025ead14382
+request item=9 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000009 status=ok send_slip=1.135543ms body_sha256=b95a1824db36d0d85db8df2ec51eee8f6112c6a329ebc6908024446e2a4bdd11
+request item=10 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000010 status=ok send_slip=352.55µs body_sha256=321c0470910ba9258f735799d3444cd48ffc4878587ab4e6ca44469bdd790d35
+request item=11 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000011 status=ok send_slip=860.965µs body_sha256=fbc1df172c8fc26d2990014441612457931e236d7754a13d414edb5805c87caf
+request item=12 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000012 status=ok send_slip=465.604µs body_sha256=b1820a9708ce0ccccf96487d08a908cdd5de5f6930eee21fc595286afc29b283
+request item=13 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000013 status=ok send_slip=668.407µs body_sha256=276d2416027036c826d58e6cca504e42330c695486aa461d3c2f4e32578967f3
+request item=14 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000014 status=ok send_slip=568.516µs body_sha256=a6d6f7f43194aca920322dfbff55bfdff89188d3032b96e65e6fec0732cc5419
+request item=15 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000015 status=ok send_slip=939.472µs body_sha256=de96d6a3b437fc6b49ba611cd00723d718bf47488e23462ba6681df0e0cb55b8
+request item=16 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000016 status=ok send_slip=2.378888ms body_sha256=a590d3031337e2f41c72906cd565d3c15b88c047f6f30084c402dbcfe5f5b62c
+request item=17 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000017 status=ok send_slip=1.672979ms body_sha256=ce4c4db647aa875cc9f51bfc04c1d74ec318ac62fb13b9bbeed1b5cff5603c68
+request item=18 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000018 status=ok send_slip=1.964057ms body_sha256=0293d7cfb92f182c98e44b794fb4c5ab621b0a650483ec98cfd9589ed712e2be
+request item=19 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000019 status=ok send_slip=3.702821ms body_sha256=7f2d2f51e0245806491e59727d8415f292070c6880e33c32971a376f6ea45618
+request item=20 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000020 status=ok send_slip=1.03206ms body_sha256=d4a24afea017ea09b829e7110038ca69283f989f8604a3fd1faf158ff4f12bb6
+request item=21 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000021 status=ok send_slip=2.7184ms body_sha256=d18d435117504bf2ba2daad2742ebde4ef3181598d3a6fc23f737a6dd45a7ca4
+request item=22 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000022 status=ok send_slip=1.007768ms body_sha256=77d6229f6a0d54d18812b45653218181f2e489423a9a62f0049660032b0c41a0
+request item=23 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000023 status=ok send_slip=1.204173ms body_sha256=833a1990847b584955104e3cd7920b772206e32feb7d768f01367e012a07227a
+request item=24 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000024 status=ok send_slip=908.321µs body_sha256=d0e1ab3fde1f76717a4854ab73ee6fa5931e0fe1f8252c57734fb2616bb15c73
+request item=25 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000025 status=ok send_slip=4.255584ms body_sha256=da6b8f430c4ad1fbeaac38e6142a32aa4e4d6f6c60e955043e76646c73c217f9
+request item=26 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000026 status=ok send_slip=1.588578ms body_sha256=d5a94dba2da4df1e2bfcfe118d6945e37a42166354b2317baf53ba2275b9ffbf
+request item=27 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000027 status=ok send_slip=1.447755ms body_sha256=dfa264caa414daf79cfc1b78e62d8658091961ca06326420d97bec277697c593
+request item=28 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000028 status=ok send_slip=671.168µs body_sha256=51abf8cdd851bfd88a3de1dad7f704e57218ffc67280eccb1fa642812beb62b3
+request item=29 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000029 status=ok send_slip=850.088µs body_sha256=23d6c605d92c2f07c0a8b28e31888f4e1fd2f9a02e40c94b543cbcd92c9d50fe
+request item=30 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000030 status=ok send_slip=420.46µs body_sha256=aba569ebc69bcd6438969c2f7a9eaa5a6a7b5374ca95424ebb080a993bd11565
+request item=31 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000031 status=ok send_slip=1.082911ms body_sha256=98ef572af3d73d6e4e77ed73d6ebe6ebe8ea00fbee2354aa575a0a74c470c47a
+request item=32 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000032 status=ok send_slip=429.271µs body_sha256=b23f75b76e641022ad812e3904b07b9abc4e55224ab10bd56d3a5f3b40f17eb2
+request item=33 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000033 status=ok send_slip=778.318µs body_sha256=b583cd7c44f918cca4779d813e6b6d1e5e78b65f5540a21e260be305a9d4a5f0
+request item=34 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000034 status=ok send_slip=417.927µs body_sha256=db9aee16b9e18a7d9c84e3361d678788b93e2e096a2b387ec830391c6b94600e
+request item=35 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000035 status=ok send_slip=387.927µs body_sha256=fcf97b829e6eaff8c1f598261d2b723db7f891b7182cf6a06b941476aeedef11
+request item=36 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000036 status=ok send_slip=1.233077ms body_sha256=f4c6b1c9b5665767b1953805344a7f2bf6f1a0abe8bd463c42b325a29ced2ead
+request item=37 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000037 status=ok send_slip=928.774µs body_sha256=c09ccb0fd7811ddc578e42393641f83a8c97b45e0ccae50854f3a070eddd5821
+request item=38 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000038 status=ok send_slip=3.095984ms body_sha256=906b85730ebedd5064b3054f24562b36e160f6a2c8563bd84f0120f351250a56
+request item=39 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000039 status=ok send_slip=2.577083ms body_sha256=2364013d84202fd7bb20981ec3940e2081f943368e554dace0b7069973b2e0c0
+request item=40 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000040 status=ok send_slip=1.234544ms body_sha256=376711cd9c661b4f7fda07223ba3b56a56901d6db6d98c756d114b70f9b07006
+request item=41 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000041 status=ok send_slip=674.436µs body_sha256=e443aa7a25e2acc1f8787b73edbf5cd2959b581c5dc2e1b74f42044595acc6e5
+request item=42 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000042 status=ok send_slip=1.533151ms body_sha256=afe6c99f108d4d776b0f2391e5e977933d5af82ca6895c0c8ea55dcbdb77de9a
+request item=43 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000043 status=ok send_slip=678.132µs body_sha256=c1953fb5b9ce87baca35f0303fe38a111e79211e70aef253b81c51a26dcf5ea8
+request item=44 id=exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2-r2-000044 status=ok send_slip=1.161332ms body_sha256=e1e3f9fceafc0b02289257526b4f9046e07f40460376dd6f746cb5a52fa33833
+summary sent=45 ok=45 errors=0 shed=0 canceled=0 cancel_planned=0 slow_planned=0 max_dispatch_slip=3.620425ms max_send_slip=6.51257ms usage_missing=0 wall=1m31.236s

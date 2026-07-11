@@ -1,0 +1,45 @@
+{
+  "run_id": "exp-EXP-ib-t010-e1-gateway-overhead-direct-r1",
+  "target_topology": "engine-direct",
+  "workload_ref": {
+    "name": "ib-t010-e1-llamacpp",
+    "version": "1.0.0",
+    "seed": 10010102
+  },
+  "engine": {
+    "name": "llama.cpp",
+    "version": "8f114a9",
+    "commit": "8f114a9b573b69035299f9b924047f53c1e22c7e",
+    "flags": {
+      "ctx_size": 4096,
+      "model_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+      "np": 1,
+      "threads": 4
+    }
+  },
+  "model": {
+    "checkpoint": "qwen2.5-1.5b-instruct-q4_k_m",
+    "revision": "local-gguf-file (no upstream registry revision); sha256=6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "tokenizer": "qwen2.5 BPE tokenizer (bundled in GGUF)"
+  },
+  "hardware": {
+    "gpu_model": null,
+    "gpu_count": 0,
+    "vram_gb": null,
+    "driver_version": null,
+    "cuda_version": null,
+    "instance_type": "local-dev-container (linux/amd64, 4 vCPU, CPU-only)"
+  },
+  "client": {
+    "location": "same-host (loopback)",
+    "rtt_ms": 1.298325
+  },
+  "warm_up": {
+    "policy": "discard-requests",
+    "value": 8
+  },
+  "repetitions": 3,
+  "hypothesis": "Routing chat-short-shaped traffic through infergate (via-gateway/gateway-mock) instead of directly at the engine (engine-direct) adds non-queue latency overhead whose pooled p95 is \u003c10ms and pooled p99 is \u003c20ms (the program SLO target, docs/tasks.md IB-T010 hypothesis (a)), falsifiable against LiteLLM's self-reported ~8ms p95 gateway overhead as a source-reported baseline (as of 2026-07 -- re-verify at use time). The expected direction is 'gateway adds a small, bounded amount of latency, not zero and not an order of magnitude more'; the run is designed at low offered rate relative to estimated capacity so queueing delay is negligible and the measured delta approximates non-queue overhead.",
+  "started_at": "2026-07-11T15:10:40Z",
+  "contracts_bundle_version": "v0.2.0"
+}

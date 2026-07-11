@@ -1,0 +1,45 @@
+{
+  "workload": "ib-t010-e1-llamacpp",
+  "workload_version": "1.0.0",
+  "seed": 10010102,
+  "declared_variable": "target_topology",
+  "diff_fields": [
+    "gateway",
+    "target_topology"
+  ],
+  "arms": [
+    {
+      "id": "direct",
+      "target": "http://127.0.0.1:19199",
+      "facts_path": "docs/evidence/ib-t010/e1-llamacpp-facts-direct.json",
+      "repetitions": 3,
+      "sent": 135,
+      "ok": 135,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0,
+      "run_dirs": [
+        "docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-1",
+        "docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-2",
+        "docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-3"
+      ]
+    },
+    {
+      "id": "gateway",
+      "target": "http://127.0.0.1:19198",
+      "facts_path": "docs/evidence/ib-t010/e1-llamacpp-facts-gateway.json",
+      "repetitions": 3,
+      "sent": 135,
+      "ok": 135,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0,
+      "run_dirs": [
+        "docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-1",
+        "docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-2",
+        "docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-3"
+      ]
+    }
+  ],
+  "created_at": "2026-07-11T15:10:40Z"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "ib-t010-e1-mock",
+  "version": "1.0.0",
+  "seed": 10010101,
+  "description": "IB-T010 E1 mock sub-experiment: chat-short-shaped, low offered rate (well below estimated capacity) so queueing delay stays negligible and the direct-vs-gateway TTFT delta approximates non-queue overhead. Mock TTFT configured to 300ms (per IG-T011/D3 lesson recorded in docs/implementation-notes.md: tiny mock latencies produce +-TTFT noise that swamps a millisecond-scale overhead signal).",
+  "arrival_process": {"type": "open-loop-poisson", "rate_rps": 6},
+  "input_length_distribution": {"type": "uniform", "min": 32, "max": 96},
+  "output_length_distribution": {"type": "uniform", "min": 16, "max": 40},
+  "prefix_sharing": {"ratio": 0},
+  "cancellation": {"rate": 0},
+  "slow_client": {"fraction": 0},
+  "stop": {"request_count": 260}
+}

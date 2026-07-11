@@ -1,0 +1,19 @@
+result_id: ib-t010-e2-overload-5x-off
+measured window: 15.107s, 2550 events (3 repetition(s)); warm-up: 150 excluded
+throughput: 168.7980 ok-req/s, 1310.87 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=2550 p50=0.082184 p90=0.082983 p95=0.083227 p99=0.084078 p999=0.093768 max=0.101328 mean=0.082266  p99 95% CI [0.083807, 0.084915]
+  e2e_duration_seconds: n=2550 p50=0.148160 p90=0.220303 p95=0.240708 p99=0.270620 p999=0.277993 max=0.283527 mean=0.153877  p99 95% CI [0.262862, 0.272235]
+  itl_seconds: n=17253 p50=0.010535 p90=0.011080 p95=0.011173 p99=0.011390 p999=0.016251 max=0.031227 mean=0.010568  p99 95% CI [0.011366, 0.011415]
+  max_stall_seconds: n=2373 p50=0.011073 p90=0.011331 p95=0.011446 p99=0.012221 p999=0.028600 max=0.031227 mean=0.011113  p99 95% CI [0.012018, 0.019345]
+goodput@SLO[ib-t010-e2-baseline@1.0.0]: ratio=1.0000 (2550/2550), 168.7980 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.1s, 0/2373 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - admission-off control arm at 5x offered rate: zero shed by construction (all caps ~1e6); the deterministic mock backend serves unbounded concurrency without slowdown, so this arm CANNOT exhibit the queueing collapse a real engine would — the honest scope of this control is 'admission off produces no backpressure signal', not 'admission off is fine' (see hypothesis file provenance_notes)
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t010/results/ib-t010-e2-overload-5x-off.benchmark-result.json

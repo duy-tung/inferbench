@@ -1,0 +1,2 @@
+sweep: capacity_estimate=37.8072 rps (probe achieved 37.8072/200.0000 offered)
+inferbench: sweep: fewer than 6 points requested: got 1, want >= 6

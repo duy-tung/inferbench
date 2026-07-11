@@ -1,0 +1,74 @@
+# IB-T010 kit validation (2026-07-11T15:33:39Z)
+# bundle: /home/user/serving-contracts (484b449)
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-1/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-2/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-3/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-1/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-2/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-3/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-mock-compare/direct/rep-1/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-mock-compare/direct/rep-2/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-mock-compare/direct/rep-3/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-mock-compare/gateway/rep-1/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-mock-compare/gateway/rep-2/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e1-mock-compare/gateway/rep-3/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-baseline/rep-1/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-baseline/rep-2/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-baseline/rep-3/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-overload-compare/off/rep-1/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-overload-compare/off/rep-2/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-overload-compare/off/rep-3/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-overload-compare/sane/rep-1/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-overload-compare/sane/rep-2/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-overload-compare/sane/rep-3/manifest.json  [benchmark-run]
+PASS  docs/evidence/ib-t010/e2-probe/probe/manifest.json  [benchmark-run]
+
+validate: 22/22 file(s) valid against 'benchmark-run'
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-1/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-2/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/direct/rep-3/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-1/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-2/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-llamacpp-compare/gateway/rep-3/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-mock-compare/direct/rep-1/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-mock-compare/direct/rep-2/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-mock-compare/direct/rep-3/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-mock-compare/gateway/rep-1/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-mock-compare/gateway/rep-2/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e1-mock-compare/gateway/rep-3/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-baseline/rep-1/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-baseline/rep-2/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-baseline/rep-3/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-overload-compare/off/rep-1/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-overload-compare/off/rep-2/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-overload-compare/off/rep-3/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-overload-compare/sane/rep-1/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-overload-compare/sane/rep-2/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-overload-compare/sane/rep-3/events.jsonl  [raw-event]
+PASS  docs/evidence/ib-t010/e2-probe/probe/events.jsonl  [raw-event]
+
+validate: 22/22 file(s) valid against 'raw-event'
+PASS  docs/evidence/ib-t010/e1-llamacpp-workload.json  [workload]
+PASS  docs/evidence/ib-t010/e1-mock-workload.json  [workload]
+PASS  docs/evidence/ib-t010/e2-baseline-workload.json  [workload]
+PASS  docs/evidence/ib-t010/e2-overload-workload.json  [workload]
+PASS  docs/evidence/ib-t010/e2-probe-base-workload.json  [workload]
+PASS  docs/evidence/ib-t010/e2-probe/probe-workload.json  [workload]
+
+validate: 6/6 file(s) valid against 'workload'
+PASS  docs/evidence/ib-t010/e1-llamacpp.slo.json  [slo]
+PASS  docs/evidence/ib-t010/e1-mock.slo.json  [slo]
+PASS  docs/evidence/ib-t010/e2.slo.json  [slo]
+
+validate: 3/3 file(s) valid against 'slo'
+PASS  docs/evidence/ib-t010/results/ib-t010-e1-llamacpp-direct.benchmark-result.json  [benchmark-result]
+PASS  docs/evidence/ib-t010/results/ib-t010-e1-llamacpp-gateway.benchmark-result.json  [benchmark-result]
+PASS  docs/evidence/ib-t010/results/ib-t010-e1-mock-direct.benchmark-result.json  [benchmark-result]
+PASS  docs/evidence/ib-t010/results/ib-t010-e1-mock-gateway.benchmark-result.json  [benchmark-result]
+PASS  docs/evidence/ib-t010/results/ib-t010-e2-baseline-1x-sane.benchmark-result.json  [benchmark-result]
+PASS  docs/evidence/ib-t010/results/ib-t010-e2-overload-5x-off.benchmark-result.json  [benchmark-result]
+PASS  docs/evidence/ib-t010/results/ib-t010-e2-overload-5x-sane.benchmark-result.json  [benchmark-result]
+
+validate: 7/7 file(s) valid against 'benchmark-result'
+
+counts: 22 manifests, 22 raw-event files, 6 workloads, 3 slos, 7 results

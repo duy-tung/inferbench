@@ -1,0 +1,18 @@
+result_id: ib-t010-e1-llamacpp-direct
+measured window: 214.506s, 111 events (3 repetition(s)); warm-up: 24 excluded
+throughput: 0.5175 ok-req/s, 9.51 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=111 p50=0.520777 p90=2.344464 p95=2.846075 p99=3.997958 max=4.500950 mean=0.931784  p99 95% CI [2.837934, 4.500950]
+  e2e_duration_seconds: n=111 p50=1.426681 p90=3.329739 p95=3.869359 p99=5.112132 max=5.649663 mean=1.886196  p99 95% CI [3.878540, 5.649663]
+  itl_seconds: n=1929 p50=0.052412 p90=0.058441 p95=0.061559 p99=0.112021 p999=0.357094 max=0.516764 mean=0.054885  p99 95% CI [0.094891, 0.127917]
+  max_stall_seconds: n=111 p50=0.060320 p90=0.106168 p95=0.164023 p99=0.438979 max=0.516764 mean=0.080714  p99 95% CI [0.166837, 0.516764]
+goodput@SLO[ib-t010-e1-llamacpp-baseline@1.0.0]: ratio=1.0000 (111/111), 0.5175 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0000 (threshold 0.8s, 0/111 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t010/results/ib-t010-e1-llamacpp-direct.benchmark-result.json

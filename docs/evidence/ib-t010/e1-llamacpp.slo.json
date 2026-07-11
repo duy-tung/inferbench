@@ -1,0 +1,51 @@
+{
+  "slo_id": "ib-t010-e1-llamacpp-baseline",
+  "version": "1.0.0",
+  "scope": "model-serving",
+  "description": "Measured-basis SLO derived from the maxima of ib-t010-e1-llamacpp@1.0.0 (seed 10010102), via-gateway and engine-direct arms; exists so goodput@SLO can be reported with shed+stall adjacent. Not a production target.",
+  "applies_to": {
+    "workload_ref": "ib-t010-e1-llamacpp@1.0.0 (seed 10010102), via-gateway and engine-direct arms"
+  },
+  "objectives": [
+    {
+      "signal": "ttft_seconds",
+      "statistic": "max",
+      "comparator": "<=",
+      "threshold": 6.1,
+      "unit": "seconds",
+      "provenance": {
+        "basis": "measured",
+        "as_of": "2026-07-11",
+        "source": "inferbench e1-llamacpp-compare/direct, e1-llamacpp-compare/gateway raw events (270 events scanned, unfiltered including warm-up)",
+        "notes": "threshold = measured max 4.501s x 1.35 headroom, rounded up to 0.05 grid"
+      }
+    },
+    {
+      "signal": "e2e_duration_seconds",
+      "statistic": "max",
+      "comparator": "<=",
+      "threshold": 7.65,
+      "unit": "seconds",
+      "provenance": {
+        "basis": "measured",
+        "as_of": "2026-07-11",
+        "source": "inferbench e1-llamacpp-compare/direct, e1-llamacpp-compare/gateway raw events (270 events scanned, unfiltered including warm-up)",
+        "notes": "threshold = measured max 5.650s x 1.35 headroom, rounded up to 0.05 grid"
+      }
+    },
+    {
+      "signal": "max_stall_seconds",
+      "statistic": "max",
+      "comparator": "<=",
+      "threshold": 0.8,
+      "unit": "seconds",
+      "provenance": {
+        "basis": "measured",
+        "as_of": "2026-07-11",
+        "source": "inferbench e1-llamacpp-compare/direct, e1-llamacpp-compare/gateway raw events (270 events scanned, unfiltered including warm-up)",
+        "notes": "threshold = measured max 0.588s x 1.35 headroom, rounded up to 0.05 grid"
+      }
+    }
+  ],
+  "notes": "Per-request evaluation: statistic 'max' objectives read as per-request bounds. Derived from the named runs' own events (measured basis, slo.schema.json rule); re-derive when the target or topology changes."
+}

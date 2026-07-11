@@ -333,6 +333,33 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
   met.
 - **Evidence:** benchmark report #1. **Integration impact:** gate G5; portfolio claim #1.
 - **Stop condition:** report published.
+- **Status:** implemented 2026-07-11 — **benchmark report #1 published:
+  `docs/evidence/ib-t010/benchmark-report-1.md`**, rolled up from 7 kit-valid
+  benchmark-result files (60/60 artifacts PASS at pin v0.2.0 = `484b449`), every
+  load-generating invocation gated through the IB-T009 hypothesis framework
+  (`hypotheses/EXP-ib-t010-e1-gateway-overhead.json`,
+  `hypotheses/EXP-ib-t010-e2-admission-value.json`). Pins: infergate `6827d8c` (IG-T011
+  HEAD, admission control + fairness; built read-only via `git archive`), llama.cpp
+  `8f114a9` + qwen2.5-1.5b-instruct-q4_k_m (sha256 recorded). **Verdicts stated as
+  measured:** (a) **CONFIRMED on the mock arm** — paired per-request non-queue overhead
+  p50 +1.04 ms / p95 +2.21 ms / p99 +2.81 ms (n=630 pairs; pooled Δp95 +1.15 ms), well
+  under the p95<10 ms / p99<20 ms program SLO and the magnitude of LiteLLM's self-reported
+  8 ms p95 (source-reported, re-verified 2026-07-11; no cross-tool superiority claim —
+  different basis/hardware); gateway-side queue-wait p95 <1 ms. llama.cpp arm
+  **INCONCLUSIVE at the ms scale** (engine variance 2–3 orders of magnitude above the
+  bound; order/warming effect recorded) — consistent with no detectable added overhead.
+  (b) **REFUTED on the strict G5 ≤20% criterion**: accepted-request TTFT p95 degradation
+  at ~5× estimated capacity = **+25.16%** (bootstrap 95% CI [+19.4%, +31.1%],
+  P(≤20%)=3.2%) with the declared shallow-queue sane config — NOT tuned to pass; root
+  cause (perpetually-full queue transit) analyzed in the report. Companion G5 criteria
+  **held**: 2067/2067 sheds typed 503 `overloaded` + `Retry-After` (raw events + gateway
+  counters + raw-HTTP spot check), no starvation in the declared single-tenant scope
+  (time-to-shed p99 2 ms, 0 deadline-aged, max accepted TTFT 233 ms ≪ 500 ms deadline);
+  multi-tenant fairness arm deferred (needs DB tenancy — scope recorded honestly).
+  `go test -race` + 90 pytest green; threats-to-validity (single-host co-location, mock
+  can't degrade organically, probe bias, mid-session host reboot) and the E1-mock tail
+  anomaly documented in the report. Deviation (discarded first llama.cpp attempt,
+  gateway histogram lost at teardown) recorded in `implementation-notes.md`.
 
 ## IB-T011 — Experiment set 2 (GPU): vLLM behavior
 

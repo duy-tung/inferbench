@@ -1,0 +1,87 @@
+{
+  "result_id": "ib-t010-e1-mock-gateway",
+  "created_at": "2026-07-11T11:11:34Z",
+  "links": {
+    "run_manifests": [
+      "docs/evidence/ib-t010/e1-mock-compare/gateway/rep-1/manifest.json",
+      "docs/evidence/ib-t010/e1-mock-compare/gateway/rep-2/manifest.json",
+      "docs/evidence/ib-t010/e1-mock-compare/gateway/rep-3/manifest.json"
+    ],
+    "raw_events": [
+      "docs/evidence/ib-t010/e1-mock-compare/gateway/rep-1/events.jsonl",
+      "docs/evidence/ib-t010/e1-mock-compare/gateway/rep-2/events.jsonl",
+      "docs/evidence/ib-t010/e1-mock-compare/gateway/rep-3/events.jsonl"
+    ]
+  },
+  "throughput": {
+    "requests_per_second": 5.7427994673546285,
+    "output_tokens_per_second": 80.78204584078844,
+    "total_requests": 630,
+    "total_output_tokens": 8862
+  },
+  "pooled_percentiles": {
+    "method": "pooled-raw-events",
+    "pooled_event_count": 630,
+    "tables": {
+      "ttft_seconds": {
+        "n": 630,
+        "p50": 0.3029651125,
+        "p90": 0.3036976543,
+        "p95": 0.30393909315,
+        "p99": 0.30446503864999996,
+        "max": 0.330679373,
+        "mean": 0.30310391044444446
+      },
+      "e2e_duration_seconds": {
+        "n": 630,
+        "p50": 0.5038310289382935,
+        "p90": 0.7138011455535889,
+        "p95": 0.743946886062622,
+        "p99": 0.803567922115326,
+        "max": 0.8683891296386719,
+        "mean": 0.5080660195577712
+      },
+      "itl_seconds": {
+        "n": 8232,
+        "p50": 0.0156307965,
+        "p90": 0.016028309,
+        "p95": 0.01612032735,
+        "p99": 0.0162991238,
+        "max": 0.068652875,
+        "mean": 0.015676528074708453,
+        "p999": 0.034022287890000634
+      },
+      "max_stall_seconds": {
+        "n": 603,
+        "p50": 0.016059748,
+        "p90": 0.0163222762,
+        "p95": 0.01711752369999999,
+        "p99": 0.03470549818,
+        "max": 0.068652875,
+        "mean": 0.016578419600331674
+      }
+    }
+  },
+  "goodput": {
+    "slo_ref": {
+      "id": "ib-t010-e1-mock-baseline",
+      "version": "1.0.0"
+    },
+    "requests_per_second_meeting_slo": 5.715452803224369,
+    "ratio": 0.9952380952380953,
+    "shed_rate": 0.0,
+    "stall_rate": 0.004975124378109453,
+    "stall_threshold_seconds": 0.05
+  },
+  "knee_estimate": null,
+  "cost": null,
+  "validity": {
+    "warm_up_handling": "manifest warm-up policy 'discard-requests' (50 requests per repetition, ordered by scheduled_send_ts): 150 events excluded, 630 kept (exp-EXP-ib-t010-e1-gateway-overhead-gateway-r1/rep1: 50 excluded; exp-EXP-ib-t010-e1-gateway-overhead-gateway-r2/rep2: 50 excluded; exp-EXP-ib-t010-e1-gateway-overhead-gateway-r3/rep3: 50 excluded)",
+    "run_count": 3,
+    "threats_to_validity": [
+      "no rate sweep in this run set \u2014 knee_estimate is null; no claim is made about saturation behavior",
+      "no cost profile applies to this run set \u2014 cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)"
+    ],
+    "unexplained_anomalies": []
+  }
+}

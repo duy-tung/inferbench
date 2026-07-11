@@ -823,3 +823,80 @@ only proves the gate exists and fires.
 - **Follow-up:** none planned; revisit only if a cross-repo consumer specifically needs to parse
   hypothesis files as YAML (none currently does — hypothesis files are inferbench-local
   governance artifacts, not a contracts-owned schema).
+
+## IB-T010 — Experiment set 1 (CPU): gateway overhead + admission value (2026-07-11)
+
+Benchmark report #1: `docs/evidence/ib-t010/benchmark-report-1.md` (roll-up), 7 per-point
+generated reports beside it, 7 kit-valid benchmark-result files (60/60 artifacts PASS at
+contracts pin v0.2.0 = `484b449`). Pins: infergate `6827d8c` (built read-only via
+`git archive`), llama.cpp `8f114a9`, model qwen2.5-1.5b-instruct-q4_k_m
+(sha256 `6a1a2eb6…407e`). Hypothesis files authored BEFORE any load
+(`hypotheses/EXP-ib-t010-e1-gateway-overhead.json`, `EXP-ib-t010-e2-admission-value.json`);
+every load-generating invocation went through `inferbench experiment {run,compare}` (IB-T009
+gating) except the E2 capacity probe, which used `sweep` probe-only per ADR-0003.
+
+Measured facts (all 2026-07-11, this host, loopback, 4 vCPU — full context in the report):
+
+- **E1 mock (CONFIRMED):** paired per-request gateway overhead p50 +1.04 ms / p95 +2.21 ms /
+  p99 +2.81 ms (630 pairs, warm-up excluded); pooled Δp95 +1.15 ms; gateway-side
+  `inference_queue_wait_seconds` p95 <1 ms. Program SLO p95<10 ms / p99<20 ms met on both
+  declared bases (paired AND pooled-delta). LiteLLM baseline re-verified 2026-07-11
+  (docs.litellm.ai/docs/benchmarks: "8ms P95 at 1k RPS", 4-instance overhead table
+  2/8/13 ms via its own `x-litellm-overhead-duration-ms` header) — magnitude framing only,
+  no cross-tool claim (different basis + hardware; comparability rule).
+- **E1 llama.cpp (INCONCLUSIVE at ms scale):** real-engine TTFT variance (direct per-rep p95
+  3.70→2.32→1.74 s across reps; sequential arms against one warming server instance)
+  is 2–3 orders of magnitude above the 10 ms bound; paired median −8.5 ms. Honest reading:
+  no detectable added overhead at the engine's own noise scale; the mock arm is the
+  resolving instrument for the ms claim.
+- **E2 (G5) — REFUTED on the strict ≤20% criterion, companions held:** capacity probe
+  37.66 rps (sane admission: budget 6, queue cap 3, deadline 500 ms — declared in the
+  hypothesis before running); accepted-request TTFT p95 0.1612 s at 1× vs 0.2018 s at 5× =
+  **+25.16%** (bootstrap 95% CI [+19.4, +31.1]%, P(≤20%)=3.2%, B=1000 seed 20260710).
+  Not tuned to pass. Root cause: at 5× the shallow queue is perpetually full, so accepted
+  requests carry a full-queue transit (+80.6% at p50; gateway queue-wait p95 134 ms vs
+  <1 ms uncontended). Sheds: 2067/2067 typed `overloaded` 503 + `Retry-After: 1`
+  (raw events + `inference_sheds_total{reason="queue_full"}` + raw-HTTP spot check
+  showing 9 accepted = budget 6 + queue 3 from a 20-burst). No starvation
+  (single-tenant scope): time-to-shed p99 2.0 ms / max 2.4 ms, 0 deadline-aged sheds,
+  max accepted TTFT 233 ms. Admission-off control at 5×: 0 sheds, p95 83 ms — the mock
+  serves unbounded concurrency without slowdown, so the off arm demonstrates absence of a
+  backpressure signal, not that admission is unnecessary (scope stated in the hypothesis
+  file and the report's threats).
+
+Decisions/notes:
+
+- **Elevated analysis gate thresholds, disclosed per point** (E2 baseline 0.15, E2 5×-sane
+  0.95): typed shedding is the treatment under test; shed rate is structurally adjacent to
+  every goodput figure, and latency tables cover accepted requests only. The default 0.05
+  gate stays untouched in code.
+- **Model-serving SLO files are measured-basis** per slo.schema.json's normative rule
+  (`make_slo_from_events.py` derives thresholds from the runs' own maxima). The
+  gateway-overhead p95<10 ms/p99<20 ms target is a gateway-scope program target evaluated
+  directly against the cross-arm deltas, not through a goodput ratio (the raw-event schema
+  has no per-request overhead signal — it is a cross-arm derived quantity).
+- **Paired per-request deltas** (same workload seed ⇒ same item in both arms) are reported
+  beside pooled-percentile deltas in `compute_overhead.py` output; the paired basis is
+  robust to one-arm window artifacts (exactly what the E1-mock direct rep-2 tail cluster
+  produced — pooled Δp99 came out −13.5 ms because of it; anomaly §4.2 of the report).
+- **Multi-tenant starvation arm deferred** (task allowance "optional if cheap"): needs
+  `-auth-mode=db` (PostgreSQL tenancy + key issuance) — not cheap in this session; the
+  no-starvation claim is scoped to intra-tenant behavior and says so everywhere.
+
+### Deviations (IB-T010)
+
+- **First E1-llama.cpp execution discarded wholesale (2026-07-11).** The run completed
+  client-side, but the session was interrupted (host reboot) and the gateway process was
+  torn down before its `/metrics` TTFT/queue-wait histograms were scraped; the task requires
+  reporting BOTH the client-side scheduled-send basis and gateway-side histograms. Rather
+  than pair client data with unmatched gateway data, the re-run replaced both arms in full
+  (no per-run selection; the first attempt was never analyzed). Discarded log retained:
+  `docs/evidence/ib-t010/e1-llamacpp-run.attempt1-discarded.log`. The runner script now
+  scrapes before teardown, and its llama-server health wait was raised 60→180 s
+  (cold-page-cache model load after reboot exceeded 60 s).
+- **`sweep` used probe-only for E2 capacity estimation.** `sweep` refuses <6 points AFTER
+  writing `sweep.json` with the probe block; E2 needs exactly two hand-placed points
+  (1× and 5×), so the script tolerates the typed points-refusal and asserts the probe
+  result exists (`scripts/ib-t010-e2-admission-value.sh`). No generator code changed.
+- **Host reboot mid-task** between the E1-mock and E1-llama.cpp/E2 runs. No compared arms
+  span the reboot; box-quiet checks logged before each measured run.

@@ -1,0 +1,18 @@
+result_id: ib-t010-e1-mock-direct
+measured window: 108.451s, 630 events (3 repetition(s)); warm-up: 150 excluded
+throughput: 5.8091 ok-req/s, 85.84 out-tok/s
+error rate 0.0000 + shed rate 0.0000 vs declared gate threshold 0.05
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=630 p50=0.301967 p90=0.302630 p95=0.302790 p99=0.317944 max=0.364772 mean=0.302395  p99 95% CI [0.303379, 0.337608]
+  e2e_duration_seconds: n=630 p50=0.504074 p90=0.740789 p95=0.758337 p99=0.851899 max=0.917664 mean=0.519010  p99 95% CI [0.827822, 0.879279]
+  itl_seconds: n=8679 p50=0.015667 p90=0.016049 p95=0.016125 p99=0.016256 p999=0.036680 max=0.078120 mean=0.015716  p99 95% CI [0.016241, 0.016266]
+  max_stall_seconds: n=594 p50=0.016084 p90=0.016271 p95=0.016469 p99=0.058327 max=0.078120 mean=0.016912  p99 95% CI [0.032165, 0.068550]
+goodput@SLO[ib-t010-e1-mock-baseline@1.0.0]: ratio=0.9873 (622/630), 5.7353 req/s meeting SLO | shed_rate=0.0000 | stall_rate=0.0135 (threshold 0.05s, 8/594 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t010/results/ib-t010-e1-mock-direct.benchmark-result.json

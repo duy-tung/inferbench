@@ -1,0 +1,13 @@
+{
+  "name": "ib-t010-e1-llamacpp",
+  "version": "1.0.0",
+  "seed": 10010102,
+  "description": "IB-T010 E1 llama.cpp sub-experiment: short prompts/short directed completions, low offered rate (single-slot llama-server, mean inter-arrival >> mean service time) so queueing delay stays negligible and the direct-vs-gateway TTFT delta approximates non-queue overhead against a REAL engine (CPU reality: modest request counts).",
+  "arrival_process": {"type": "open-loop-poisson", "rate_rps": 0.4},
+  "input_length_distribution": {"type": "uniform", "min": 24, "max": 64},
+  "output_length_distribution": {"type": "uniform", "min": 12, "max": 24},
+  "prefix_sharing": {"ratio": 0},
+  "cancellation": {"rate": 0},
+  "slow_client": {"fraction": 0},
+  "stop": {"request_count": 45}
+}

@@ -1,0 +1,88 @@
+{
+  "result_id": "ib-t010-e2-baseline-1x-sane",
+  "created_at": "2026-07-11T15:24:16Z",
+  "links": {
+    "run_manifests": [
+      "docs/evidence/ib-t010/e2-baseline/rep-1/manifest.json",
+      "docs/evidence/ib-t010/e2-baseline/rep-2/manifest.json",
+      "docs/evidence/ib-t010/e2-baseline/rep-3/manifest.json"
+    ],
+    "raw_events": [
+      "docs/evidence/ib-t010/e2-baseline/rep-1/events.jsonl",
+      "docs/evidence/ib-t010/e2-baseline/rep-2/events.jsonl",
+      "docs/evidence/ib-t010/e2-baseline/rep-3/events.jsonl"
+    ]
+  },
+  "throughput": {
+    "requests_per_second": 33.15910399768093,
+    "output_tokens_per_second": 260.35429986807077,
+    "total_requests": 900,
+    "total_output_tokens": 6352
+  },
+  "pooled_percentiles": {
+    "method": "pooled-raw-events",
+    "pooled_event_count": 900,
+    "tables": {
+      "ttft_seconds": {
+        "n": 809,
+        "p50": 0.0836412,
+        "p90": 0.1495969762,
+        "p95": 0.161198562,
+        "p99": 0.19606150055999993,
+        "max": 0.218847991,
+        "mean": 0.10328682601236093
+      },
+      "e2e_duration_seconds": {
+        "n": 809,
+        "p50": 0.16838788986206055,
+        "p90": 0.252894926071167,
+        "p95": 0.2626573085784911,
+        "p99": 0.3121729087829589,
+        "max": 0.3499019145965576,
+        "mean": 0.1768273446704313
+      },
+      "itl_seconds": {
+        "n": 5543,
+        "p50": 0.010680773,
+        "p90": 0.0110161972,
+        "p95": 0.0111047435,
+        "p99": 0.01123065814,
+        "max": 0.063445559,
+        "mean": 0.010716078629622948,
+        "p999": 0.03696347143000016
+      },
+      "max_stall_seconds": {
+        "n": 758,
+        "p50": 0.011019056,
+        "p90": 0.0112123682,
+        "p95": 0.01125929955,
+        "p99": 0.015241359979999584,
+        "max": 0.063445559,
+        "mean": 0.011279104118733509
+      }
+    }
+  },
+  "goodput": {
+    "slo_ref": {
+      "id": "ib-t010-e2-baseline",
+      "version": "1.0.0"
+    },
+    "requests_per_second_meeting_slo": 33.15910399768093,
+    "ratio": 0.8988888888888888,
+    "shed_rate": 0.10111111111111111,
+    "stall_rate": 0.0,
+    "stall_threshold_seconds": 0.1
+  },
+  "knee_estimate": null,
+  "cost": null,
+  "validity": {
+    "warm_up_handling": "manifest warm-up policy 'discard-requests' (50 requests per repetition, ordered by scheduled_send_ts): 150 events excluded, 900 kept (ib-t010-e2-baseline-r1/rep1: 50 excluded; ib-t010-e2-baseline-r2/rep2: 50 excluded; ib-t010-e2-baseline-r3/rep3: 50 excluded)",
+    "run_count": 3,
+    "threats_to_validity": [
+      "capacity-boundary point: offered rate equals the probe-estimated capacity (37.66 rps), so a ~10% typed shed rate is the expected boundary behavior, not a failure; the declared gate threshold is raised to 0.15 (from the 0.05 default) for exactly this point, disclosed here",
+      "no rate sweep in this run set \u2014 knee_estimate is null; no claim is made about saturation behavior",
+      "no cost profile applies to this run set \u2014 cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)"
+    ],
+    "unexplained_anomalies": []
+  }
+}

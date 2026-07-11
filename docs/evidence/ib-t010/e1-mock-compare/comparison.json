@@ -1,0 +1,45 @@
+{
+  "workload": "ib-t010-e1-mock",
+  "workload_version": "1.0.0",
+  "seed": 10010101,
+  "declared_variable": "target_topology",
+  "diff_fields": [
+    "gateway",
+    "target_topology"
+  ],
+  "arms": [
+    {
+      "id": "direct",
+      "target": "http://127.0.0.1:19281",
+      "facts_path": "/home/user/inferbench/docs/evidence/ib-t010/e1-mock-facts-direct.json",
+      "repetitions": 3,
+      "sent": 780,
+      "ok": 780,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0,
+      "run_dirs": [
+        "/home/user/inferbench/docs/evidence/ib-t010/e1-mock-compare/direct/rep-1",
+        "/home/user/inferbench/docs/evidence/ib-t010/e1-mock-compare/direct/rep-2",
+        "/home/user/inferbench/docs/evidence/ib-t010/e1-mock-compare/direct/rep-3"
+      ]
+    },
+    {
+      "id": "gateway",
+      "target": "http://127.0.0.1:19280",
+      "facts_path": "/home/user/inferbench/docs/evidence/ib-t010/e1-mock-facts-gateway.json",
+      "repetitions": 3,
+      "sent": 780,
+      "ok": 780,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0,
+      "run_dirs": [
+        "/home/user/inferbench/docs/evidence/ib-t010/e1-mock-compare/gateway/rep-1",
+        "/home/user/inferbench/docs/evidence/ib-t010/e1-mock-compare/gateway/rep-2",
+        "/home/user/inferbench/docs/evidence/ib-t010/e1-mock-compare/gateway/rep-3"
+      ]
+    }
+  ],
+  "created_at": "2026-07-11T11:05:32Z"
+}

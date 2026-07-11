@@ -1,0 +1,6 @@
+run ib-t010-e2-baseline-r1: sent=350 ok=315 errors=0 shed=35 canceled=0 max_dispatch_slip=1.187197ms max_send_slip=2.163468ms wall=9.413s
+experiment ib-t010-e2-baseline-r1 (hypothesis EXP-ib-t010-e2-admission-value) OK: artifacts docs/evidence/ib-t010/e2-baseline/rep-1
+run ib-t010-e2-baseline-r2: sent=350 ok=316 errors=0 shed=34 canceled=0 max_dispatch_slip=32.238717ms max_send_slip=32.404217ms wall=9.415s
+experiment ib-t010-e2-baseline-r2 (hypothesis EXP-ib-t010-e2-admission-value) OK: artifacts docs/evidence/ib-t010/e2-baseline/rep-2
+run ib-t010-e2-baseline-r3: sent=350 ok=316 errors=0 shed=34 canceled=0 max_dispatch_slip=1.239896ms max_send_slip=1.690551ms wall=9.411s
+experiment ib-t010-e2-baseline-r3 (hypothesis EXP-ib-t010-e2-admission-value) OK: artifacts docs/evidence/ib-t010/e2-baseline/rep-3

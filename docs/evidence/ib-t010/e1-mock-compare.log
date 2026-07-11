@@ -1,0 +1,4 @@
+experiment compare (hypothesis EXP-ib-t010-e1-gateway-overhead): variable=target_topology diff_fields=[gateway target_topology]
+  arm direct: target=http://127.0.0.1:19281 reps=3 sent=780 ok=780 errors=0 shed=0 canceled=0
+  arm gateway: target=http://127.0.0.1:19280 reps=3 sent=780 ok=780 errors=0 shed=0 canceled=0
+comparison manifest: /home/user/inferbench/docs/evidence/ib-t010/e1-mock-compare/comparison.json

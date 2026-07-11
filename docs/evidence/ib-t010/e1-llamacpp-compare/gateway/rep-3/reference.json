@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t010-e1-llamacpp",
+  "workload_version": "1.0.0",
+  "seed": 10010102,
+  "item_count": 45,
+  "schedule_fingerprint": "3ad852654079e47716177b08ceed7db27d0ab5ef01f4d43b386697a38f39ffa7"
+}

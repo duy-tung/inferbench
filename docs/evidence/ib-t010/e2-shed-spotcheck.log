@@ -1,0 +1,32 @@
+burst of 20 concurrent requests against admission-sane-v1 (budget=6, tenant-queue-cap=20); expect some 200s and some 503s with Retry-After
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 503 Service Unavailable
+Retry-After: 1
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+HTTP/1.1 200 OK

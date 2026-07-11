@@ -1,0 +1,36 @@
+{
+  "slo_id": "ib-t010-e1-mock-baseline",
+  "version": "1.0.0",
+  "scope": "model-serving",
+  "description": "IB-T010 E1 mock sub-experiment SLO: derived from the measured maxima of the direct/gateway comparison's own raw events (loopback, mock TTFT=300ms/ITL=15ms). Exists so goodput@SLO can be reported alongside the direct-vs-gateway TTFT comparison; not a production target.",
+  "applies_to": {"workload_ref": "ib-t010-e1-mock@1.0.0 (seed 10010101), gateway-mock and engine-direct arms"},
+  "objectives": [
+    {
+      "signal": "ttft_seconds",
+      "statistic": "max",
+      "comparator": "<=",
+      "threshold": 0.5,
+      "unit": "seconds",
+      "provenance": {
+        "basis": "measured",
+        "as_of": "2026-07-11",
+        "source": "inferbench docs/evidence/ib-t010/e1-mock-compare raw events (largest observed client TTFT 0.365s, direct arm, unfiltered including warm-up)",
+        "notes": "threshold = measured suite maximum 0.365s rounded up to 0.5s"
+      }
+    },
+    {
+      "signal": "max_stall_seconds",
+      "statistic": "max",
+      "comparator": "<=",
+      "threshold": 0.05,
+      "unit": "seconds",
+      "provenance": {
+        "basis": "measured",
+        "as_of": "2026-07-11",
+        "source": "inferbench docs/evidence/ib-t010/e1-mock-compare raw events (configured mock ITL=15ms; observed per-chunk stalls ~15.3-15.6ms)",
+        "notes": "threshold = configured ITL (~0.0155s observed) rounded up to 0.05s headroom"
+      }
+    }
+  ],
+  "notes": "Per-request evaluation: statistic 'max' objectives read as per-request bounds. This SLO is intentionally loose (it exists to exercise goodput@SLO structurally); the actual IB-T010 hypothesis (a) claim is the direct-vs-gateway TTFT DELTA, evaluated directly from the two arms' pooled percentile tables against the program's gateway_overhead_non_queue_seconds target (p95<10ms, p99<20ms), not through this goodput ratio."
+}

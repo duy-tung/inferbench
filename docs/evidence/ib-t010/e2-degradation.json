@@ -1,0 +1,19 @@
+{
+  "baseline_p95_s": 0.161198562,
+  "baseline_p95_ci95": [
+    0.15534932832999998,
+    0.16766832658999997
+  ],
+  "sane5x_p95_s": 0.20176389279999998,
+  "sane5x_p95_ci95": [
+    0.1953272534,
+    0.20607687759999999
+  ],
+  "degradation_pct": 25.164821755668008,
+  "degradation_ci95_pct": [
+    19.377217133072538,
+    31.08817151800629
+  ],
+  "p_degradation_le_20pct": 0.032,
+  "method": "bootstrap (B=1000, seed 20260710, numpy default_rng) over pooled post-warm-up accepted-request TTFT samples; ratio CI from paired resample draws"
+}

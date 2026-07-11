@@ -1,0 +1,73 @@
+{
+  "signal": "ttft_seconds",
+  "warmup_requests_excluded_per_rep": 50,
+  "pooling": "raw per-request samples pooled across repetitions (never averaged percentiles); percentiles = numpy.quantile (Hyndman-Fan 7), same method as the analysis package",
+  "direct": {
+    "pooled": {
+      "n": 630,
+      "p50": 0.301967435,
+      "p90": 0.3026300282,
+      "p95": 0.30279019949999997,
+      "p99": 0.31794422169000014,
+      "max": 0.364771636,
+      "mean": 0.30239498957936506
+    },
+    "per_rep_p95": {
+      "1": 0.30284394025,
+      "2": 0.3030935919,
+      "3": 0.3026561163
+    },
+    "per_rep_p99": {
+      "1": 0.30558911399,
+      "2": 0.33925522498,
+      "3": 0.30282384589
+    }
+  },
+  "gateway": {
+    "pooled": {
+      "n": 630,
+      "p50": 0.3029651125,
+      "p90": 0.3036976543,
+      "p95": 0.30393909315,
+      "p99": 0.30446503864999996,
+      "max": 0.330679373,
+      "mean": 0.30310391044444446
+    },
+    "per_rep_p95": {
+      "1": 0.3037578383,
+      "2": 0.3039579685,
+      "3": 0.3040045164
+    },
+    "per_rep_p99": {
+      "1": 0.30432174564000003,
+      "2": 0.30445946089,
+      "3": 0.30462281486
+    }
+  },
+  "pooled_percentile_deltas_b_minus_a": {
+    "p50": 0.000997677500000016,
+    "p90": 0.0010676260999999965,
+    "p95": 0.001148893650000038,
+    "p99": -0.013479183040000176,
+    "mean": 0.0007089208650793988
+  },
+  "pooled_percentile_ratios_b_over_a": {
+    "p50": 1.003303924146655,
+    "p95": 1.0037943554708746,
+    "p99": 0.9576051957530383
+  },
+  "paired_per_request_delta_b_minus_a": {
+    "n_pairs": 630,
+    "note": "same workload version+seed in both arms => workload item i is the same prompt/length/schedule offset in both; delta = B.ttft - A.ttft per (repetition, item). Negative deltas mean the item was FASTER via B than via A on that repetition (run-to-run noise).",
+    "percentiles": {
+      "n": 630,
+      "p50": 0.0010386145000000346,
+      "p90": 0.00196468880000002,
+      "p95": 0.0022075175000000223,
+      "p99": 0.0028134545400000125,
+      "max": 0.028805572,
+      "mean": 0.000708920865079366
+    },
+    "negative_fraction": 0.10317460317460317
+  }
+}

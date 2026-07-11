@@ -1,0 +1,32 @@
+{
+  "name": "ib-t010-e2-overload",
+  "version": "1.0.0",
+  "seed": 10010201,
+  "description": "IB-T010 E2 ~5x estimated-capacity overload point, admission-sane-v1 vs admission-off-v1 (single declared variable gateway.config_version).",
+  "arrival_process": {
+    "type": "open-loop-poisson",
+    "rate_rps": 189.0362
+  },
+  "input_length_distribution": {
+    "type": "uniform",
+    "min": 24,
+    "max": 64
+  },
+  "output_length_distribution": {
+    "type": "uniform",
+    "min": 10,
+    "max": 20
+  },
+  "prefix_sharing": {
+    "ratio": 0
+  },
+  "cancellation": {
+    "rate": 0
+  },
+  "slow_client": {
+    "fraction": 0
+  },
+  "stop": {
+    "request_count": 900
+  }
+}

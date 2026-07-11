@@ -1,0 +1,19 @@
+result_id: ib-t010-e2-overload-5x-sane
+measured window: 15.109s, 2550 events (3 repetition(s)); warm-up: 150 excluded
+throughput: 37.9254 ok-req/s, 281.96 out-tok/s
+error rate 0.0000 + shed rate 0.7753 vs declared gate threshold 0.95
+pooled latency percentiles (method: pooled-raw-events):
+  ttft_seconds: n=573 p50=0.151038 p90=0.189679 p95=0.201764 p99=0.219338 max=0.233133 mean=0.150574  p99 95% CI [0.211665, 0.225546]
+  e2e_duration_seconds: n=573 p50=0.218934 p90=0.293831 p95=0.309173 p99=0.355634 max=0.388761 mean=0.219295  p99 95% CI [0.333183, 0.362036]
+  itl_seconds: n=3687 p50=0.010674 p90=0.011021 p95=0.011119 p99=0.011288 p999=0.011505 max=0.014115 mean=0.010662  p99 95% CI [0.011263, 0.011327]
+  max_stall_seconds: n=526 p50=0.011008 p90=0.011255 p95=0.011326 p99=0.011470 max=0.014115 mean=0.010994  p99 95% CI [0.011418, 0.011604]
+goodput@SLO[ib-t010-e2-baseline@1.0.0]: ratio=0.2247 (573/2550), 37.9254 req/s meeting SLO | shed_rate=0.7753 | stall_rate=0.0000 (threshold 0.1s, 0/526 streaming)
+cost: null — no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+knee_estimate: null (no sweep)
+threats_to_validity:
+  - deliberate 5x-capacity overload point: the ~77% typed shed rate IS the treatment under test (admission control shedding excess demand with 503+Retry-After), not a failure mode being hidden; the declared gate threshold is raised to 0.95 for exactly this point, disclosed here, and the latency table below covers ACCEPTED requests only (shed requests never produce a first byte)
+  - no rate sweep in this run set — knee_estimate is null; no claim is made about saturation behavior
+  - no cost profile applies to this run set — cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)
+unexplained_anomalies: [] (we looked and found none)
+
+wrote schema-valid benchmark-result: docs/evidence/ib-t010/results/ib-t010-e2-overload-5x-sane.benchmark-result.json

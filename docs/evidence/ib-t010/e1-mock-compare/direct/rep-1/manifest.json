@@ -1,0 +1,45 @@
+{
+  "run_id": "exp-EXP-ib-t010-e1-gateway-overhead-direct-r1",
+  "target_topology": "engine-direct",
+  "workload_ref": {
+    "name": "ib-t010-e1-mock",
+    "version": "1.0.0",
+    "seed": 10010101
+  },
+  "engine": {
+    "name": "mock",
+    "version": "dev",
+    "commit": "6827d8c3d177464c17fae3b4dc6c2c475323333b",
+    "flags": {
+      "error_rate": 0,
+      "itl_ms": 15,
+      "seed": 42,
+      "ttft_ms": 300
+    }
+  },
+  "model": {
+    "checkpoint": "mock-8b",
+    "revision": "mockengine@6827d8c",
+    "tokenizer": "mockengine-estimator"
+  },
+  "hardware": {
+    "gpu_model": null,
+    "gpu_count": 0,
+    "vram_gb": null,
+    "driver_version": null,
+    "cuda_version": null,
+    "instance_type": "local-dev-container (linux/amd64, 4 vCPU, CPU-only)"
+  },
+  "client": {
+    "location": "same-host (loopback)",
+    "rtt_ms": 1.172397
+  },
+  "warm_up": {
+    "policy": "discard-requests",
+    "value": 50
+  },
+  "repetitions": 3,
+  "hypothesis": "Routing chat-short-shaped traffic through infergate (via-gateway/gateway-mock) instead of directly at the engine (engine-direct) adds non-queue latency overhead whose pooled p95 is \u003c10ms and pooled p99 is \u003c20ms (the program SLO target, docs/tasks.md IB-T010 hypothesis (a)), falsifiable against LiteLLM's self-reported ~8ms p95 gateway overhead as a source-reported baseline (as of 2026-07 -- re-verify at use time). The expected direction is 'gateway adds a small, bounded amount of latency, not zero and not an order of magnitude more'; the run is designed at low offered rate relative to estimated capacity so queueing delay is negligible and the measured delta approximates non-queue overhead.",
+  "started_at": "2026-07-11T11:05:32Z",
+  "contracts_bundle_version": "v0.2.0"
+}

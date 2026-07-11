@@ -1,0 +1,44 @@
+{
+  "workload": "ib-t010-e2-overload",
+  "workload_version": "1.0.0",
+  "seed": 10010201,
+  "declared_variable": "gateway.config_version",
+  "diff_fields": [
+    "gateway.config_version"
+  ],
+  "arms": [
+    {
+      "id": "sane",
+      "target": "http://127.0.0.1:19292",
+      "facts_path": "docs/evidence/ib-t010/e2-facts-sane.json",
+      "repetitions": 3,
+      "sent": 2700,
+      "ok": 633,
+      "errors": 0,
+      "shed": 2067,
+      "canceled": 0,
+      "run_dirs": [
+        "docs/evidence/ib-t010/e2-overload-compare/sane/rep-1",
+        "docs/evidence/ib-t010/e2-overload-compare/sane/rep-2",
+        "docs/evidence/ib-t010/e2-overload-compare/sane/rep-3"
+      ]
+    },
+    {
+      "id": "off",
+      "target": "http://127.0.0.1:19293",
+      "facts_path": "docs/evidence/ib-t010/e2-facts-off.json",
+      "repetitions": 3,
+      "sent": 2700,
+      "ok": 2700,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0,
+      "run_dirs": [
+        "docs/evidence/ib-t010/e2-overload-compare/off/rep-1",
+        "docs/evidence/ib-t010/e2-overload-compare/off/rep-2",
+        "docs/evidence/ib-t010/e2-overload-compare/off/rep-3"
+      ]
+    }
+  ],
+  "created_at": "2026-07-11T15:22:45Z"
+}

@@ -1,0 +1,50 @@
+{
+  "run_id": "ib-t010-e2-baseline-r1",
+  "target_topology": "gateway-mock",
+  "workload_ref": {
+    "name": "ib-t010-e2-baseline",
+    "version": "1.0.0",
+    "seed": 10010202
+  },
+  "engine": {
+    "name": "mock",
+    "version": "dev",
+    "commit": "6827d8c3d177464c17fae3b4dc6c2c475323333b",
+    "flags": {
+      "error_rate": 0,
+      "itl_ms": 10,
+      "seed": 43,
+      "ttft_ms": 80
+    }
+  },
+  "model": {
+    "checkpoint": "mock-8b",
+    "revision": "mockengine@6827d8c",
+    "tokenizer": "mockengine-estimator"
+  },
+  "hardware": {
+    "gpu_model": null,
+    "gpu_count": 0,
+    "vram_gb": null,
+    "driver_version": null,
+    "cuda_version": null,
+    "instance_type": "local-dev-container (linux/amd64, 4 vCPU, CPU-only)"
+  },
+  "gateway": {
+    "version": "dev@6827d8c",
+    "config_version": "admission-sane-v1"
+  },
+  "client": {
+    "location": "same-host (loopback)",
+    "rtt_ms": 0.843442
+  },
+  "warm_up": {
+    "policy": "discard-requests",
+    "value": 50
+  },
+  "repetitions": 3,
+  "hypothesis": "At an offered rate of approximately 5x the estimated admission-bounded capacity of the gateway+mock pair, configuring infergate's admission control sanely (bounded per-tenant queue, bounded global in-flight budget, bounded global queue, a short queue deadline) keeps accepted-request TTFT p95 degradation to \u003c=20% versus the capacity-boundary (~1x) baseline measured under the SAME sane admission configuration, while excess requests are shed with typed HTTP responses (503 overloaded + Retry-After, docs/tasks.md IG-T010) rather than being queued indefinitely or crashing the process. Configuring admission effectively off (huge budget/queue caps) at the same 5x offered rate is the control: it is expected to shed close to nothing (no backpressure signal at all) -- the comparison isolates admission control's own queueing/shedding mechanics, since the deterministic mock backend imposes no concurrency-dependent latency of its own, so admission control is the ONLY source of capacity-boundary behavior in this experiment; that scope limitation is recorded honestly rather than implied away.",
+  "started_at": "2026-07-11T15:22:16Z",
+  "contracts_bundle_version": "v0.2.0",
+  "notes": "gateway.config_version=admission-sane-v1 encodes exactly: -admission-tenant-queue-cap 3 -admission-global-inflight-budget 6 -admission-global-queue-cap 3 -admission-queue-deadline 500ms (latency-protective shallow-queue admission; see scripts/ib-t010-e2-admission-value.sh)"
+}

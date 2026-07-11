@@ -1,0 +1,3 @@
+time=2026-07-11T15:10:39.871Z level=INFO msg="gateway listening" addr=127.0.0.1:19198 backend=llamacpp models=qwen2.5-1.5b-instruct-q4_k_m config_version=static
+time=2026-07-11T15:19:49.479Z level=INFO msg="shutdown signal received; draining" signal=terminated in_flight=0 drain_timeout=2m5s
+time=2026-07-11T15:19:49.480Z level=INFO msg="drain complete" waited=3.343µs

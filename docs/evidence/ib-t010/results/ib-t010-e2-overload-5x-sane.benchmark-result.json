@@ -1,0 +1,88 @@
+{
+  "result_id": "ib-t010-e2-overload-5x-sane",
+  "created_at": "2026-07-11T15:24:34Z",
+  "links": {
+    "run_manifests": [
+      "docs/evidence/ib-t010/e2-overload-compare/sane/rep-1/manifest.json",
+      "docs/evidence/ib-t010/e2-overload-compare/sane/rep-2/manifest.json",
+      "docs/evidence/ib-t010/e2-overload-compare/sane/rep-3/manifest.json"
+    ],
+    "raw_events": [
+      "docs/evidence/ib-t010/e2-overload-compare/sane/rep-1/events.jsonl",
+      "docs/evidence/ib-t010/e2-overload-compare/sane/rep-2/events.jsonl",
+      "docs/evidence/ib-t010/e2-overload-compare/sane/rep-3/events.jsonl"
+    ]
+  },
+  "throughput": {
+    "requests_per_second": 37.92538429901373,
+    "output_tokens_per_second": 281.9583544743429,
+    "total_requests": 2550,
+    "total_output_tokens": 4260
+  },
+  "pooled_percentiles": {
+    "method": "pooled-raw-events",
+    "pooled_event_count": 2550,
+    "tables": {
+      "ttft_seconds": {
+        "n": 573,
+        "p50": 0.151037668,
+        "p90": 0.18967917060000003,
+        "p95": 0.20176389279999998,
+        "p99": 0.21933832123999997,
+        "max": 0.233132654,
+        "mean": 0.15057421442059335
+      },
+      "e2e_duration_seconds": {
+        "n": 573,
+        "p50": 0.2189340591430664,
+        "p90": 0.29383120536804197,
+        "p95": 0.30917310714721674,
+        "p99": 0.35563419342041014,
+        "max": 0.388761043548584,
+        "mean": 0.21929532861626377
+      },
+      "itl_seconds": {
+        "n": 3687,
+        "p50": 0.010673757,
+        "p90": 0.011021371,
+        "p95": 0.011118582,
+        "p99": 0.01128790854,
+        "max": 0.014115226,
+        "mean": 0.010661638756712773,
+        "p999": 0.011505351256000008
+      },
+      "max_stall_seconds": {
+        "n": 526,
+        "p50": 0.011008374000000001,
+        "p90": 0.0112545535,
+        "p95": 0.0113256655,
+        "p99": 0.011470077,
+        "max": 0.014115226,
+        "mean": 0.010993951169201521
+      }
+    }
+  },
+  "goodput": {
+    "slo_ref": {
+      "id": "ib-t010-e2-baseline",
+      "version": "1.0.0"
+    },
+    "requests_per_second_meeting_slo": 37.92538429901373,
+    "ratio": 0.22470588235294117,
+    "shed_rate": 0.7752941176470588,
+    "stall_rate": 0.0,
+    "stall_threshold_seconds": 0.1
+  },
+  "knee_estimate": null,
+  "cost": null,
+  "validity": {
+    "warm_up_handling": "manifest warm-up policy 'discard-requests' (50 requests per repetition, ordered by scheduled_send_ts): 150 events excluded, 2550 kept (exp-EXP-ib-t010-e2-admission-value-sane-r1/rep1: 50 excluded; exp-EXP-ib-t010-e2-admission-value-sane-r2/rep2: 50 excluded; exp-EXP-ib-t010-e2-admission-value-sane-r3/rep3: 50 excluded)",
+    "run_count": 3,
+    "threats_to_validity": [
+      "deliberate 5x-capacity overload point: the ~77% typed shed rate IS the treatment under test (admission control shedding excess demand with 503+Retry-After), not a failure mode being hidden; the declared gate threshold is raised to 0.95 for exactly this point, disclosed here, and the latency table below covers ACCEPTED requests only (shed requests never produce a first byte)",
+      "no rate sweep in this run set \u2014 knee_estimate is null; no claim is made about saturation behavior",
+      "no cost profile applies to this run set \u2014 cost is null (cost figures are only computed from a declared, provenanced cost-profile file, never from assumed rates)"
+    ],
+    "unexplained_anomalies": []
+  }
+}

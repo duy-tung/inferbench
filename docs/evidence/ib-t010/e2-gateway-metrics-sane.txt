@@ -1,0 +1,6 @@
+inference_requests_total{model="mock-8b",backend="mock",tenant_tier="default",status_class="2xx",error_class="none"} 1674
+inference_requests_total{model="mock-8b",backend="unknown",tenant_tier="default",status_class="5xx",error_class="overloaded"} 2496
+inference_sheds_total{reason="backend_unavailable"} 0
+inference_sheds_total{reason="global_overload"} 0
+inference_sheds_total{reason="queue_full"} 2496
+inference_sheds_total{reason="tenant_rate_limit"} 0

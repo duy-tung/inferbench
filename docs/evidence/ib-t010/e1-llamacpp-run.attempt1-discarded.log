@@ -1,0 +1,10 @@
+=== quiet-box check ===
+no matching processes
+ 11:12:04 up  3:04,  0 user,  load average: 0.30, 0.17, 0.20
+llama-server healthy
+gateway healthy
+experiment compare (hypothesis EXP-ib-t010-e1-gateway-overhead): variable=target_topology diff_fields=[gateway target_topology]
+  arm direct: target=http://127.0.0.1:19199 reps=3 sent=135 ok=135 errors=0 shed=0 canceled=0
+  arm gateway: target=http://127.0.0.1:19198 reps=3 sent=135 ok=135 errors=0 shed=0 canceled=0
+comparison manifest: docs/evidence/ib-t010/e1-llamacpp-compare/comparison.json
+E1 llama.cpp sub-experiment complete: docs/evidence/ib-t010/e1-llamacpp-compare

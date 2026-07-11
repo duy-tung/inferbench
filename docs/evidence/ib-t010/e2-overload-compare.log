@@ -1,0 +1,4 @@
+experiment compare (hypothesis EXP-ib-t010-e2-admission-value): variable=gateway.config_version diff_fields=[gateway.config_version]
+  arm sane: target=http://127.0.0.1:19292 reps=3 sent=2700 ok=633 errors=0 shed=2067 canceled=0
+  arm off: target=http://127.0.0.1:19293 reps=3 sent=2700 ok=2700 errors=0 shed=0 canceled=0
+comparison manifest: docs/evidence/ib-t010/e2-overload-compare/comparison.json

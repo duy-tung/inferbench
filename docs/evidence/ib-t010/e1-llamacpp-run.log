@@ -1,0 +1,27 @@
+=== quiet-box check ===
+no matching processes
+ 15:10:35 up 7 min,  0 user,  load average: 0.70, 0.63, 0.35
+llama-server healthy
+gateway healthy
+experiment compare (hypothesis EXP-ib-t010-e1-gateway-overhead): variable=target_topology diff_fields=[gateway target_topology]
+  arm direct: target=http://127.0.0.1:19199 reps=3 sent=135 ok=135 errors=0 shed=0 canceled=0
+  arm gateway: target=http://127.0.0.1:19198 reps=3 sent=135 ok=135 errors=0 shed=0 canceled=0
+comparison manifest: docs/evidence/ib-t010/e1-llamacpp-compare/comparison.json
+{
+  "gateway_ttft_seconds": {
+    "n": 135.0,
+    "p50": 0.3916666666666667,
+    "p90": 2.19,
+    "p95": 2.5949999999999998,
+    "p99": 2.9190000000000005
+  },
+  "gateway_queue_wait_seconds": {
+    "n": 135.0,
+    "p50": 0.0005,
+    "p90": 0.0009000000000000001,
+    "p95": 0.00095,
+    "p99": 0.00099
+  },
+  "method": "prometheus histogram_quantile-style linear interpolation within the straddling bucket (bucket boundaries per infergate internal/telemetry/vocabulary.go TTFTBuckets/QueueWaitBuckets); coarse at sub-bucket resolution, reported as a cross-check against client-side pooled percentiles, not a replacement for them"
+}
+E1 llama.cpp sub-experiment complete: docs/evidence/ib-t010/e1-llamacpp-compare
