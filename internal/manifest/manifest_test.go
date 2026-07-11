@@ -86,3 +86,66 @@ func TestWriteRoundTrip(t *testing.T) {
 		t.Fatalf("round trip mismatch: %+v", got)
 	}
 }
+
+func TestDiffIgnoresBookkeepingFields(t *testing.T) {
+	a := validManifest()
+	b := validManifest()
+	a.RunID, b.RunID = "run-a", "run-b"
+	a.StartedAt, b.StartedAt = "2026-07-11T00:00:00Z", "2026-07-11T00:05:00Z"
+	rttB := 5.0
+	b.Client.RTTms = &rttB
+	diffs, err := Diff(a, b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(diffs) != 0 {
+		t.Fatalf("bookkeeping-only differences must be ignored, got %v", diffs)
+	}
+}
+
+func TestDiffFindsDeclaredVariable(t *testing.T) {
+	a := validManifest()
+	b := validManifest()
+	b.TargetTopology = TopologyEngineDirect
+	b.Gateway = nil
+	diffs, err := Diff(a, b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(diffs) != 2 { // target_topology, gateway (whole block disappears)
+		t.Fatalf("want 2 diffs (target_topology, gateway), got %v", diffs)
+	}
+	found := map[string]bool{}
+	for _, d := range diffs {
+		found[d] = true
+	}
+	if !found["target_topology"] {
+		t.Fatalf("expected target_topology in diffs, got %v", diffs)
+	}
+}
+
+func TestDiffFindsEngineFlag(t *testing.T) {
+	a := validManifest()
+	b := validManifest()
+	a.Engine.Flags = map[string]any{"max_num_seqs": 8}
+	b.Engine.Flags = map[string]any{"max_num_seqs": 16}
+	diffs, err := Diff(a, b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(diffs) != 1 || diffs[0] != "engine.flags.max_num_seqs" {
+		t.Fatalf("want [engine.flags.max_num_seqs], got %v", diffs)
+	}
+}
+
+func TestDiffNoDifferenceBetweenIdenticalManifests(t *testing.T) {
+	a := validManifest()
+	b := validManifest()
+	diffs, err := Diff(a, b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(diffs) != 0 {
+		t.Fatalf("identical manifests must diff to nothing, got %v", diffs)
+	}
+}

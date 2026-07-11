@@ -364,3 +364,71 @@ func TestAllZeroRateRepeatingPhasesRefused(t *testing.T) {
 		t.Fatal("Build hung on all-zero-rate repeating phases")
 	}
 }
+
+// Fingerprint is the replay-determinism primitive (IB-T008): same seed =>
+// same fingerprint; different seed => different fingerprint.
+func TestFingerprintDeterministic(t *testing.T) {
+	p1, err := Build(baseWorkload(t, 7))
+	if err != nil {
+		t.Fatal(err)
+	}
+	p2, err := Build(baseWorkload(t, 7))
+	if err != nil {
+		t.Fatal(err)
+	}
+	f1, f2 := Fingerprint(p1), Fingerprint(p2)
+	if f1 == "" {
+		t.Fatal("fingerprint must not be empty")
+	}
+	if f1 != f2 {
+		t.Fatalf("same seed produced different fingerprints: %s vs %s", f1, f2)
+	}
+}
+
+func TestFingerprintDiffersOnSeed(t *testing.T) {
+	p1, err := Build(baseWorkload(t, 7))
+	if err != nil {
+		t.Fatal(err)
+	}
+	p2, err := Build(baseWorkload(t, 8))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if Fingerprint(p1) == Fingerprint(p2) {
+		t.Fatal("different seeds produced identical fingerprints")
+	}
+}
+
+// A rate-only variant of the same seed must reproduce identical per-item
+// content (input/output tokens etc): only send offsets differ, so the
+// fingerprint differs, but the item-content hash (built the same way minus
+// SendOffset) must match — this is what makes a rate sweep single-variable
+// structurally, not just by convention (internal/sweep.DeriveRateWorkload).
+func TestFingerprintRateChangeOnlyAffectsOffsets(t *testing.T) {
+	w1 := baseWorkload(t, 55)
+	w2 := baseWorkload(t, 55)
+	fast := 999.0
+	w2.Arrival.RateRPS = &fast
+
+	p1, err := Build(w1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	p2, err := Build(w2)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(p1.Items) != len(p2.Items) {
+		t.Fatalf("item counts differ: %d vs %d", len(p1.Items), len(p2.Items))
+	}
+	for i := range p1.Items {
+		a, b := p1.Items[i], p2.Items[i]
+		if a.InputTokens != b.InputTokens || a.MaxTokens != b.MaxTokens ||
+			a.CancelTrigger != b.CancelTrigger || a.PrefixGroup != b.PrefixGroup {
+			t.Fatalf("item %d content diverged across a rate-only change: %+v vs %+v", i, a, b)
+		}
+	}
+	if Fingerprint(p1) == Fingerprint(p2) {
+		t.Fatal("a genuine rate change must change the fingerprint (send offsets differ)")
+	}
+}

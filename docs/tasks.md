@@ -222,6 +222,53 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
 - **Evidence:** sweep artifacts. **Integration impact:** saturation/knee inputs for fleetlab;
   I4 gateway-overhead sweeps.
 - **Stop condition:** sweep produces a knee on mock.
+- **Status:** implemented 2026-07-11 — `internal/sweep` (pure mechanics: rate-point placement,
+  single-variable workload derivation, capacity-estimate math), `internal/replay` (schedule
+  fingerprint + reference verification), `internal/structdiff` + `internal/manifest.Diff` (the
+  shared structural single-variable-rule primitive), and four new `cmd/inferbench` subcommands
+  (`sweep`, `replay`, `compare`, plus the shared `runOnce`/manifest-facts refactor of `run`).
+  **Capacity-estimate procedure (documented):** a short open-loop overload probe (offered rate
+  far above any plausible capacity, bounded request count) measures achieved sustained
+  throughput; ADR-0003 sanctions exactly this ("closed-loop... narrowly, for throughput-ceiling
+  discovery and sweep-range placement") — implemented as an open-loop overload probe rather
+  than closed-loop dispatch (closed-loop execution stays deferred; see Deviations). **Mock
+  saturation is client-modeled and documented as such**: the pinned mock/gateway pair has no
+  concurrency limiter or admission control of its own (`cmd/mock-backend/main.go`'s flags are
+  addr/seed/ttft/itl/error-rate/created/stream-fail-after-chunks only — verified by reading the
+  source), so `sweep --max-conns` holds a client-transport `MaxConnsPerHost` cap fixed across
+  the probe and every point to model a capacity-limited target; Go's `http.Transport` blocks
+  (queues) requests past the cap rather than failing them, so the resulting queueing delay is
+  real client-observed latency, counted via the scheduled-send basis (ADR-0001), never
+  fabricated — a verification-harness technique, not a production claim. **Replay**: every
+  `run`/`replay`/point/arm execution now writes a `reference.json` sidecar
+  (`schedule.Fingerprint` over every planned item field); `replay` refuses (typed
+  `replay.ErrMismatch`) before sending any request if the rebuilt schedule disagrees with a
+  named reference. **Compare**: `--arm id=facts@target` (>= 2, generalizes past A/B), refuses
+  (before any traffic) an arm set whose manifests differ in anything beyond the declared
+  `--variable` and its schema-implied companions (`manifest.ImpliedFields`, e.g.
+  `target_topology` implies the `gateway` block's presence).
+  **Verification:** `go test -race -count=1 ./...` green (11 packages, incl. new
+  `internal/sweep`, `internal/replay`, `internal/structdiff`, and `cmd/inferbench` regression
+  tests). End-to-end vs the pinned mock+gateway pair (infergate @ `74f2372`, built read-only via
+  `git archive`; contracts @ **v0.2.0 tag = `484b449`**, re-pinned from `8d81492` — diff is
+  release notes only): **sweep produced a bracketed knee** — 6 points, 3 repetitions/point,
+  10%→120% of a probe-estimated capacity (27.79 rps); pooled TTFT p99 per point 0.167s / 0.168s
+  / 0.214s / 0.341s / 0.659s / 1.189s; `analysis/knee.py` `detect_knee` found
+  `arrival_rate_rps=21.12, confidence=0.8, bracketed=true`, kneedle cross-check agrees — **this
+  is the stop condition**. Replay determinism verified two ways (schedule-fingerprint match +
+  byte-identical response-body SHA-256 sets across 60 requests) plus a negative control (a
+  changed seed is refused before any request). A/B compare smoke (direct vs via-gateway,
+  single declared variable `target_topology`) plus a negative control (a second undeclared
+  variable is refused before any request). 56/56 emitted artifacts (23 manifests + 23 raw-events
+  + 10 workloads) kit-valid at the pinned bundle. Evidence: `docs/evidence/ib-t008/`
+  (`sweep/`, `knee-result.json`, `knee-detection.log`, `replay-*`, `compare/`, `kit-validate.log`).
+  Reproduce: `scripts/sweep-mock.sh docs/evidence/ib-t008 ../infergate 74f2372`.
+  **Bug found and fixed during this task** (regression test added,
+  `cmd/inferbench/common_test.go`): the original `onceParams.SeedOverride` used an `int64`
+  sentinel (`< 0` = no override); every call site outside `cmdRun` forgot to set it, so the Go
+  zero value silently overrode every sweep/compare run's seed to 0. Fixed by switching to a
+  `*int64` (nil = no override) — a pointer's zero value IS "no override", so the bug class is
+  now unreachable by construction.
 
 ## IB-T009 — Controlled-experiment framework
 

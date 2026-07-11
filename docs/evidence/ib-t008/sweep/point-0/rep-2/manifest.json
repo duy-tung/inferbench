@@ -1,0 +1,48 @@
+{
+  "run_id": "sweep-p0-r2",
+  "target_topology": "gateway-mock",
+  "workload_ref": {
+    "name": "ib-t008-sweep-base-sweep-p0",
+    "version": "1.0.0",
+    "seed": 8008021
+  },
+  "engine": {
+    "name": "mock",
+    "version": "dev",
+    "commit": "74f2372",
+    "flags": {
+      "error_rate": 0,
+      "itl": "5ms",
+      "seed": 42,
+      "ttft": "20ms"
+    }
+  },
+  "model": {
+    "checkpoint": "mock-8b",
+    "revision": "mockengine@74f2372",
+    "tokenizer": "mockengine-estimator"
+  },
+  "hardware": {
+    "gpu_model": null,
+    "gpu_count": 0,
+    "vram_gb": null,
+    "driver_version": null,
+    "cuda_version": null,
+    "instance_type": "local-dev-container (linux/amd64, CPU-only)"
+  },
+  "gateway": {
+    "version": "dev@74f2372",
+    "config_version": "flags-v1"
+  },
+  "client": {
+    "location": "same-host (loopback)",
+    "rtt_ms": 0.756608
+  },
+  "warm_up": {
+    "policy": "none"
+  },
+  "repetitions": 3,
+  "hypothesis": "IB-T008 sweep mechanics verification: a rate sweep at 10%-120% of an estimated client-modeled capacity produces a detectable saturation knee on the pinned mock pair.",
+  "started_at": "2026-07-11T08:47:46Z",
+  "contracts_bundle_version": "v0.2.0"
+}

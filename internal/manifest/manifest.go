@@ -16,15 +16,20 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+
+	"github.com/duy-tung/inferbench/internal/structdiff"
 )
 
 // ContractsBundleVersion is the serving-contracts pin this build emits.
 // Re-pinned at the IB-T002 CO-review fix (2026-07-10) from the released
-// v0.1.0 tag to commit 8d81492 (rides the untagged v0.2.0: raw-event gains
-// required scheduled_send_ts + optional send_slip_seconds). Reversible
-// assumption: re-pin to the v0.2.0 tag when it is cut; see
+// v0.1.0 tag to commit 8d81492 (raw-event gains required scheduled_send_ts
+// + optional send_slip_seconds), then re-pinned again at IB-T008
+// (2026-07-11) to the now-cut v0.2.0 tag (commit 484b449 — diff vs 8d81492
+// touches only RELEASES.md, no schema semantics; verified via
+// `git diff 8d81492..484b449 --stat`). Pin history:
+// 8c58863 -> v0.1.0 -> 8d81492 -> v0.2.0 (this pin). See
 // docs/implementation-notes.md.
-const ContractsBundleVersion = "8d81492 (v0.2.0 tag pending)"
+const ContractsBundleVersion = "v0.2.0"
 
 var versionRe = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
 
@@ -178,6 +183,62 @@ func (m *Manifest) Validate() error {
 		return errors.New("manifest: hypothesis is required (>= 10 chars, a falsifiable statement)")
 	}
 	return nil
+}
+
+// exemptDiffFields are manifest fields that are EXPECTED to vary between
+// two runs even when nothing experimentally relevant differs: bookkeeping
+// the tool fills per invocation (run_id, started_at), the measured client
+// RTT, freeform notes, and the build's contracts pin. Diff excludes them —
+// the single-variable rule is about declared experimental configuration,
+// not run bookkeeping.
+var exemptDiffFields = map[string]bool{
+	"run_id":                   true,
+	"started_at":               true,
+	"client.rtt_ms":            true,
+	"notes":                    true,
+	"contracts_bundle_version": true,
+}
+
+// impliedByVariable maps a declared single variable to companion manifest
+// fields that necessarily change ALONGSIDE it because of structural
+// coupling in this schema (not a second experimental variable): e.g.
+// target_topology determines whether a gateway block may be present at all
+// (Validate forbids a gateway block for engine-direct and requires one
+// otherwise), so declaring target_topology as the variable for a
+// direct-vs-gateway comparison (experiments.md §7 "Gateway overhead") must
+// not also trip the combinatorial guard on the gateway block's
+// presence/absence.
+var impliedByVariable = map[string][]string{
+	"target_topology": {"gateway"},
+}
+
+// ImpliedFields returns the companion fields implied by variable (see
+// impliedByVariable) — used by `compare` and `experiment` alongside Diff so
+// the single-variable check judges the declared variable's actual shape,
+// not an artifact of an unrelated schema constraint.
+func ImpliedFields(variable string) []string {
+	return impliedByVariable[variable]
+}
+
+// Diff returns the sorted, dotted-path list of fields on which a and b
+// differ, excluding exemptDiffFields. This is the single-variable-rule
+// enforcement primitive shared by `compare` (IB-T008) and `experiment`
+// (IB-T009): callers require the returned set to be a subset of {the one
+// declared variable} — a non-empty remainder after removing the declared
+// variable is a combinatorial/uncontrolled comparison and must be refused
+// (experiments.md rules 10 and §5).
+func Diff(a, b *Manifest) ([]string, error) {
+	diffs, err := structdiff.Diff(a, b)
+	if err != nil {
+		return nil, fmt.Errorf("manifest: diff: %w", err)
+	}
+	out := diffs[:0]
+	for _, d := range diffs {
+		if !exemptDiffFields[d] {
+			out = append(out, d)
+		}
+	}
+	return out, nil
 }
 
 // Write emits the manifest as pretty JSON to path.

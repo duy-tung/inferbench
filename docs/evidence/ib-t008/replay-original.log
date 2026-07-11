@@ -1,0 +1,2 @@
+run ib-t008-replay-original: sent=60 ok=60 errors=0 shed=0 canceled=0 max_dispatch_slip=1.123019ms max_send_slip=1.691172ms wall=5.989s
+artifacts: /home/user/inferbench/docs/evidence/ib-t008/replay-original

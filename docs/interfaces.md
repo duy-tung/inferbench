@@ -9,14 +9,15 @@ protocols. No shared application library with any repo. The dependency graph is 
 golden fixtures and its own emitted artifacts against it in CI (`make contracts-verify` pattern;
 this repo's arm of integration milestone I1).
 
-> **Pin status:** pinned to `serving-contracts` commit **`8d81492`** (rides the untagged
-> **v0.2.0**; re-pin to the tag when cut — reversible assumption in `implementation-notes.md`).
-> Re-pinned at the IB-T002 CO-review fix (2026-07-10) from the released v0.1.0 tag because
-> raw-event v0.2.0 REQUIRES `scheduled_send_ts` (+ optional `send_slip_seconds`) with the
-> normative rule that client-side TTFT/E2E are measured from the scheduled send time
-> (coordinated-omission safety). Emitted manifests carry
-> `contracts_bundle_version: "8d81492 (v0.2.0 tag pending)"`. Pin history: `8c58863` (IB-T002)
-> → `v0.1.0` (IB-T003) → `8d81492` (this fix).
+> **Pin status:** pinned to `serving-contracts` **`v0.2.0` tag (commit `484b449`)**. Re-pinned at
+> the IB-T002 CO-review fix (2026-07-10) from the released v0.1.0 tag because raw-event v0.2.0
+> REQUIRES `scheduled_send_ts` (+ optional `send_slip_seconds`) with the normative rule that
+> client-side TTFT/E2E are measured from the scheduled send time (coordinated-omission safety);
+> re-pinned again at IB-T008 (2026-07-11) from the pre-tag commit `8d81492` to the now-cut
+> `v0.2.0` tag (`git diff 8d81492..484b449 --stat` touches only `RELEASES.md`, no schema
+> semantics). Emitted manifests carry `contracts_bundle_version: "v0.2.0"`. Pin history:
+> `8c58863` (IB-T002) → `v0.1.0` (IB-T003) → `8d81492` (CO-review fix) → `v0.2.0`/`484b449`
+> (IB-T008).
 
 ### Contract 1 — Inference API (OpenAI-compatible subset) — inferbench DRIVES it
 
@@ -97,6 +98,16 @@ concurrency hints, prefix-cache support, quantization, priority support) drive:
 | `inferbench replay` | deterministic re-issue of a recorded workload (same seed → identical schedule) |
 | `inferbench compare` | A/B across run sets; refuses comparisons violating the single-variable rule |
 | `inferbench experiment` | governed experiment execution: requires a hypothesis file; rejects hypothesis-less runs and matrix sweeps |
+
+Exact flags for `run`/`sweep`/`replay`/`compare`/`experiment {run,sweep,compare}` are fixed at
+IB-T008/IB-T009 and documented in each subcommand's `-h` output (`cmd/inferbench/*.go`). `sweep`,
+`compare`, and `experiment` share one execution path with `run` (`cmd/inferbench/common.go`'s
+`runOnce`) — there is only one way this binary sends a request. `sweep --max-conns` and
+`replay`/`compare`'s negative-control refusals (before any traffic) are demonstrated in
+`docs/evidence/ib-t008/`; `experiment`'s hypothesis-file schema is `hypotheses/README.md`
+(JSON, not the `docs/experiments.md` §5 YAML sketch — a recorded, reversible serialization
+choice, `docs/implementation-notes.md`) and its refusal demos are
+`docs/evidence/ib-t009/refusal-demo-transcript.md`.
 
 Analysis is invoked as a Python package/CLI (`python3 -m inferbench_analysis ...`), consuming run
 directories and emitting result files + reports. Exact flags are fixed at IB-T005 (`analyze`) and

@@ -1,0 +1,103 @@
+{
+  "sweep_id": "sweep",
+  "base_workload": "ib-t008-sweep-base",
+  "workload_version": "1.0.0",
+  "seed": 8008021,
+  "declared_variable": "arrival_process.rate_rps",
+  "concurrency_cap": 2,
+  "concurrency_cap_note": "client-transport MaxConnsPerHost, held fixed across the probe and every point: the mock/gateway pair has no admission control of its own at the pinned build (docs/implementation-notes.md), so this models the target's effective capacity for the purpose of this verification sweep. Go's http.Transport blocks (queues) requests past this cap instead of failing them, producing genuine client-visible queueing delay that counts against latency via the scheduled-send basis (ADR-0001).",
+  "target": "http://127.0.0.1:18280",
+  "min_fraction": 0.1,
+  "max_fraction": 1.2,
+  "probe": {
+    "offered_rate_rps": 200,
+    "request_count": 150,
+    "ok_count": 150,
+    "elapsed_seconds": 5.397209137,
+    "achieved_rps": 27.79214149247817,
+    "run_dir": "/home/user/inferbench/docs/evidence/ib-t008/sweep/probe",
+    "method": "open-loop overload probe (ADR-0003): achieved_rps = ok_count / elapsed_seconds at an offered rate far above any plausible capacity"
+  },
+  "capacity_estimate_rps": 27.79214149247817,
+  "points": [
+    {
+      "index": 0,
+      "rate_rps": 2.7792141492478173,
+      "fraction_of_capacity": 0.10000000000000002,
+      "run_id": "sweep-p0-r3",
+      "run_dir": "/home/user/inferbench/docs/evidence/ib-t008/sweep/point-0",
+      "repetitions": 3,
+      "sent": 450,
+      "ok": 450,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0
+    },
+    {
+      "index": 1,
+      "rate_rps": 8.893485277593014,
+      "fraction_of_capacity": 0.31999999999999995,
+      "run_id": "sweep-p1-r3",
+      "run_dir": "/home/user/inferbench/docs/evidence/ib-t008/sweep/point-1",
+      "repetitions": 3,
+      "sent": 450,
+      "ok": 450,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0
+    },
+    {
+      "index": 2,
+      "rate_rps": 15.00775640593821,
+      "fraction_of_capacity": 0.5399999999999999,
+      "run_id": "sweep-p2-r3",
+      "run_dir": "/home/user/inferbench/docs/evidence/ib-t008/sweep/point-2",
+      "repetitions": 3,
+      "sent": 450,
+      "ok": 450,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0
+    },
+    {
+      "index": 3,
+      "rate_rps": 21.122027534283404,
+      "fraction_of_capacity": 0.7599999999999998,
+      "run_id": "sweep-p3-r3",
+      "run_dir": "/home/user/inferbench/docs/evidence/ib-t008/sweep/point-3",
+      "repetitions": 3,
+      "sent": 450,
+      "ok": 450,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0
+    },
+    {
+      "index": 4,
+      "rate_rps": 27.236298662628602,
+      "fraction_of_capacity": 0.9799999999999999,
+      "run_id": "sweep-p4-r3",
+      "run_dir": "/home/user/inferbench/docs/evidence/ib-t008/sweep/point-4",
+      "repetitions": 3,
+      "sent": 450,
+      "ok": 450,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0
+    },
+    {
+      "index": 5,
+      "rate_rps": 33.3505697909738,
+      "fraction_of_capacity": 1.2,
+      "run_id": "sweep-p5-r3",
+      "run_dir": "/home/user/inferbench/docs/evidence/ib-t008/sweep/point-5",
+      "repetitions": 3,
+      "sent": 450,
+      "ok": 450,
+      "errors": 0,
+      "shed": 0,
+      "canceled": 0
+    }
+  ],
+  "created_at": "2026-07-11T08:46:50Z"
+}

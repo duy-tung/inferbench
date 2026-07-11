@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t008-sweep-base-sweep-p4",
+  "workload_version": "1.0.0",
+  "seed": 8008021,
+  "item_count": 150,
+  "schedule_fingerprint": "f9289d0411a2dd837d512081c01e6bf0c5e951d406286c2682ec586376c3893c"
+}

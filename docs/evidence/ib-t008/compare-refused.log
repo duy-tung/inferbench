@@ -1,0 +1,1 @@
+inferbench: compare: arm "gateway" differs from arm "direct" in "model.checkpoint", outside the declared variable "target_topology" — no full-matrix comparisons (experiments.md rule 10 / §5)

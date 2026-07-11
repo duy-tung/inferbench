@@ -1,0 +1,12 @@
+{
+  "name": "ib-t008-compare",
+  "version": "1.0.0",
+  "seed": 8008040,
+  "arrival_process": {"type": "open-loop-poisson", "rate_rps": 10},
+  "input_length_distribution": {"type": "uniform", "min": 32, "max": 128},
+  "output_length_distribution": {"type": "uniform", "min": 8, "max": 64},
+  "prefix_sharing": {"ratio": 0},
+  "cancellation": {"rate": 0},
+  "slow_client": {"fraction": 0},
+  "stop": {"request_count": 60}
+}

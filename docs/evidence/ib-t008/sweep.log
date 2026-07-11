@@ -1,0 +1,8 @@
+sweep: capacity_estimate=27.7921 rps (probe achieved 27.7921/200.0000 offered)
+  point 0: rate=2.7792 rps (10% of capacity) reps=3 sent=450 ok=450 errors=0 shed=0 canceled=0
+  point 1: rate=8.8935 rps (32% of capacity) reps=3 sent=450 ok=450 errors=0 shed=0 canceled=0
+  point 2: rate=15.0078 rps (54% of capacity) reps=3 sent=450 ok=450 errors=0 shed=0 canceled=0
+  point 3: rate=21.1220 rps (76% of capacity) reps=3 sent=450 ok=450 errors=0 shed=0 canceled=0
+  point 4: rate=27.2363 rps (98% of capacity) reps=3 sent=450 ok=450 errors=0 shed=0 canceled=0
+  point 5: rate=33.3506 rps (120% of capacity) reps=3 sent=450 ok=450 errors=0 shed=0 canceled=0
+sweep manifest: /home/user/inferbench/docs/evidence/ib-t008/sweep/sweep.json

@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t008-replay",
+  "workload_version": "1.0.0",
+  "seed": 8008030,
+  "item_count": 60,
+  "schedule_fingerprint": "9400a741377fa21f88f13569544c6f13d2582f4124710c9ffd349c3f35b4e2e1"
+}

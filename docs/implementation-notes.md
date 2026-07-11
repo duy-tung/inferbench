@@ -570,6 +570,111 @@ only emitter; for valid runs whose latency is withheld (analyze exit 3, no file 
 **Evidence:** `analysis/src/inferbench_analysis/report.py`, `analysis/tests/test_report.py`,
 `docs/evidence/ib-t006/` (3 reports, report.log, kit-validate.log), `scripts/report-evidence.sh`.
 
+### 2026-07-11 — IB-T008: sweeps, replay, comparison mode
+
+**Contracts pin:** re-pinned `8d81492` → **`v0.2.0` tag (commit `484b449`)** — `git diff
+8d81492..484b449 --stat` touches only `RELEASES.md`, no schema semantics.
+`manifest.ContractsBundleVersion` now emits `"v0.2.0"`.
+
+**Scope delivered:** `internal/structdiff` (one JSON-round-trip structural diff primitive),
+`internal/manifest.Diff`/`ImpliedFields` (the bookkeeping-exempt, schema-coupling-aware wrapper
+used everywhere the single-variable rule is checked), `internal/replay` (schedule fingerprint +
+reference verification), `internal/sweep` (pure mechanics: rate-point placement, capacity-probe
+math, single-rate-variable workload derivation), and four `cmd/inferbench` files replacing the
+single-subcommand `main.go`: `common.go` (shared `runOnce` — every subcommand now executes a
+request through the exact same path `run` always did), `run.go`, `sweep.go`, `replay.go`,
+`compare.go`, `experiment.go` (IB-T009, same session).
+
+**Capacity-estimate procedure (documented, experiments.md rule 3):** a short **open-loop
+overload probe** — one run at a rate declared to comfortably exceed any plausible capacity, for
+a bounded request count — measures achieved sustained throughput (`ok_count / elapsed_seconds`).
+`sweep` refuses (typed `sweep.ErrProbeDidNotSaturate`) an estimate where achieved throughput
+stayed within 85% of the offered probe rate — the probe never fell behind, so the estimate would
+be unreliable. ADR-0003 sanctions exactly this kind of run ("closed-loop... narrowly, for
+throughput-ceiling discovery and capacity estimation for sweep-range placement"); this repo used
+an open-loop overload probe instead of implementing closed-loop dispatch (see Deviations).
+
+**Mock saturation is client-modeled, and that is disclosed, not hidden.** Reading
+`infergate/cmd/mock-backend/main.go` at the pinned commit confirms its flag set is
+`addr/seed/ttft/itl/error-rate/created/stream-fail-after-chunks` only — no concurrency limiter,
+no admission control, no queueing model; every request is served in constant configured time
+regardless of concurrent load, and the gateway at this pin has none either (admission control is
+IG-T010, not yet released). A first attempt at a plain rate sweep against this pair, therefore,
+showed essentially flat TTFT across the whole 10%–120% range (measured: p95 0.313s → 0.335s,
+~7% growth — nowhere near a 1.5x departure). `sweep --max-conns N` holds a client-transport
+`MaxConnsPerHost` cap fixed across the probe and every point, modeling a capacity-limited target
+for verification purposes: Go's `http.Transport` **blocks** (queues) new requests once the cap
+is reached rather than failing them (confirmed via the Go stdlib docs), so the resulting
+queueing delay is genuine client-observed latency — measured via the scheduled-send basis
+(ADR-0001's "at-saturation caveat": "connect delay caused by the target is client-visible
+queueing and is measured... Raising `--max-slip` for overload studies is legitimate only because
+the slip is recorded per event either way" — the same reasoning applies to a connection-pool
+wait). This is a **verification-harness technique for a mock target that does not model its own
+capacity, never a production claim**; a real target's real admission control (infergate IG-T010)
+will saturate on its own once released, and IB-T010's published sweeps will not need this knob.
+Documented in the `sweep` CLI help, `internal/sweep`'s package doc, and
+`scripts/sweep-mock.sh`'s header comment.
+
+**Tuning to a decisive knee (empirical, recorded for reproducibility):** `max-conns=2`,
+mock `ttft=20ms itl=5ms`, output tokens `uniform(8,32)`, `150 requests/point/repetition`, 6
+points 10%→120% of a probe-estimated capacity. Little's-law sanity check: per-connection
+throughput ≈13.7 rps (measured from an earlier max-conns=5 trial achieving ~68.5 rps), so
+capacity ≈ 2 × 13.7 ≈ 27.4 rps — matches the measured probe (27.79–28.28 rps across trials). The
+key tuning insight: for a FIXED percentage overload (e.g. 120% of capacity), the absolute
+queueing delay accumulated over N requests is `N × (1 − capacity/rate) / capacity` — inversely
+proportional to capacity — so a SMALL absolute concurrency cap turns the same 20% overload into
+a much larger, more clearly measurable absolute delay than a large cap would. Two earlier trials
+(max-conns=5 at 100%–200% fractions, and max-conns=3–4 with larger fractions) either timed out
+(low-rate points at a fixed high request count take a long time when the rate is a small
+fraction of a large capacity) or showed only marginal p99 growth (~1.03x, short of the 1.5x
+departure factor) — both recorded here so the final parameters are not presented as the first
+thing tried.
+
+**Verification (all commands run 2026-07-11):**
+
+1. `gofmt -l .` clean; `go vet ./...` clean; `go test -race -count=1 ./...` → **11 packages ok**
+   (adds `internal/structdiff`, `internal/replay`, `internal/sweep`, `cmd/inferbench` to the
+   IB-T002–T006 set). New tests: structural diff (nested leaf, map field, presence mismatch);
+   manifest Diff (bookkeeping-exempt, declared-variable-found, engine-flag leaf, identical→empty);
+   schedule Fingerprint (deterministic, seed-sensitive, rate-only-affects-offsets — the executable
+   proof that a rate sweep varies nothing but arrival timing); replay Reference (round trip,
+   same-seed passes, seed/name-mismatch refused); sweep math (rate-point spacing/count/refusals,
+   capacity estimate saturated/unsaturated/zero, derive-rate-workload + single-variable pass/catch).
+2. **Bug found BY this task's own tests, fixed same day:** `onceParams.SeedOverride` was an
+   `int64` with a `< 0` = "no override" sentinel; `cmdRun` set it explicitly (`-1` default), but
+   `sweep`'s point/probe calls and `compare`'s arm calls did not set it at all, so the Go zero
+   value (`0`) silently overrode every derived run's seed to 0 — discovered while smoke-testing
+   `compare` (`comparison.json` showed `"seed": 0` instead of the workload's declared
+   `8008001`). **Fixed** by changing the field to `*int64` (nil = no override — a pointer's zero
+   value IS the safe default, so the bug class is now unreachable by construction, not just
+   patched at the two call sites that had it). Added `cmd/inferbench/common_test.go`
+   (`TestRunOnceNilSeedOverridePreservesWorkloadSeed`, `TestRunOnceSeedOverrideApplies`) as a
+   permanent regression test — this package had zero tests before this task.
+3. **End-to-end vs the pinned mock+gateway pair** (infergate @ **`74f2372`**, built read-only via
+   `git archive`; `scripts/sweep-mock.sh docs/evidence/ib-t008 ../infergate 74f2372`):
+   - **Sweep**: capacity estimate 27.79 rps; 6 points (2.78/8.89/15.01/21.12/27.24/33.35 rps =
+     10/32/54/76/98/120% of capacity), 3 repetitions/point, 450 requests/point, 0 errors/shed.
+     Pooled TTFT p99 per point: 0.167s, 0.168s, 0.214s, 0.341s, 0.659s, 1.189s.
+   - **Knee detection** (`analysis/knee.py` `detect_knee`, unmodified from IB-T005):
+     `arrival_rate_rps=21.12 rps, confidence=0.8, bracketed=true`; kneedle cross-check agrees.
+     **This is the IB-T008 stop condition.**
+   - **Replay**: an original run (60 streaming requests, seed 8008030) and a `replay` re-issue
+     against the same target produced identical `schedule_fingerprint` (both
+     `9400a741...b4e2e1`) AND identical response-body SHA-256 sets (60/60). A mutated-seed
+     negative control was refused (`replay.ErrMismatch`, exit 1) before any request was sent.
+   - **A/B compare**: direct-vs-gateway (`target_topology`, single declared variable), 40
+     req/arm, 0 errors both arms, `comparison.json` records `diff_fields: [gateway,
+     target_topology]` (gateway is the schema-implied companion of target_topology, not a
+     second variable). A second negative control (an extra `model.checkpoint` difference)
+     was refused before any request was sent.
+   - **Kit validation**: 56/56 emitted artifacts (23 `benchmark-run`, 23 `raw-event`, 10
+     `workload`) PASS at the `v0.2.0` pin.
+
+**Evidence:** `docs/evidence/ib-t008/` (`sweep/` incl. `sweep.json` + 19 run dirs,
+`knee-result.json`, `knee-detection.log`, `replay-original/`, `replay-reissue/`,
+`replay-mismatch.log`, `compare/`, `compare-refused.log`, `kit-validate.log`),
+`scripts/sweep-mock.sh`.
+
 ## Deviations
 
 > Program deviation policy: when repository evidence forces a deviation from the approved plan,
@@ -609,3 +714,29 @@ only emitter; for valid runs whose latency is withheld (analyze exit 3, no file 
   `docs/evidence/ib-t003/` now kit-validates at pin `8d81492` (see the IB-T004 log entry and
   `docs/evidence/ib-t004/kit-validate.log`). This also closes the IB-T002 deviation above:
   the pinned live streaming verification happened (IG-T003 landed at infergate HEAD).
+
+### 2026-07-11 — IB-T008: closed-loop arrival execution stays deferred; capacity estimation uses an open-loop overload probe instead
+
+- **Evidence:** `internal/workload.Workload.CheckRunnable` has returned a typed
+  `ErrNotImplemented` for `arrival_process.type == "closed-loop"` since IB-T002, with a comment
+  pointing at IB-T008 as the eventual owner. `docs/tasks.md`'s IB-T008 requirement text, however,
+  is scoped to "rate sweeps... replay... A/B comparison" — it does not require closed-loop
+  dispatch. ADR-0003 sanctions closed-loop *only* for "throughput-ceiling discovery and capacity
+  estimation for sweep-range placement", which is exactly what the sweep's capacity probe needs
+  — and that need is met by an OPEN-LOOP run at an overload rate (see the IB-T008 log entry):
+  at an offered rate far above the true ceiling, achieved throughput saturates at the same
+  ceiling either way (Little's law), so the open-loop probe measures the same quantity a
+  closed-loop probe would, without adding a second dispatch mode (closed-loop's send times are
+  response-coupled, which does not fit the precomputed-`schedule.Plan` model the rest of the
+  generator relies on for determinism/replay) to this task's scope.
+- **Decision (conservative, reversible):** implement the capacity-estimate procedure with an
+  open-loop overload probe; leave `CheckRunnable`'s typed refusal for `closed-loop` unchanged
+  and update its comment to stop pointing at IB-T008.
+- **Consequences:** none of the eight canonical workloads declare `closed-loop` arrival (IB-T003
+  design decision: "canonical suite is open-loop only"), so no suite workload is affected. A
+  future task that specifically wants closed-loop-mode throughput-ceiling numbers (as opposed to
+  sweep-range placement, which is served today) would need to implement response-coupled
+  dispatch as new scope.
+- **Follow-up:** none planned; re-open only if a specific downstream need for literal
+  closed-loop execution (not just ceiling estimation) appears.
+

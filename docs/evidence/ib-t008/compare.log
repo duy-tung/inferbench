@@ -1,0 +1,4 @@
+comparison: variable=target_topology diff_fields=[gateway target_topology]
+  arm direct: target=http://127.0.0.1:18281 reps=1 sent=60 ok=60 errors=0 shed=0 canceled=0
+  arm gateway: target=http://127.0.0.1:18280 reps=1 sent=60 ok=60 errors=0 shed=0 canceled=0
+comparison manifest: /home/user/inferbench/docs/evidence/ib-t008/compare/comparison.json

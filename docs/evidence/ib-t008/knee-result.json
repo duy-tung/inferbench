@@ -1,0 +1,8 @@
+{
+  "arrival_rate_rps": 21.122027534283404,
+  "signal": "ttft_seconds_p99",
+  "method": "plateau-departure threshold: first offered rate with signal > 1.5x low-rate plateau median (plateau = median of 2 lowest-rate points = 0.167489), sustained through the top of the sweep; kneedle-style max-curvature cross-check agrees (cross-check point 4/6). Resolution limited to sweep-point spacing; assumes plateau-then-degrade shape; no extrapolation past the knee",
+  "confidence": 0.8,
+  "bracketed": true,
+  "capacity_estimate_rps": 27.79214149247817
+}

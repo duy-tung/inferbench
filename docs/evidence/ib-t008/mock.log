@@ -1,0 +1,1 @@
+time=2026-07-11T08:46:50.113Z level=INFO msg="mock-backend listening" addr=127.0.0.1:18281 seed=42 ttft=20ms itl=5ms error_rate=0

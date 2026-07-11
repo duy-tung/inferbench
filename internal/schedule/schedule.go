@@ -9,6 +9,8 @@
 package schedule
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"math"
@@ -164,6 +166,25 @@ func Build(w *workload.Workload) (*Plan, error) {
 		items[i] = it
 	}
 	return &Plan{Seed: seed, PrefixTokens: prefixTokens, Items: items}, nil
+}
+
+// Fingerprint returns a stable content hash of the plan: same
+// (workload version, seed, arrival process) => identical Plan (Build is
+// pure) => identical Fingerprint, which is the executable evidence deterministic
+// replay (IB-T008) rests on. Every planned field is hashed, not just send
+// offsets, so a change to the length/cancellation/slow-client/prefix-sharing
+// sampling would also be caught, not just an arrival-time change.
+func Fingerprint(p *Plan) string {
+	h := sha256.New()
+	fmt.Fprintf(h, "seed=%d prefix_tokens=%d items=%d\n", p.Seed, p.PrefixTokens, len(p.Items))
+	for _, it := range p.Items {
+		fmt.Fprintf(h, "%d|%d|%d|%d|%s|%.9f|%d|%d|%d|%d\n",
+			it.Index, it.SendOffset, it.InputTokens, it.MaxTokens,
+			it.CancelTrigger, it.CancelAfterSeconds, it.CancelAfterTokens,
+			it.SlowReadBytesPerSec, it.SlowInitialDelay, it.PrefixGroup)
+	}
+	sum := h.Sum(nil)
+	return hex.EncodeToString(sum)
 }
 
 // arrivalOffsets samples the Poisson arrival times (exponential

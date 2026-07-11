@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t008-compare",
+  "workload_version": "1.0.0",
+  "seed": 8008040,
+  "item_count": 60,
+  "schedule_fingerprint": "45e57058e80cbd5c679a171c220c8a2a63767af4fea810459aa33582d3179d3a"
+}

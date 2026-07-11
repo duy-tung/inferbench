@@ -7,8 +7,13 @@
 //
 // Scope note: prefix-sharing, cancellation, and slow-client profiles are
 // fully executable since IB-T004. Closed-loop arrival is parsed and
-// validated but NOT implemented yet; attempting to run such a workload
-// returns a typed ErrNotImplemented (deferred to IB-T008 per docs/tasks.md).
+// validated but NOT implemented (response-coupled dispatch does not fit the
+// precomputed schedule.Plan model); attempting to run such a workload
+// returns a typed ErrNotImplemented. IB-T008's capacity-estimate procedure
+// (which ADR-0003 permits closed-loop for) uses an open-loop overload probe
+// instead, so this stays deferred with no current owner — see
+// docs/implementation-notes.md "IB-T008: closed-loop arrival execution
+// stays deferred".
 package workload
 
 import (
@@ -247,7 +252,7 @@ func (w *Workload) validateArrival() error {
 // implemented; only closed-loop arrival execution remains deferred.
 func (w *Workload) CheckRunnable() error {
 	if w.Arrival.Type == ArrivalClosedLoop {
-		return fmt.Errorf("%w: closed-loop arrival (throughput-ceiling mode, ADR-0003) lands with the sweep work (IB-T008)", ErrNotImplemented)
+		return fmt.Errorf("%w: closed-loop arrival (throughput-ceiling mode, ADR-0003) is not implemented; internal/sweep's capacity-estimate procedure uses an open-loop overload probe instead (see docs/implementation-notes.md)", ErrNotImplemented)
 	}
 	return nil
 }

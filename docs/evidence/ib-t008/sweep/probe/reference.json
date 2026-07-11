@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t008-sweep-base-capacity-probe",
+  "workload_version": "1.0.0",
+  "seed": 8008021,
+  "item_count": 150,
+  "schedule_fingerprint": "b1c999e5f6996213399a2da0bfa7772c579eb1e777d59b0ff4d1435f0dfd8e3e"
+}
