@@ -1,0 +1,2 @@
+run ib-t007-llamacpp-calibration-20260711-223623: sent=30 ok=30 errors=0 shed=0 canceled=0 max_dispatch_slip=11.976967ms max_send_slip=12.537883ms wall=2m10.55s
+artifacts: docs/evidence/ib-t007/inferbench-run

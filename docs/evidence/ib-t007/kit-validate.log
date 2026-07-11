@@ -1,0 +1,16 @@
+# IB-T007 kit validation
+# bundle: v0.2.0 (484b449)
+# date: 2026-07-11T23:02:05Z
+
+## workload
+PASS  docs/evidence/ib-t007/inferbench-workload.json  [workload]
+
+validate: 1/1 file(s) valid against 'workload'
+## manifest (benchmark-run)
+PASS  docs/evidence/ib-t007/inferbench-run/manifest.json  [benchmark-run]
+
+validate: 1/1 file(s) valid against 'benchmark-run'
+## raw events
+PASS  docs/evidence/ib-t007/inferbench-run/events.jsonl  [raw-event]
+
+validate: 1/1 file(s) valid against 'raw-event'

@@ -1,0 +1,13 @@
+{
+  "name": "ib-t007-llamacpp-calibration",
+  "version": "1.0.0",
+  "seed": 1007001,
+  "description": "IB-T007 CPU reference-tool calibration: short synthetic prompts, short directed completions, low offered rate (single-slot llama-server -np 1, mean inter-arrival >> mean service time) so queueing delay stays negligible and each request is effectively an isolated single-request measurement -- comparable in shape to the independent Python reference client (docs/evidence/ib-t007/refclient.py) run against the same llama-server process.",
+  "arrival_process": {"type": "open-loop-poisson", "rate_rps": 0.2},
+  "input_length_distribution": {"type": "uniform", "min": 24, "max": 80},
+  "output_length_distribution": {"type": "uniform", "min": 16, "max": 40},
+  "prefix_sharing": {"ratio": 0},
+  "cancellation": {"rate": 0},
+  "slow_client": {"fraction": 0},
+  "stop": {"request_count": 30}
+}

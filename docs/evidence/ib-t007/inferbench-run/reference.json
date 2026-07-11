@@ -1,0 +1,7 @@
+{
+  "workload_name": "ib-t007-llamacpp-calibration",
+  "workload_version": "1.0.0",
+  "seed": 1007001,
+  "item_count": 30,
+  "schedule_fingerprint": "829e1dfbbc6d7d3a0d4db47af08a89e8d794b7554eef166e0d5d1e817d02ed95"
+}

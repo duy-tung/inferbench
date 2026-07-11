@@ -207,6 +207,29 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
 - **Evidence:** calibration report. **Integration impact:** credibility of all published numbers;
   possible upstream findings (`oss-opportunities.md`).
 - **Stop condition:** deltas explained.
+- **Status:** implemented 2026-07-11 (CPU variant; GPU variant vs `vllm bench serve` stays deferred
+  behind G6 — no GPU). **Calibration report PASSED — deltas within declared tolerance or explained:
+  `docs/evidence/ib-t007/calibration-reference.md`.** Cross-checked inferbench against a
+  llama.cpp-based reference on the real model (`qwen2.5-1.5b-instruct-q4_k_m`, sha256 recorded) +
+  pinned llama.cpp `8f114a9`, three independent measurement surfaces: (1) llama-server's own
+  per-request `timings` (server-side prompt/decode, read direct-to-engine since the adapter strips
+  them client-facing), (2) an independent Python reference client sharing no code with inferbench's
+  Go client, (3) `llama-bench` as a model-level throughput anchor. **Differences enumerated + per-
+  metric tolerances declared BEFORE comparing** (ADR-0004); the dominant difference is the arrival
+  process (inferbench open-loop Poisson vs the sequential reference) on a single-slot `-np 1` engine.
+  **Key results:** client ITL p50 46.1 ms vs the server's own self-reported decode/token p50 46.1 ms
+  (near-exact); paired client TTFT = server prompt-eval time + 11 ms p50 (bounded-positive transport
+  delta); inferbench non-queued TTFT p50 0.541 s vs reference 0.438 s (within ±150 ms); decode
+  throughput converges across all three tools (llama-bench 21.08 / server 21.69 / inferbench-client
+  21.71 t/s, ~3%). The one large delta — TTFT tail 3.3 s wider than the sequential reference — is
+  the *correct* consequence of inferbench capturing single-slot queue delay a sequential tool cannot
+  see (coordinated-omission safety working as designed), proven per-request by busy-overlap
+  analysis; **delta explained, stop condition met.** CPU-contention threat measured (shared cores
+  vs `taskset` separation inflates the TTFT tail ~120–230 ms; median dominated by engine compute;
+  thread-count confound disclosed). Emitted inferbench artifacts kit-valid at v0.2.0 `484b449`
+  (`kit-validate.log`). `go test -race` + pytest green. Scope guard honored (no target-performance
+  claim); no unexplained anomalies → nothing filed upstream. Reproduce:
+  `scripts/calibrate-llamacpp-reference.sh`.
 
 ## IB-T008 — Sweeps, replay, comparison mode
 

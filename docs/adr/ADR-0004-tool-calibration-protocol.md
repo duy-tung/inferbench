@@ -53,3 +53,43 @@ target.
   without GPU spend.
 - The differences table doubles as documentation of inferbench's own measurement-point
   definitions, kept aligned with Contract 2's mirror rule.
+
+## Executed protocol (CPU variant, 2026-07-11)
+
+The CPU fallback was executed; the GPU variant (`vllm bench serve`) stays deferred behind G6 (no
+GPU). Evidence: `docs/evidence/ib-t007/calibration-reference.md` (**PASSED** — deltas within the
+declared tolerance or explained). What was actually run, and how the decision points above were
+realized:
+
+1. **Reference tooling (Tier 2) = three independent surfaces**, exploiting that llama.cpp ships its
+   own measurement points:
+   - **llama-server `timings`** — the engine's own per-request self-reported prompt/decode timings,
+     attached to the final SSE chunk under `stream_options.include_usage=true`
+     (`tools/server/server-task.cpp` `to_json_oaicompat_chat_stream`). The infergate adapter strips
+     these client-facing, so calibration runs **direct-to-engine** to read them. This is the primary
+     reference: a *server-side* measurement of the *same request* inferbench measured client-side.
+   - an **independent Python reference client** (`refclient.py`) sharing no code with inferbench's Go
+     client — so agreement is not a shared-bug artifact.
+   - **llama-bench** as a model-level tokens/sec anchor (different measurement point; comparability
+     caveat applied per rule 10).
+2. **Differences enumerated before comparing** (§1 of the report): the dominant one is the
+   **arrival process** — inferbench is open-loop Poisson, the reference client is sequential; on a
+   single-slot (`-np 1`) engine, open-loop arrivals queue and the sequential client never does.
+3. **Tolerances declared before comparing**, per metric (client-ITL ±10/±20 ms p50/p95; non-queued
+   client-TTFT ±150 ms p50; paired client-TTFT − server `prompt_ms` positive and < 100 ms; paired
+   client-ITL vs server decode/token ±10 ms). Whole-distribution TTFT was declared *not directly
+   comparable* (arrival-process row) — its delta is explained, not bounded.
+4. **Outcome:** same-basis comparisons agree to single-digit ms — client ITL p50 46.1 ms vs the
+   server's own decode/token p50 46.1 ms; paired client TTFT = server prompt-eval + 11 ms (p50)
+   bounded-positive transport delta; inferbench non-queued TTFT p50 0.541 s vs the reference client's
+   0.438 s (within ±150 ms). The one large delta (TTFT tail 3.3 s) is the correct consequence of
+   inferbench capturing single-slot queue delay that a sequential tool cannot see — evidence *for*
+   coordinated-omission safety. Decode throughput converges across all three tools (llama-bench
+   21.08, server 21.69, inferbench-client 21.71 t/s; ~3%).
+5. **CPU-contention threat measured** (report §4): client/server core contention inflates the TTFT
+   *tail* ~120–230 ms (shared cores vs `taskset` separation); the median is dominated by engine
+   compute. Confound disclosed: separating the client onto its own core on a 4-core box costs the
+   server one thread.
+6. **Scope guard honored:** no number is published as a target-performance claim; the report speaks
+   only to generator trustworthiness. No unexplained anomalies → nothing filed to
+   `oss-opportunities.md`.

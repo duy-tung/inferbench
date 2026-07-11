@@ -1,0 +1,63 @@
+run_id=ib-t007-llamacpp-calibration-20260711-223623 repetition=1 requests=30 max_slip=10s cancel_planned=0 slow_planned=0 prefix_sharing=0
+schedule item=0 offset=4.410464664s input_tokens=75 max_tokens=37
+schedule item=1 offset=8.066060698s input_tokens=67 max_tokens=31
+schedule item=2 offset=22.517644891s input_tokens=59 max_tokens=19
+schedule item=3 offset=27.012236045s input_tokens=40 max_tokens=32
+schedule item=4 offset=29.972229731s input_tokens=65 max_tokens=17
+schedule item=5 offset=30.687095896s input_tokens=28 max_tokens=30
+schedule item=6 offset=36.764748231s input_tokens=72 max_tokens=24
+schedule item=7 offset=37.619496731s input_tokens=64 max_tokens=31
+schedule item=8 offset=41.106203901s input_tokens=46 max_tokens=22
+schedule item=9 offset=44.402550957s input_tokens=37 max_tokens=17
+schedule item=10 offset=49.82941445s input_tokens=35 max_tokens=34
+schedule item=11 offset=52.359149754s input_tokens=56 max_tokens=16
+schedule item=12 offset=52.465870256s input_tokens=70 max_tokens=34
+schedule item=13 offset=54.879712341s input_tokens=73 max_tokens=20
+schedule item=14 offset=58.96513965s input_tokens=48 max_tokens=24
+schedule item=15 offset=1m5.886427518s input_tokens=37 max_tokens=25
+schedule item=16 offset=1m12.612677816s input_tokens=40 max_tokens=26
+schedule item=17 offset=1m14.965153976s input_tokens=27 max_tokens=31
+schedule item=18 offset=1m18.69229641s input_tokens=72 max_tokens=23
+schedule item=19 offset=1m21.099000702s input_tokens=72 max_tokens=24
+schedule item=20 offset=1m21.547940623s input_tokens=77 max_tokens=31
+schedule item=21 offset=1m21.940710529s input_tokens=44 max_tokens=32
+schedule item=22 offset=1m22.485052671s input_tokens=65 max_tokens=29
+schedule item=23 offset=1m25.856716364s input_tokens=47 max_tokens=25
+schedule item=24 offset=1m32.187342461s input_tokens=64 max_tokens=16
+schedule item=25 offset=1m34.393687145s input_tokens=64 max_tokens=23
+schedule item=26 offset=1m34.809617671s input_tokens=25 max_tokens=31
+schedule item=27 offset=1m39.126201394s input_tokens=26 max_tokens=20
+schedule item=28 offset=1m53.599849485s input_tokens=66 max_tokens=23
+schedule item=29 offset=2m8.304092109s input_tokens=34 max_tokens=35
+epoch=2026-07-11T22:36:23.157816Z
+request item=0 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000000 status=ok send_slip=2.83162ms body_sha256=d42a53a9160f820c6a4848afb724270c2f4e152a5ae3aa1103218c811ebfc60c
+request item=1 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000001 status=ok send_slip=779.635µs body_sha256=2a1a60d9265e1058deb66eb0f86d89e8d973e8a4692c7036f5a4060b1774aee6
+request item=2 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000002 status=ok send_slip=12.537883ms body_sha256=a5af0625bc8984f2cf75797ddf7b39c131008750b4b140ec9995d25089496b46
+request item=3 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000003 status=ok send_slip=735.816µs body_sha256=99d2eff5505070789b2306e784f0d78ec50f3196a2d410b2396da3371930be51
+request item=4 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000004 status=ok send_slip=1.135175ms body_sha256=71c9aa68b9bac6024f72886725476f46a647759952ebbdaa9a333d40c018d6f5
+request item=5 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000005 status=ok send_slip=1.600913ms body_sha256=9888022948b4848eaf09e55e1a22d5f3d8dbd9b392e2ac0320402f033bc31233
+request item=6 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000006 status=ok send_slip=3.410544ms body_sha256=696e744f5553dae5e2c0a5475491b46351f49b4be467a3afacae0f0ad48473ec
+request item=7 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000007 status=ok send_slip=1.180759ms body_sha256=fb8c3d105539bff31dded0306049b44b6c6ff6d24d8b17c101bfe4c5c3f3d32f
+request item=8 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000008 status=ok send_slip=1.198988ms body_sha256=13de4cfd2faa55e94e68e235ba123bb5a3f0ba058d9cd69e6f8f52272d6abe4a
+request item=9 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000009 status=ok send_slip=2.297299ms body_sha256=2a3d1ee83b994af43b5e1f2b4d199106180d6f1f9fe44356b04a2fc5017cb8cd
+request item=10 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000010 status=ok send_slip=4.143398ms body_sha256=721db24d805512e7354d632f1f1037c5592d81630abd9ee408c6984e672ed4d6
+request item=11 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000011 status=ok send_slip=1.114056ms body_sha256=c3950ff0a05a9b0b19c3a28811a6b1dd36d5fff6af7be703a57b3050ea62b92d
+request item=12 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000012 status=ok send_slip=1.062864ms body_sha256=2d9b718c97e03f4ef0776f402c7e03b193b60f7ef8154c1470367b24f17c0896
+request item=13 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000013 status=ok send_slip=963.384µs body_sha256=695b8717fad0ec27b36003f0f9763d46ae913870e34a21df0fdef633def1abba
+request item=14 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000014 status=ok send_slip=2.770254ms body_sha256=db0f359e4b14817d328d6769e90e0271449c3e118ad898b23f55b9345e9f33d7
+request item=15 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000015 status=ok send_slip=5.794154ms body_sha256=cdd80b019a35f6676bda55101c2042803c8e41bfce6a34665d0d17a903fbd6ab
+request item=16 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000016 status=ok send_slip=5.355274ms body_sha256=a8f905435c8f182aeeafab1466f64bb8cca55c9c219dda8d14346560838eceb1
+request item=17 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000017 status=ok send_slip=1.063593ms body_sha256=2866d21dd65e22e1d19de3d3f51b49b8c2807075b5e394eb7708c3a15c0877ce
+request item=18 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000018 status=ok send_slip=1.930155ms body_sha256=47e4fb26a51afdbcf56c2a0b6c5bf9d96de8e49ec34a226215d9dc4f4cdb67c3
+request item=19 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000019 status=ok send_slip=1.778208ms body_sha256=3528702d23803b34f6bc12c79d11def43f66fd0a692d8cf2a3fb807711a1f4c6
+request item=20 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000020 status=ok send_slip=956.683µs body_sha256=02267ee8b188b4cf6c512e49363ad199e001686a6900c425af68efc26969057e
+request item=21 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000021 status=ok send_slip=1.359498ms body_sha256=259d610fc389f642b39d73aa1f73bfd2cbbe8cddf40c80267405f9ede91e2717
+request item=22 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000022 status=ok send_slip=1.127484ms body_sha256=05f870cbfc1251380f4943a1497d9fcb536cac7e70b952e6eb8bd0f8d1bd34a0
+request item=23 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000023 status=ok send_slip=1.336215ms body_sha256=d46f2fdd1974cec7b53a6f120003cd6b5b61e995218334bba06bd7ccd2416370
+request item=24 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000024 status=ok send_slip=867.455µs body_sha256=eefc105bc81b36fb764742dcdabd25fd1d984af1b19a89c496ffcacd38256562
+request item=25 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000025 status=ok send_slip=797.056µs body_sha256=83f8c7589a76e46b8df179dc29167b5339d2c58dcb3e0b801395970fd475822b
+request item=26 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000026 status=ok send_slip=529.363µs body_sha256=b0fd828a3b3c579a636095588a11536150fa22cc95aa090dec8ca0e72149f347
+request item=27 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000027 status=ok send_slip=1.149901ms body_sha256=816e4bdae279b21deff4f658564d2501d8ef0a729011f0dc19aa9993144abe3d
+request item=28 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000028 status=ok send_slip=5.472539ms body_sha256=e3f32a365dc9f4a3894f913edd64aa2a60eeb0d0e9a2a8f4acd8b2e7605fb616
+request item=29 id=ib-t007-llamacpp-calibration-20260711-223623-r1-000029 status=ok send_slip=9.108641ms body_sha256=63fd65878517b939dc48682015d16c4da12067b3b41542a951d11354a80be782
+summary sent=30 ok=30 errors=0 shed=0 canceled=0 cancel_planned=0 slow_planned=0 max_dispatch_slip=11.976967ms max_send_slip=12.537883ms usage_missing=0 wall=2m10.55s

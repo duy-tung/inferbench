@@ -1,0 +1,362 @@
+{
+  "inferbench_run": {
+    "n_total_events": 30,
+    "n_warmup_discarded": 5,
+    "status_counts_after_warmup": {
+      "ok": 25
+    },
+    "ttft_seconds": {
+      "count": 25,
+      "mean": 1.26209024944,
+      "p50": 0.66459881,
+      "p95": 4.161831544,
+      "max": 5.754096745,
+      "min": 0.247414725
+    },
+    "itl_seconds_pooled": {
+      "count": 600,
+      "mean": 0.050455399045000036,
+      "p50": 0.045023857,
+      "p95": 0.064210123,
+      "max": 0.480509581,
+      "min": 0.0360899
+    }
+  },
+  "refclient_shared_meta": {
+    "label": "shared",
+    "base_url": "http://127.0.0.1:19299",
+    "model": "qwen2.5-1.5b-instruct-q4_k_m",
+    "n_total": 30,
+    "n_warmup": 5,
+    "n_kept": 25,
+    "n_errors": 0,
+    "seed": 1007002,
+    "sampler_seed": 20260711,
+    "wall_seconds": 51.37936112399984,
+    "client_ttft_seconds": {
+      "count": 25,
+      "mean": 0.48085562020001815,
+      "p50": 0.43803950199981045,
+      "p95": 0.8839502880000509,
+      "max": 1.0033412560005672,
+      "min": 0.2958965990001161
+    },
+    "client_itl_seconds_pooled": {
+      "count": 579,
+      "mean": 0.05346732602763492,
+      "p50": 0.04606190499907825,
+      "p95": 0.0744979549999698,
+      "max": 0.575903572000243,
+      "min": 0.037499784000829095
+    },
+    "server_prompt_ms": {
+      "count": 25,
+      "mean": 464.82828,
+      "p50": 410.933,
+      "p95": 850.546,
+      "max": 996.245,
+      "min": 267.459
+    },
+    "server_predicted_ms_per_token": {
+      "count": 25,
+      "mean": 52.134294402304825,
+      "p50": 46.0939696969697,
+      "p95": 73.55019047619048,
+      "max": 76.0898125,
+      "min": 43.53033333333333
+    },
+    "client_minus_server_proxy_overhead_seconds": {
+      "count": 25,
+      "mean": -0.036106954202286684,
+      "p50": -0.035732833276048925,
+      "p95": -0.01505778999862517,
+      "max": -0.01124262866661574,
+      "min": -0.057306760667887646
+    }
+  },
+  "refclient_pinned_meta": {
+    "label": "taskset-pinned",
+    "base_url": "http://127.0.0.1:19299",
+    "model": "qwen2.5-1.5b-instruct-q4_k_m",
+    "n_total": 30,
+    "n_warmup": 5,
+    "n_kept": 25,
+    "n_errors": 0,
+    "seed": 1007002,
+    "sampler_seed": 20260711,
+    "wall_seconds": 54.70484721200046,
+    "client_ttft_seconds": {
+      "count": 25,
+      "mean": 0.5393796370401105,
+      "p50": 0.5299070189994382,
+      "p95": 0.7656741060000058,
+      "max": 0.7689863150008023,
+      "min": 0.3068903670009604
+    },
+    "client_itl_seconds_pooled": {
+      "count": 579,
+      "mean": 0.054829244276334066,
+      "p50": 0.05397070899925893,
+      "p95": 0.059579315999144455,
+      "max": 0.1441541749991302,
+      "min": 0.039975460998903145
+    },
+    "server_prompt_ms": {
+      "count": 25,
+      "mean": 529.87792,
+      "p50": 521.846,
+      "p95": 758.953,
+      "max": 758.995,
+      "min": 297.978
+    },
+    "server_predicted_ms_per_token": {
+      "count": 25,
+      "mean": 52.51837002078064,
+      "p50": 52.17659090909091,
+      "p95": 55.06961538461538,
+      "max": 58.83183333333333,
+      "min": 50.0506875
+    },
+    "client_minus_server_proxy_overhead_seconds": {
+      "count": 25,
+      "mean": -0.04301665298067011,
+      "p50": -0.04311013794785257,
+      "p95": -0.036793093572127344,
+      "max": -0.036777517500235724,
+      "min": -0.04760589133402898
+    }
+  },
+  "llama_bench": [
+    {
+      "build_commit": "8f114a9",
+      "build_number": 1,
+      "cpu_info": "Intel(R) Xeon(R) Processor @ 2.80GHz",
+      "gpu_info": "",
+      "backends": "CPU",
+      "model_filename": "/home/user/tools/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "model_type": "qwen2 1.5B Q4_K - Medium",
+      "model_size": 1111370240,
+      "model_n_params": 1777088000,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "n_threads": 4,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "f16",
+      "type_v": "f16",
+      "n_gpu_layers": -1,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": -1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "use_mmap": true,
+      "use_direct_io": false,
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 64,
+      "n_gen": 0,
+      "n_depth": 0,
+      "test_time": "2026-07-11T22:40:27Z",
+      "avg_ns": 524757202,
+      "stddev_ns": 23273392,
+      "avg_ts": 122.151347,
+      "stddev_ts": 5.363267,
+      "samples_ns": [
+        522154814,
+        557338094,
+        536851271,
+        497933084,
+        509508748
+      ],
+      "samples_ts": [
+        122.569,
+        114.832,
+        119.214,
+        128.531,
+        125.611
+      ]
+    },
+    {
+      "build_commit": "8f114a9",
+      "build_number": 1,
+      "cpu_info": "Intel(R) Xeon(R) Processor @ 2.80GHz",
+      "gpu_info": "",
+      "backends": "CPU",
+      "model_filename": "/home/user/tools/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "model_type": "qwen2 1.5B Q4_K - Medium",
+      "model_size": 1111370240,
+      "model_n_params": 1777088000,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "n_threads": 4,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "f16",
+      "type_v": "f16",
+      "n_gpu_layers": -1,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": -1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "use_mmap": true,
+      "use_direct_io": false,
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 0,
+      "n_gen": 32,
+      "n_depth": 0,
+      "test_time": "2026-07-11T22:40:30Z",
+      "avg_ns": 1523550665,
+      "stddev_ns": 100123156,
+      "avg_ts": 21.082269,
+      "stddev_ts": 1.497799,
+      "samples_ns": [
+        1351074792,
+        1581236043,
+        1596093396,
+        1565509198,
+        1523839898
+      ],
+      "samples_ts": [
+        23.6848,
+        20.2373,
+        20.049,
+        20.4406,
+        20.9996
+      ]
+    }
+  ],
+  "comparison_a_inferbench_vs_refclient": {
+    "inferbench_ttft": {
+      "count": 25,
+      "mean": 1.26209024944,
+      "p50": 0.66459881,
+      "p95": 4.161831544,
+      "max": 5.754096745,
+      "min": 0.247414725
+    },
+    "refclient_shared_ttft": {
+      "count": 25,
+      "mean": 0.48085562020001815,
+      "p50": 0.43803950199981045,
+      "p95": 0.8839502880000509,
+      "max": 1.0033412560005672,
+      "min": 0.2958965990001161
+    },
+    "ttft_p50_delta_seconds": -0.22655930800018953,
+    "ttft_p50_delta_pct_of_inferbench": -34.08963491827341,
+    "ttft_p95_delta_seconds": -3.277881255999949,
+    "ttft_p95_delta_pct_of_inferbench": -78.76054620052034,
+    "inferbench_itl_pooled": {
+      "count": 600,
+      "mean": 0.050455399045000036,
+      "p50": 0.045023857,
+      "p95": 0.064210123,
+      "max": 0.480509581,
+      "min": 0.0360899
+    },
+    "refclient_shared_itl_pooled": {
+      "count": 579,
+      "mean": 0.05346732602763492,
+      "p50": 0.04606190499907825,
+      "p95": 0.0744979549999698,
+      "max": 0.575903572000243,
+      "min": 0.037499784000829095
+    },
+    "itl_p50_delta_seconds": 0.001038047999078251,
+    "itl_p95_delta_seconds": 0.010287831999969813
+  },
+  "comparison_b_client_vs_server_timings_paired": {
+    "client_ttft": {
+      "count": 25,
+      "mean": 0.48085562020001815,
+      "p50": 0.43803950199981045,
+      "p95": 0.8839502880000509,
+      "max": 1.0033412560005672,
+      "min": 0.2958965990001161
+    },
+    "server_prompt_ms": {
+      "count": 25,
+      "mean": 464.82828,
+      "p50": 410.933,
+      "p95": 850.546,
+      "max": 996.245,
+      "min": 267.459
+    },
+    "server_predicted_ms_per_token": {
+      "count": 25,
+      "mean": 52.134294402304825,
+      "p50": 46.0939696969697,
+      "p95": 73.55019047619048,
+      "max": 76.0898125,
+      "min": 43.53033333333333
+    },
+    "client_minus_server_proxy_overhead_seconds": {
+      "count": 25,
+      "mean": -0.036106954202286684,
+      "p50": -0.035732833276048925,
+      "p95": -0.01505778999862517,
+      "max": -0.01124262866661574,
+      "min": -0.057306760667887646
+    }
+  },
+  "comparison_c_cpu_contention_shared_vs_pinned": {
+    "shared": {
+      "client_ttft": {
+        "count": 25,
+        "mean": 0.48085562020001815,
+        "p50": 0.43803950199981045,
+        "p95": 0.8839502880000509,
+        "max": 1.0033412560005672,
+        "min": 0.2958965990001161
+      },
+      "client_itl_pooled": {
+        "count": 579,
+        "mean": 0.05346732602763492,
+        "p50": 0.04606190499907825,
+        "p95": 0.0744979549999698,
+        "max": 0.575903572000243,
+        "min": 0.037499784000829095
+      },
+      "wall_seconds": 51.37936112399984
+    },
+    "pinned": {
+      "client_ttft": {
+        "count": 25,
+        "mean": 0.5393796370401105,
+        "p50": 0.5299070189994382,
+        "p95": 0.7656741060000058,
+        "max": 0.7689863150008023,
+        "min": 0.3068903670009604
+      },
+      "client_itl_pooled": {
+        "count": 579,
+        "mean": 0.054829244276334066,
+        "p50": 0.05397070899925893,
+        "p95": 0.059579315999144455,
+        "max": 0.1441541749991302,
+        "min": 0.039975460998903145
+      },
+      "wall_seconds": 54.70484721200046,
+      "label": "taskset-pinned"
+    },
+    "ttft_p50_delta_seconds_pinned_minus_shared": 0.0918675169996277,
+    "ttft_p95_delta_seconds_pinned_minus_shared": -0.11827618200004508
+  }
+}

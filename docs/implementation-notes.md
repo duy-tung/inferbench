@@ -742,6 +742,70 @@ only proves the gate exists and fires.
 **Evidence:** `docs/evidence/ib-t009/` (`refusal-demo-transcript.md`, `compliant-compare/`,
 `kit-validate.log`), `hypotheses/`, `scripts/experiment-demo.sh`.
 
+### 2026-07-11 — IB-T007: calibration vs reference tooling (CPU variant, PASSED)
+
+**Scope delivered:** the CPU-fallback calibration (GPU variant vs `vllm bench serve` stays deferred
+behind G6 — no GPU here). `scripts/calibrate-llamacpp-reference.sh` (one-command repro),
+`docs/evidence/ib-t007/refclient.py` (independent reference client), `compare_calibration.py`,
+`inferbench-workload.json`/`inferbench-facts.json`, and the report
+`docs/evidence/ib-t007/calibration-reference.md`. **PASSED** — every delta within the tolerance
+declared before comparing (ADR-0004) or attributed to an enumerated difference; stop condition
+("deltas explained") met.
+
+**Design — three independent reference surfaces from llama.cpp itself:** (1) llama-server's own
+per-request `timings` object (server-side prompt/decode wall times), which the OpenAI-compat
+streaming path attaches to the final SSE chunk under `stream_options.include_usage=true`
+(`tools/server/server-task.cpp:540`, computed in `server-context.cpp:504`). infergate strips these
+client-facing, so calibration runs **direct-to-engine** to read them — a *server-side* measurement
+of the *same request* inferbench measured client-side. (2) `refclient.py`, a deliberately separate
+Python implementation of client-side TTFT/ITL sharing NO code with `internal/client/client.go`, so
+agreement can't be a shared-bug artifact. (3) `llama-bench` as a model-level tokens/sec anchor.
+
+**Differences enumerated + per-metric tolerances declared BEFORE comparing** (report §1). Dominant
+difference: **arrival process** — inferbench open-loop Poisson vs the reference client's sequential
+sends — on a single-slot (`-np 1`) llama-server.
+
+**Measured facts (2026-07-11, real model `qwen2.5-1.5b-instruct-q4_k_m` sha256
+`6a1a2eb6…e9407e`, llama.cpp `8f114a9`, 4-vCPU CPU-only, loopback; n=25 kept/arm after 5 warm-up):**
+
+- **Comparison A (inferbench vs reference client, client-side):** ITL p50 Δ **−1.0 ms**, p95 Δ
+  **−10.3 ms** (both within tolerance). Whole-distribution TTFT tail is 3.3 s apart (inferbench p95
+  4.16 s vs 0.88 s) — **explained**: on the single slot, open-loop Poisson bursts queue and
+  inferbench's `scheduled_send_ts` basis correctly counts the queue wait (CO-safety working as
+  designed); the sequential reference structurally never queues. Proven per-request by busy-overlap
+  analysis (requests 20–23 = a Poisson burst → cascaded queue → 2.08/3.84/5.75/4.16 s TTFT).
+  Splitting inferbench's own requests: **non-queued** p50 0.541 s / p95 0.744 s **matches** the
+  reference (0.438 / 0.884 s; Δ +103 ms within the ±150 ms prompt-length tolerance); the whole tail
+  lives in the **queued** subset (p50 1.87 s, max 5.75 s) the reference cannot produce.
+- **Comparison B (paired, same request — the strongest cross-check):** client ITL pooled p50
+  **46.1 ms** vs the server's own `predicted_ms/predicted_n` decode/token p50 **46.1 ms**
+  (near-exact; p95 74.5 vs 73.6 ms). Client TTFT − server `prompt_ms` = **+11.4 ms** p50, bounded
+  [+7, +41] ms — client latency is always the server's compute time plus a small positive
+  transport/first-decode delta, exactly as a correct client measurement must be.
+- **Comparison C (CPU contention, measured):** shared cores (server -t 4, client unpinned) vs
+  `taskset` separation (server -t 3 cores 0–2, client core 3): TTFT tail tightened (**p95 −118 ms,
+  max −234 ms**) → client/server contention inflates the tail ~120–230 ms; median rose +92 ms
+  **confounded** by the lost server thread (can't give the client a dedicated core on a 4-core box
+  without dropping the server to 3 threads — disclosed).
+- **llama-bench anchor:** decode throughput converges across **three independent measurement
+  points** — llama-bench 21.08 t/s, server self-reported 21.69 t/s, inferbench client-derived
+  (1/median ITL) 21.71 t/s (~3%). Prompt rate differs ~12% (122 vs 107 t/s) — expected: serving
+  path hits prompt-cache reuse on the shared prefix vs llama-bench's uncached tight loop (different
+  measurement point, comparability caveat per rule 10).
+
+**Verification:** `go test -race -count=1 ./...` green (unchanged code — this task added only
+docs/evidence/scripts); `cd analysis && CONTRACTS_BUNDLE=/home/user/serving-contracts python3 -m
+pytest -q` green (103 passed, analysis package unchanged). Emitted inferbench artifacts
+(workload + benchmark-run manifest + raw-event) kit-valid at v0.2.0 `484b449`
+(`docs/evidence/ib-t007/kit-validate.log`). Scope guard honored — no target-performance claim; no
+unexplained anomalies, so nothing filed to `oss-opportunities.md`. Reproduce:
+`scripts/calibrate-llamacpp-reference.sh`.
+
+**Evidence:** `docs/evidence/ib-t007/` (`calibration-reference.md`, `refclient.py`,
+`compare_calibration.py`, `comparison-summary.json`, `inferbench-run/`, `refclient-shared.json`,
+`refclient-pinned.json`, `llama-bench.json`, `quiet-box.txt`, per-pass logs, `kit-validate.log`),
+`scripts/calibrate-llamacpp-reference.sh`, ADR-0004 "Executed protocol" section.
+
 ## Deviations
 
 > Program deviation policy: when repository evidence forces a deviation from the approved plan,
