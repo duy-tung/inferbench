@@ -1,8 +1,8 @@
-# inferbench analysis core (IB-T005)
+# inferbench analysis core (IB-T005) + report generator (IB-T006)
 
 The statistics half of inferbench: turns raw-event JSONL + run manifests
 (serving-contracts Contract 3, pinned bundle) into schema-valid
-benchmark-result files.
+benchmark-result files and honest Markdown reports.
 
 What is structural here, not conventional (see `docs/adr/ADR-0002` and
 `docs/experiments.md`):
@@ -25,6 +25,17 @@ What is structural here, not conventional (see `docs/adr/ADR-0002` and
   + validity note.
 - **Knee detection** — plateau-departure (1.5×, sustained) + kneedle
   cross-check; limitations emitted in the method string; ≥6 sweep points.
+- **Refusal-first reports (IB-T006)** — one renderer, fixed section order in
+  code (deliberately not a template file: an editable template is what the
+  validity sections would get stripped from). A report cannot render without
+  a complete validity block, a hypothesis in every embedded manifest (shown
+  prominently), goodput with shed+stall adjacent, and either latency tables
+  or the withheld-latency WHY block. "Unexplained anomalies" is never
+  silently empty: it lists anomalies or states "none observed" beside the
+  checks that were run. The benchmark comparability rule is embedded
+  verbatim (drift vs the pinned bundle's policy file is a typed refusal);
+  closed-loop arrival is flagged loudly; `cost: null` always renders with
+  its reason; rule-8 one-command reproduction line included.
 
 ## Usage
 
@@ -37,10 +48,25 @@ python3 -m inferbench_analysis analyze \
   --slo docs/evidence/ib-t005/mock-loopback.slo.json \
   --result-id my-result \
   --out out/my-result.benchmark-result.json
+
+# honest Markdown report from an emitted result file:
+python3 -m inferbench_analysis report \
+  --bundle /path/to/pinned/serving-contracts-bundle \
+  --result out/my-result.benchmark-result.json \
+  --root . --out out/
+
+# report regenerated from raw events (adds bootstrap CIs + dispersion;
+# the ONLY publishable surface for valid runs whose latency is withheld):
+python3 -m inferbench_analysis report \
+  --bundle /path/to/pinned/serving-contracts-bundle \
+  --run docs/evidence/ib-t004/calib-A \
+  --slo docs/evidence/ib-t005/mock-loopback.slo.json \
+  --result-id my-result --out out/
 ```
 
-Exit codes: 0 = emitted + self-validated; 1 = typed refusal; 3 = run valid but
-result not expressible (latency withheld — see stdout for the reason).
+Exit codes: 0 = emitted + self-validated / report rendered; 1 = typed
+refusal; 3 = analyze only: run valid but result not expressible (latency
+withheld — see stdout for the reason; publish via `report --run ...`).
 
 ## Tests
 

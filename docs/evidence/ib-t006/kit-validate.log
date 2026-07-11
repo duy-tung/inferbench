@@ -1,0 +1,9 @@
+PASS  ib-t005-calib-A.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-calib-B.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-cancel-mid-stream.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-slow-control.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-slow-on.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-smoke-A.benchmark-result.json  [benchmark-result]
+PASS  ib-t005-stream-SA.benchmark-result.json  [benchmark-result]
+
+check: 7/7 artifact(s) valid

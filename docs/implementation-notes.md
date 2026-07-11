@@ -481,6 +481,95 @@ dispersion objects and bootstrap CIs that the contract file cannot carry.
 **Evidence:** `analysis/` (package + tests), `docs/evidence/ib-t005/` (mock-loopback.slo.json,
 results/ ×7, analyze.log, kit-validate.log), `scripts/analyze-evidence.sh`.
 
+### 2026-07-11 — IB-T006: report generator + validity block
+
+**Contracts pin:** serving-contracts @ `8d81492` (unchanged). **Scope:** `report` subcommand in
+the analysis CLI + `inferbench_analysis/report.py` (renderer), report test suite, end-to-end
+sample reports from the real IB-T004/IB-T005 evidence. Package version 0.1.0 → 0.2.0.
+
+**Design decision — the "template" is code, not a template file.** The task's attack surface
+(G4) is "render a report without the validity sections". A jinja2/file template is exactly the
+artifact those sections would get quietly stripped from, so the template is one renderer
+(`report._render`) with a FIXED section order baked into code and no parameter to skip a
+section; jinja2 was justified out in `analysis/pyproject.toml` (no new dependencies — stdlib
+string building only).
+
+**Honesty rules made structural (all typed `ReportInputError` refusals, tested):**
+
+1. **No validity block → no report.** Both builders (`report_from_analysis` from the in-memory
+   `AnalysisResult`; `report_from_result_dict` from an emitted benchmark-result file) refuse
+   inputs lacking warm_up_handling / run_count / threats_to_validity / unexplained_anomalies —
+   the file path re-checks structurally even though the CLI schema-validates first, so a
+   validation bypass still refuses. `validity.warm_up_handling` is cross-checked against the
+   manifest's declared warm-up policy (inconsistent artifacts refused).
+2. **Hypothesis displayed prominently.** First section under the title, blockquoted per run;
+   a manifest without a hypothesis is not reportable.
+3. **Goodput never without shed + stall.** Rendered as one table: ratio, req/s meeting SLO,
+   shed rate, stall rate (with threshold and stalled/streaming counts) — missing `shed_rate`,
+   `stall_rate`, or the SLO reference refuses. Stall-rate-beside-goodput is the study-track
+   artifact of the goodput-critique paper (arXiv 2410.14257), now encoded in the template.
+4. **Withheld latency renders WHY, never a blank table.** Both kinds (`error-shed-gate`,
+   `no-samples`) render the reason, the measured error/shed rates, the declared threshold, the
+   statement that the run remains VALID, and that the report is the publishable artifact (the
+   pinned contract has no null-table form — IB-T005 contracts observation). Exactly one of
+   tables/withheld must be present; a blank latency section is unconstructible.
+5. **Anomalies never silently empty.** Either enumerated, or "**None observed.**" beside the
+   list of checks that were run (analysis mode fills the gate/window slots with the run set's
+   actual numbers); empty anomalies + empty checks list refuses.
+6. **Comparability rule VERBATIM.** Embedded from `compatibility-policy.md` §7 at the pin and
+   printed in every report (the benchmark-result schema requires this); when the bundle is
+   supplied at render time the embedded copy is checked against the bundle's policy file and
+   drift is a typed refusal (re-pin updates the constant + pin note together).
+7. **Closed-loop visibly flagged.** Arrival process read from `workload.json` beside the
+   manifest: closed-loop → banner at the top + per-manifest flag + latency-section reminder;
+   NO workload file → "arrival process NOT inspectable … open-loop arrivals are NOT implied"
+   (absence of evidence is not open-loop evidence).
+8. **`cost: null` always says why.** Analysis mode carries `CostUnavailable.reason`; file mode
+   recovers the reason from threats_to_validity, and a null cost with no recorded reason is
+   rendered as itself a validity gap.
+9. **No mean-only tables.** Mean is one column beside n/p50/p90/p95/p99/p999/max, with the
+   explicit anti-mean-only note; bootstrap CIs and cross-run dispersion (median ± range)
+   render in analysis mode with the statement that the pinned result schema cannot carry them.
+10. **Rule-8 one-command repro.** The CLI reconstructs its own invocation (`shlex.join`) into
+    the report, plus pins (contracts bundle version from the manifests, analysis version);
+    an empty repro command refuses.
+
+**Emission not duplicated:** `report` only consumes results. `analyze` (IB-T005) remains the
+only emitter; for valid runs whose latency is withheld (analyze exit 3, no file possible),
+`report --run` is the publishable surface — CLI help and `docs/interfaces.md` updated to say so.
+
+**Verification (all commands run 2026-07-11):**
+
+1. `cd analysis && CONTRACTS_BUNDLE=/path/to/serving-contracts python3 -m pytest -q` →
+   **103 passed** (70 IB-T005 + 33 new report tests: mandatory-section presence AND fixed
+   order; hypothesis-before-results; validity-absent/incomplete refusals; warm-up
+   inconsistency refusal; withheld rendering for both kinds incl. goodput still shown with
+   rates; goodput-shed-stall adjacency in one table + refusals for missing
+   shed_rate/stall_rate/slo_ref; anomalies-never-silent (none-observed + checks; listed
+   anomalies; structural refusal when checks stripped); cost-null WHY in both modes + the
+   no-recorded-reason callout; closed-loop flag / open-loop description / missing-workload
+   non-implication; full-percentile-table + CI rendering; verbatim-rule drift guard against
+   the real pinned bundle; result-file round trip + CLI report from a result file).
+2. **End-to-end on real evidence** (`scripts/report-evidence.sh /path/to/serving-contracts`,
+   log: `docs/evidence/ib-t006/report.log`): 3 reports rendered, exit 0 each —
+   `ib-t006-calib-A.report.md` (**the primary G4 sample**: from raw events, full manifest +
+   hypothesis, pooled tables + bootstrap CIs, goodput/shed/stall table, null knee + null cost
+   with reasons, validity block, none-observed anomalies with 8 checks, one-command repro);
+   `ib-t005-calib-A.report.md` (from the emitted result file — consumption path, CI absence
+   stated); `ib-t006-cancel-queued.report.md` (**withheld case**, kind `no-samples`: 30/30
+   deliberately-canceled-at-dispatch requests, zero TTFT samples — WHY block rendered, gate
+   accounting shown, goodput 0 with rates visible). The ib-t004/ib-t005 evidence contains no
+   error/shed-GATED run (mock error_rate 0 everywhere); the `error-shed-gate` rendering is
+   exercised by known-answer unit tests instead (10%-timeout synthetic run), and cancel-queued
+   covers the real withheld path.
+3. **Kit validation green** (`docs/evidence/ib-t006/kit-validate.log`): consumed result files
+   re-checked at pin `8d81492` → **7/7 PASS**. No result files were (re)emitted by IB-T006 —
+   the report generator consumes them (IB-T005 owns emission), so there was nothing new to
+   kit-validate.
+
+**Evidence:** `analysis/src/inferbench_analysis/report.py`, `analysis/tests/test_report.py`,
+`docs/evidence/ib-t006/` (3 reports, report.log, kit-validate.log), `scripts/report-evidence.sh`.
+
 ## Deviations
 
 > Program deviation policy: when repository evidence forces a deviation from the approved plan,

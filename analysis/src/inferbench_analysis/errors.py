@@ -47,6 +47,15 @@ class ComparabilityError(AnalysisError):
     key (experiments.md rule 10)."""
 
 
+class ReportInputError(AnalysisError):
+    """Report rendering refused: the input lacks a mandatory honesty element
+    (complete validity block, hypothesis, shed/stall-adjacent goodput,
+    latency tables or a withheld-latency explanation, anomaly checks), is
+    inconsistent with its own manifest, or the embedded verbatim contract
+    text has drifted from the pinned bundle. A report is never rendered with
+    a mandatory section silently missing."""
+
+
 class ResultNotExpressibleError(AnalysisError):
     """The run set is valid but its result cannot be serialized as a
     schema-valid benchmark-result at the pinned contracts version — e.g. the

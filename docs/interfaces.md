@@ -98,9 +98,13 @@ concurrency hints, prefix-cache support, quantization, priority support) drive:
 | `inferbench compare` | A/B across run sets; refuses comparisons violating the single-variable rule |
 | `inferbench experiment` | governed experiment execution: requires a hypothesis file; rejects hypothesis-less runs and matrix sweeps |
 
-Analysis is invoked as a Python package/CLI (`python -m analysis ...`), consuming run directories
-and emitting result files + reports. Exact flags are fixed at IB-T002/IB-T005 and documented in
-the CLI help; every report names the exact command that regenerates it (methodology rule 8).
+Analysis is invoked as a Python package/CLI (`python3 -m inferbench_analysis ...`), consuming run
+directories and emitting result files + reports. Exact flags are fixed at IB-T005 (`analyze`) and
+IB-T006 (`report --result FILE | --run DIR ...` → Markdown report) and documented in the CLI
+help; every report names the exact command that regenerates it (methodology rule 8). A valid run
+whose latency is withheld (error/shed gate, or a zero-sample contract-required signal) has no
+expressible result file at the pinned contracts version — `report --run` is its publishable
+surface.
 
 ## Forbidden edges (checked at every review gate)
 

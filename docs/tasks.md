@@ -168,6 +168,28 @@ Field legend: *Goal* (what/which repo) · *Requirement* (normative content) · *
 - **Evidence:** sample report. **Integration impact:** the evidence format for I3 and everything
   after.
 - **Stop condition:** sample report approved — this is gate **G4** together with IB-T009.
+- **Status:** implemented 2026-07-11 — `report` subcommand added to the analysis CLI
+  (`python3 -m inferbench_analysis report --result FILE | --run DIR ... [--out DIR]`); the
+  "template" is deliberately code, not an editable template file: one renderer with a fixed
+  section order and typed refusals (`ReportInputError`) for any missing honesty element — no
+  validity block, no hypothesis, goodput without shed/stall, blank latency section, or "no
+  anomalies" without the checks run. Reports embed the full manifest (hypothesis rendered
+  prominently under the title), the comparability rule VERBATIM from the pinned contracts
+  (drift vs the bundle's policy file is a typed refusal), interpretation rules, mandatory
+  threats-to-validity + unexplained-anomalies sections ("none observed" always ships beside
+  the checks that were run), goodput with shed+stall structurally in the same table,
+  closed-loop flagging from the workload file (a missing workload file explicitly does NOT
+  imply open-loop), `cost: null` always with its reason, the withheld-latency WHY block
+  (never a blank table), and the rule-8 one-command reproduction line. Result emission stays
+  IB-T005's `analyze` — the report generator only consumes results. **103 pytest tests
+  green** (70 IB-T005 + 33 report: refusals, section order, withheld rendering, goodput-shed
+  adjacency, anomalies-never-silent, closed-loop flag, verbatim-drift guard, CLI round trip).
+  End-to-end evidence in `docs/evidence/ib-t006/`: primary G4 sample
+  `ib-t006-calib-A.report.md` (from raw events, bootstrap CIs), `ib-t005-calib-A.report.md`
+  (from the emitted result file), `ib-t006-cancel-queued.report.md` (withheld latency, kind
+  `no-samples` — the report is the publishable artifact); consumed result files
+  re-kit-validated 7/7 at pin `8d81492` (none re-emitted). G4 stays open until IB-T009 joins
+  it (per stop condition).
 
 ## IB-T007 — Calibration vs reference tooling
 

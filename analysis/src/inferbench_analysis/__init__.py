@@ -1,10 +1,12 @@
-"""inferbench analysis core (IB-T005).
+"""inferbench analysis core (IB-T005) + honest report generator (IB-T006).
 
 Statistics engine for benchmark raw events (serving-contracts Contract 3):
 pooled percentiles (never averaged across runs — structurally enforced),
 bootstrap CIs, warm-up exclusion, saturation-knee detection, goodput@SLO
 with shed and stall rates adjacent, cost from provenanced cost profiles,
-and schema-valid benchmark-result emission.
+schema-valid benchmark-result emission, and refusal-first Markdown report
+rendering (mandatory validity/threats/anomalies sections, hypothesis
+prominent, withheld-latency explanation, comparability rule verbatim).
 """
 
 from .contracts import Bundle
@@ -17,9 +19,19 @@ from .errors import (
     KneeInputError,
     LoaderError,
     PoolingGuardError,
+    ReportInputError,
     ResultNotExpressibleError,
     SLOError,
     WarmupError,
+)
+from .report import (
+    ANALYSIS_VERSION,
+    COMPARABILITY_RULE_VERBATIM,
+    ManifestEntry,
+    ReportModel,
+    check_comparability_verbatim,
+    report_from_analysis,
+    report_from_result_dict,
 )
 from .events import RawEvent, Run, check_poolable, load_run
 from .goodput import Goodput, evaluate_goodput
@@ -44,7 +56,17 @@ from .result import (
 )
 from .warmup import WarmupReport, apply_warmup
 
+__version__ = ANALYSIS_VERSION
+
 __all__ = [
+    "ANALYSIS_VERSION",
+    "COMPARABILITY_RULE_VERBATIM",
+    "ManifestEntry",
+    "ReportInputError",
+    "ReportModel",
+    "check_comparability_verbatim",
+    "report_from_analysis",
+    "report_from_result_dict",
     "AnalysisConfig",
     "AnalysisError",
     "AnalysisResult",

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "inferbench-analysis"
-version = "0.1.0"
-description = "inferbench analysis core (IB-T005): pooled-percentile statistics, bootstrap CIs, warm-up exclusion, saturation-knee detection, goodput@SLO with shed/stall adjacency, cost, benchmark-result emission"
+version = "0.2.0"
+description = "inferbench analysis core (IB-T005) + honest report generator (IB-T006): pooled-percentile statistics, bootstrap CIs, warm-up exclusion, saturation-knee detection, goodput@SLO with shed/stall adjacency, cost, benchmark-result emission, refusal-first Markdown reports"
 requires-python = ">=3.11"
 # Dependency policy (program Python conventions): numpy (percentiles + vectorized
 # bootstrap resampling) and jsonschema (validate consumed/emitted artifacts against
@@ -14,6 +14,10 @@ requires-python = ">=3.11"
 # scipy is NOT needed: percentile bootstrap and the knee method are elementary
 # numpy; a scipy dependency would buy nothing but a heavier install.
 # PyYAML is NOT needed: every consumed and emitted artifact is JSON.
+# jinja2 (IB-T006) is NOT needed and deliberately avoided: the report's mandatory
+# honesty sections are enforced as unconditional code paths in report.py; an
+# editable template file is exactly the artifact the validity sections could be
+# quietly stripped from (G4 attack surface).
 dependencies = [
     "numpy>=1.26",
     "jsonschema>=4.18",

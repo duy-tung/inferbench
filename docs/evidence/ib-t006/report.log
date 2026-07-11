@@ -1,0 +1,24 @@
+# IB-T006 report-generator evidence
+# bundle: /home/user/serving-contracts (8d81492)
+# date: 2026-07-11T00:07:43Z
+
+## report: calib-A from raw events (expected exit 0)
+$ python3 -m inferbench_analysis report --bundle /home/user/serving-contracts --run docs/evidence/ib-t004/calib-A --slo docs/evidence/ib-t005/mock-loopback.slo.json --result-id ib-t006-calib-A --out docs/evidence/ib-t006
+wrote report: docs/evidence/ib-t006/ib-t006-calib-A.report.md
+ok: calib-A from raw events exit 0
+
+## report: ib-t005-calib-A from result file (expected exit 0)
+$ python3 -m inferbench_analysis report --bundle /home/user/serving-contracts --result docs/evidence/ib-t005/results/ib-t005-calib-A.benchmark-result.json --out docs/evidence/ib-t006
+wrote report: docs/evidence/ib-t006/ib-t005-calib-A.report.md
+ok: ib-t005-calib-A from result file exit 0
+
+## report: cancel-queued (latency withheld) (expected exit 0)
+$ python3 -m inferbench_analysis report --bundle /home/user/serving-contracts --run docs/evidence/ib-t004/cancel-queued --slo docs/evidence/ib-t005/mock-loopback.slo.json --result-id ib-t006-cancel-queued --out docs/evidence/ib-t006
+wrote report: docs/evidence/ib-t006/ib-t006-cancel-queued.report.md
+ok: cancel-queued (latency withheld) exit 0
+
+## kit re-validation of the CONSUMED result files (none re-emitted here)
+PASS  ib-t005-stream-SA.benchmark-result.json  [benchmark-result]
+
+check: 7/7 artifact(s) valid
+RESULT: GREEN — 3 reports rendered (incl. 1 withheld-latency), consumed results kit-valid
